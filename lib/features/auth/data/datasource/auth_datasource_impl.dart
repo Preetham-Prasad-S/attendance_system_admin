@@ -7,4 +7,10 @@ class AuthDatasourceImpl implements AuthDatasource {
     // TODO: Implement login function in authdatasource
     throw UnimplementedError();
   }
+
+  @override
+  Future<Either<String, String>> signup(String email, String password) {
+    // TODO: implement signup
+    throw UnimplementedError();
+  }
 }
