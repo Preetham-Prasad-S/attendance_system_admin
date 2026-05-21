@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       title: 'Attendance System',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(brightness: Brightness.dark, useMaterial3: true),
-      home: LoginScreen(),
+      home: Scaffold(),
     );
   }
 }
