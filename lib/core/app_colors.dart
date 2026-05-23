@@ -4,4 +4,7 @@ class AppColors {
   AppColors._();
   static const lightScaffoldColor = Color.fromARGB(255, 243, 243, 243);
   static const whiteColor = Color.fromARGB(255, 255, 255, 255);
+  static const blueColor = Color.fromRGBO(7, 129, 229, 1);
+  static const navButtonBackgroundColor = Color.fromARGB(32, 33, 149, 243);
+  static const navButtonBorderColor = Color.fromARGB(29, 7, 129, 229);
 }

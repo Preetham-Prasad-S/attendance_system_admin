@@ -1,6 +1,7 @@
 import 'package:attendance_system_admin/core/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ionicons/ionicons.dart';
 
 class BaseDesktopScreen extends StatelessWidget {
   const BaseDesktopScreen({super.key});
@@ -46,22 +47,77 @@ class CustomNavRail extends StatelessWidget {
       ),
       child: Column(
         children: [
+          SizedBox(height: 10),
+          // Nav Title
           Row(
             spacing: 10,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ImageIcon(AssetImage("icon-small.png")),
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: AppColors.blueColor,
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                child: ImageIcon(
+                  AssetImage("icon-small.png"),
+                  size: 50,
+                  color: AppColors.whiteColor,
+                ),
+              ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     "Attendance Manager",
-                    style: GoogleFonts.rubik(fontSize: 20),
+                    style: GoogleFonts.quicksand(
+                      fontSize: 23,
+                      color: AppColors.blueColor,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  Text("Admin Console", style: GoogleFonts.rubik()),
+                  Text(
+                    "Admin Console",
+                    style: GoogleFonts.quicksand(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ],
               ),
             ],
+          ),
+          const SizedBox(height: 50),
+
+          // Employee Nav Button
+          Container(
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: const Color.fromARGB(29, 7, 129, 229),
+                width: 2,
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              color: AppColors.navButtonBackgroundColor,
+            ),
+            margin: EdgeInsets.all(5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  Ionicons.people_circle,
+                  size: 30,
+                  color: AppColors.blueColor,
+                ),
+                SizedBox(width: 10),
+                Text(
+                  "Employees",
+                  style: GoogleFonts.quantico(
+                    fontSize: 20,
+                    color: AppColors.blueColor,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
