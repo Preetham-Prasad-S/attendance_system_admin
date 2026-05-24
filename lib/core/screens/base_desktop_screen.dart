@@ -90,29 +90,29 @@ class CustomNavRail extends StatelessWidget {
 
           // Employee Nav Button
           Container(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             decoration: BoxDecoration(
-              border: Border.all(
-                color: const Color.fromARGB(29, 7, 129, 229),
-                width: 2,
-              ),
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+              // border: Border.all(
+              //   color: const Color.fromARGB(29, 7, 129, 229),
+              //   width: 2,
+              // ),
+              borderRadius: BorderRadius.all(Radius.circular(15)),
               color: AppColors.navButtonBackgroundColor,
             ),
-            margin: EdgeInsets.all(5),
+            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Icon(
-                  Ionicons.people_circle,
-                  size: 30,
+                  Ionicons.people_outline,
+                  size: 25,
                   color: AppColors.blueColor,
                 ),
                 SizedBox(width: 10),
                 Text(
                   "Employees",
                   style: GoogleFonts.quantico(
-                    fontSize: 20,
+                    fontSize: 18,
                     color: AppColors.blueColor,
                   ),
                 ),
