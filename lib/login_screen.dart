@@ -1,33 +1,32 @@
+import 'package:attendance_system_admin/core/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'login_desktop_layout.dart';
-import 'login_mobilelayout.dart';
-import 'login_shortlayout.dart';
+import 'login_mobile_layout.dart';
+import 'login_short_layout.dart';
 
-class AdminLoginPage extends StatefulWidget {
-  const AdminLoginPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _AdminLoginPage();
+  State<StatefulWidget> createState() => _LoginScreen();
 }
 
-class _AdminLoginPage extends State<AdminLoginPage> {
+class _LoginScreen extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: Color.fromRGBO(228, 228, 230, 1),
+    return Scaffold(
+      backgroundColor: AppColors.lightScaffoldColor,
 
-        body: Column(
-          children: [
-            if (width < 1000 && width > 505)
-              ShortLayout()
-            else if (width < 505)
-              MobileLayout()
-            else
-              LoginDesktopLayout(),
-          ],
-        ),
+      body: Column(
+        children: [
+          if (width < 1000 && width > 505)
+            LoginShortLayout()
+          else if (width < 505)
+            LoginMobilelayout()
+          else
+            LoginDesktopLayout(),
+        ],
       ),
     );
   }

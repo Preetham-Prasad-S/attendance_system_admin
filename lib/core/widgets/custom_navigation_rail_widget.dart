@@ -65,7 +65,8 @@ class NavButton extends StatelessWidget {
           SizedBox(width: 10),
           Text(
             "Employees",
-            style: GoogleFonts.quantico(
+            style: GoogleFonts.quicksand(
+              fontWeight: FontWeight.w500,
               fontSize: 18,
               color: AppColors.blueColor,
             ),

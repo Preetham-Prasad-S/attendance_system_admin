@@ -1,5 +1,8 @@
+import 'package:attendance_system_admin/core/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:ionicons/ionicons.dart';
 
 class LoginDesktopLayout extends StatefulWidget {
   const LoginDesktopLayout({super.key});
@@ -28,9 +31,9 @@ class _DesktopLayout extends State<LoginDesktopLayout> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Attendance",
-                      style: TextStyle(
-                        color: Colors.blue,
+                      "Staff Attendance Admin",
+                      style: GoogleFonts.quicksand(
+                        color: AppColors.blueColor,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -53,8 +56,8 @@ class _DesktopLayout extends State<LoginDesktopLayout> {
                           children: [
                             Text(
                               "Precision Workforce Tracking",
-                              style: TextStyle(
-                                fontSize: 30,
+                              style: GoogleFonts.quicksand(
+                                fontSize: 26,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -62,7 +65,10 @@ class _DesktopLayout extends State<LoginDesktopLayout> {
                             Text(
                               "Experience the future of attendance management with our cutting-edge isometric reporting and real-time kiosk integration.",
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 16),
+                              style: GoogleFonts.quicksand(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
                               maxLines: 3,
                             ),
                           ],
@@ -89,13 +95,14 @@ class _DesktopLayout extends State<LoginDesktopLayout> {
                   child: Container(
                     padding: EdgeInsets.all(40),
                     width: 500,
-                    height: 600,
+
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "Welcome Back",
-                          style: TextStyle(
+                          style: GoogleFonts.quicksand(
                             fontSize: 22,
                             fontWeight: FontWeight.w600,
                           ),
@@ -103,28 +110,47 @@ class _DesktopLayout extends State<LoginDesktopLayout> {
                         SizedBox(height: 10),
                         Text(
                           "Login to manage attendance records",
-                          style: TextStyle(
+                          style: GoogleFonts.quicksand(
                             fontSize: 14,
-                            color: Color.fromRGBO(63, 62, 62, 1),
+                            fontWeight: FontWeight.w500,
+                            color: Color.fromRGBO(0, 0, 0, 1),
                           ),
                         ),
-                        SizedBox(height: 15),
+                        SizedBox(height: 35),
                         Text(
                           "Email Address",
-                          style: TextStyle(
+                          style: GoogleFonts.quicksand(
                             fontWeight: FontWeight.bold,
-                            fontSize: 12,
+                            fontSize: 14,
                           ),
                         ),
                         SizedBox(height: 8),
                         TextField(
+                          style: GoogleFonts.quicksand(
+                            fontWeight: FontWeight.w500,
+                          ),
+                          cursorColor: AppColors.blueColor,
                           decoration: InputDecoration(
                             hintText: "name@company.com",
-                            hintStyle: TextStyle(
-                              color: Color.fromRGBO(64, 63, 63, 1),
+                            hintStyle: GoogleFonts.quicksand(
+                              color: Color.fromRGBO(64, 63, 63, 0.673),
                               fontSize: 14,
+                              fontWeight: FontWeight.w600,
                             ),
-                            border: OutlineInputBorder(
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: AppColors.blueColor,
+                                width: 2,
+                              ),
+
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.grey,
+                                width: 1.5,
+                              ),
+
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
@@ -137,9 +163,9 @@ class _DesktopLayout extends State<LoginDesktopLayout> {
                               flex: 2,
                               child: Text(
                                 "Password",
-                                style: TextStyle(
+                                style: GoogleFonts.quicksand(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 12,
+                                  fontSize: 14,
                                 ),
                               ),
                             ),
@@ -147,11 +173,11 @@ class _DesktopLayout extends State<LoginDesktopLayout> {
                             InkWell(
                               onTap: () {},
                               child: Text(
-                                "Forgot Password?",
-                                style: TextStyle(
+                                "Forgot Password ?",
+                                style: GoogleFonts.quicksand(
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
-                                  color: Color.fromRGBO(14, 144, 243, 1),
+                                  color: AppColors.blueColor,
                                 ),
                               ),
                             ),
@@ -161,14 +187,31 @@ class _DesktopLayout extends State<LoginDesktopLayout> {
                         SizedBox(height: 8),
 
                         TextField(
+                          cursorColor: AppColors.blueColor,
+                          style: GoogleFonts.quicksand(
+                            fontWeight: FontWeight.w500,
+                          ),
                           obscureText: textHide,
                           decoration: InputDecoration(
-                            hintText: "● ● ● ● ●",
-                            hintStyle: TextStyle(
-                              color: Color.fromRGBO(64, 63, 63, 1),
-                              fontSize: 10,
+                            hintText: "•••••••••••",
+                            hintStyle: GoogleFonts.quicksand(
+                              color: Color.fromRGBO(64, 63, 63, 0.673),
+                              fontSize: 14,
                             ),
-                            border: OutlineInputBorder(
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: AppColors.blueColor,
+                                width: 2,
+                              ),
+
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.grey,
+                                width: 1.5,
+                              ),
+
                               borderRadius: BorderRadius.circular(10),
                             ),
                             suffixIcon: IconButton(
@@ -197,10 +240,23 @@ class _DesktopLayout extends State<LoginDesktopLayout> {
                                   isChecked = newValue ?? false;
                                 });
                               },
-                              activeColor: Colors.blue,
-                              checkColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(5),
+                                ),
+                              ),
+                              side: BorderSide(
+                                color: const Color.fromARGB(120, 0, 0, 0),
+                              ),
+                              activeColor: AppColors.blueColor,
+                              checkColor: AppColors.whiteColor,
                             ),
-                            Text("Remember Me"),
+                            Text(
+                              "Remember Me",
+                              style: GoogleFonts.quicksand(
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                           ],
                         ),
 
@@ -209,14 +265,20 @@ class _DesktopLayout extends State<LoginDesktopLayout> {
                         TextButton(
                           onPressed: () {},
                           style: TextButton.styleFrom(
-                            minimumSize: Size(double.infinity, 50),
+                            minimumSize: Size(double.infinity, 60),
                             foregroundColor: Color.fromRGBO(255, 255, 255, 1),
                             backgroundColor: Color.fromRGBO(48, 102, 208, 1),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadiusGeometry.circular(10),
                             ),
                           ),
-                          child: Text("Login"),
+                          child: Text(
+                            "Login",
+                            style: GoogleFonts.quicksand(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                         ),
                         SizedBox(height: 20),
 
@@ -233,7 +295,7 @@ class _DesktopLayout extends State<LoginDesktopLayout> {
                               padding: EdgeInsets.symmetric(horizontal: 15.0),
                               child: Text(
                                 "OR",
-                                style: TextStyle(
+                                style: GoogleFonts.quicksand(
                                   color: Colors.grey[600],
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -257,13 +319,17 @@ class _DesktopLayout extends State<LoginDesktopLayout> {
                                 onPressed: () {},
                                 label: Text(
                                   "Google",
-                                  style: TextStyle(
+                                  style: GoogleFonts.quicksand(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ),
-                                icon: FaIcon(FontAwesomeIcons.google, size: 15),
+                                icon: Image(
+                                  image: AssetImage("google-icon-small.png"),
+                                  height: 20,
+                                ),
                                 style: TextButton.styleFrom(
+                                  overlayColor: AppColors.blueColor,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(5),
                                     side: BorderSide(
@@ -280,17 +346,19 @@ class _DesktopLayout extends State<LoginDesktopLayout> {
                               child: TextButton.icon(
                                 onPressed: () {},
                                 label: Text(
-                                  "Microsoft",
-                                  style: TextStyle(
+                                  "Github",
+                                  style: GoogleFonts.quicksand(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ),
                                 icon: FaIcon(
-                                  FontAwesomeIcons.microsoft,
-                                  size: 15,
+                                  FontAwesomeIcons.github,
+                                  size: 20,
+                                  color: Colors.black,
                                 ),
                                 style: TextButton.styleFrom(
+                                  overlayColor: AppColors.blueColor,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(5),
                                     side: BorderSide(
@@ -312,6 +380,9 @@ class _DesktopLayout extends State<LoginDesktopLayout> {
                             Text(
                               "Don't have an account?",
                               textAlign: TextAlign.center,
+                              style: GoogleFonts.quicksand(
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
 
                             SizedBox(width: 5),
@@ -321,7 +392,8 @@ class _DesktopLayout extends State<LoginDesktopLayout> {
                               child: Text(
                                 "Sign Up",
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: GoogleFonts.quicksand(
+                                  fontWeight: FontWeight.w500,
                                   color: Color.fromRGBO(48, 102, 208, 1),
                                 ),
                               ),
