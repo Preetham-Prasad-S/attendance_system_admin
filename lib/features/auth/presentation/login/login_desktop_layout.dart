@@ -2,7 +2,6 @@ import 'package:attendance_system_admin/core/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ionicons/ionicons.dart';
 
 class LoginDesktopLayout extends StatefulWidget {
   const LoginDesktopLayout({super.key});
