@@ -4,14 +4,14 @@ import 'login_desktop_layout.dart';
 import 'login_mobile_layout.dart';
 import 'login_short_layout.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
   State<StatefulWidget> createState() => _LoginScreen();
 }
 
-class _LoginScreen extends State<LoginPage> {
+class _LoginScreen extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;

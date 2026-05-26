@@ -7,4 +7,5 @@ class AppColors {
   static const blueColor = Color.fromRGBO(48, 102, 208, 1);
   static const navButtonBackgroundColor = Color.fromARGB(16, 33, 149, 243);
   static const navButtonBorderColor = Color.fromARGB(29, 7, 129, 229);
+  static const lightCardShadowColor = Color.fromARGB(112, 0, 0, 0);
 }

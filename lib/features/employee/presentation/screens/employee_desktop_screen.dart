@@ -1,3 +1,4 @@
+import 'package:attendance_system_admin/features/employee/presentation/widgets/employee_navigation_bar_widget.dart';
 import 'package:flutter/material.dart';
 
 class EmployeeDesktopScreen extends StatelessWidget {
@@ -5,6 +6,6 @@ class EmployeeDesktopScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: Center(child: Text("Desktop")));
+    return Column(children: [EmployeeNavigationBarWidget()]);
   }
 }

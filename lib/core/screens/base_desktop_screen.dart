@@ -1,5 +1,6 @@
 import 'package:attendance_system_admin/core/app_colors.dart';
 import 'package:attendance_system_admin/core/widgets/custom_navigation_rail_widget.dart';
+import 'package:attendance_system_admin/features/employee/presentation/screens/employee_desktop_screen.dart';
 import 'package:flutter/material.dart';
 
 class BaseDesktopScreen extends StatelessWidget {
@@ -17,22 +18,11 @@ class BaseDesktopScreen extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(20),
-              child: IndexedStack(children: [(EmployeeScreen())]),
+              child: IndexedStack(children: [EmployeeDesktopScreen()]),
             ),
           ),
         ],
       ),
-    );
-  }
-}
-
-class EmployeeScreen extends StatelessWidget {
-  const EmployeeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [SizedBox(height: 30, child: Row(children: []))],
     );
   }
 }
