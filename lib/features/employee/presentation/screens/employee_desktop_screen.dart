@@ -6,6 +6,12 @@ class EmployeeDesktopScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [EmployeeNavigationBarWidget()]);
+    return Column(
+      children: [
+        EmployeeNavigationBarWidget(),
+        SizedBox(height: 40),
+        Column(children: [Text("User Management")]),
+      ],
+    );
   }
 }
