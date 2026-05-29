@@ -1,3 +1,4 @@
+import 'package:attendance_system_admin/features/employee/presentation/widgets/employee_info_widget.dart';
 import 'package:attendance_system_admin/features/employee/presentation/widgets/employee_navigation_bar_widget.dart';
 import 'package:attendance_system_admin/features/employee/presentation/widgets/employee_title_widget.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ class EmployeeDesktopScreen extends StatelessWidget {
         SizedBox(height: 40),
         EmployeeTitleWidget(),
         SizedBox(height: 30),
-        Column(children: []),
+        EmployeeInfoWidget(),
       ],
     );
   }
