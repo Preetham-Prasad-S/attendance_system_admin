@@ -1,6 +1,8 @@
+import 'package:attendance_system_admin/core/app_colors.dart';
+import 'package:colorful_iconify_flutter/icons/logos.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+import 'package:google_fonts/google_fonts.dart';
+import 'package:iconify_flutter/iconify_flutter.dart';
 class LoginMobilelayout extends StatefulWidget {
   const LoginMobilelayout({super.key});
   @override
@@ -8,8 +10,8 @@ class LoginMobilelayout extends StatefulWidget {
 }
 
 class _MobileLayout extends State<LoginMobilelayout> {
-  bool isChecked = false;
-  bool textHide = true;
+  
+  
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -29,94 +31,100 @@ class _MobileLayout extends State<LoginMobilelayout> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Welcome Back",
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
-                  ),
+                  MobileLoginTitleWidget(),
+
                   SizedBox(height: 5),
-                  Text(
-                    "Login to manage attendance records",
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Color.fromRGBO(63, 62, 62, 1),
-                    ),
-                  ),
+
+                  MobileLoginDescriptionWidget(),
+
                   SizedBox(height: 10),
-                  Text(
-                    "Email Address",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                  ),
-                  SizedBox(height: 8),
-                  TextField(
-                    decoration: InputDecoration(
-                      hintText: "name@company.com",
-                      hintStyle: TextStyle(
-                        color: Color.fromRGBO(64, 63, 63, 1),
-                        fontSize: 14,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(width: 1.5),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 15),
 
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          "Password",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
+                  MobileLoginEmailFieldWidget(),
 
-                      InkWell(
-                        onTap: () {},
-                        child: Text(
-                          "Forgot Password?",
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Color.fromRGBO(14, 144, 243, 1),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  MobileLoginPasswordForgotWidget(),
 
                   SizedBox(height: 8),
-
-                  TextField(
-                    obscureText: textHide,
-                    decoration: InputDecoration(
-                      hintText: "● ● ● ● ●",
-                      hintStyle: TextStyle(
-                        color: Color.fromRGBO(64, 63, 63, 1),
-                        fontSize: 10,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(width: 1.5),
-                      ),
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          textHide = !textHide;
-                        },
-                        icon: Icon(
-                          textHide ? Icons.visibility : Icons.visibility_off,
-                        ),
-                        color: Color.fromRGBO(108, 108, 109, 1),
-                      ),
-                    ),
-                  ),
+                  
+                  MobileLoginPasswordTextfieldWidget(),
+                  
                   SizedBox(height: 0),
 
-                  Row(
+                  MobileLoginCheckboxWidget(),
+
+                  SizedBox(height: 10),
+
+                  MobileLoginLoginButtonWidget(),
+
+                  SizedBox(height: 10),
+
+                  MobileLoginDividerWIdget(),
+
+                  SizedBox(height: 10),
+
+                  MobileLoginOptionsButtonWidget(),
+
+                  SizedBox(height: 20),
+
+                  MobileLoginSignupWidget(),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
+class MobileLoginSignupWidget extends StatelessWidget {
+  const MobileLoginSignupWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+         "Don't have an account?",
+          textAlign: TextAlign.center,
+          style: GoogleFonts.quicksand(
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+    
+        SizedBox(width: 5),
+    
+        InkWell(
+          onTap: () {},
+          child: Text(
+            "Sign Up",
+            textAlign: TextAlign.center,
+            style: GoogleFonts.quicksand(
+              fontWeight: FontWeight.w500,
+              color: Color.fromRGBO(48, 102, 208, 1),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class MobileLoginCheckboxWidget extends StatefulWidget{
+  const MobileLoginCheckboxWidget({super.key});
+  @override
+  State<MobileLoginCheckboxWidget> createState() => _MobileLoginCheckboxWidget();
+}
+
+class _MobileLoginCheckboxWidget extends State<MobileLoginCheckboxWidget>{
+  bool isChecked = false;
+  @override
+  Widget build(BuildContext context){
+    return Row(
                     children: [
                       Checkbox(
                         value: isChecked,
@@ -130,128 +138,307 @@ class _MobileLayout extends State<LoginMobilelayout> {
                       ),
                       Text("Remember Me"),
                     ],
-                  ),
+                  );
+  }
+}
 
-                  SizedBox(height: 10),
+class MobileLoginPasswordTextfieldWidget extends StatefulWidget{
+  const MobileLoginPasswordTextfieldWidget({super.key});
+  @override
+  State<MobileLoginPasswordTextfieldWidget> createState() => _MobileLoginPasswordTextfieldWidget();
+}
 
-                  TextButton(
-                    onPressed: () {},
-                    style: TextButton.styleFrom(
-                      minimumSize: Size(double.infinity, 50),
-                      foregroundColor: Color.fromRGBO(255, 255, 255, 1),
-                      backgroundColor: Color.fromRGBO(48, 102, 208, 1),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadiusGeometry.circular(10),
-                      ),
-                    ),
-                    child: Text("Login"),
-                  ),
-                  SizedBox(height: 10),
-
-                  // Continuous horizontal line
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Divider(thickness: 1.5, color: Colors.grey),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15.0),
-                        child: Text(
-                          "OR",
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                            fontWeight: FontWeight.bold,
+class _MobileLoginPasswordTextfieldWidget extends State<MobileLoginPasswordTextfieldWidget>{
+  bool textHide = true;
+  @override
+  Widget build(BuildContext context){
+    return TextField(
+                    cursorColor: AppColors.blueColor,
+                          style: GoogleFonts.quicksand(
+                            fontWeight: FontWeight.w500,
                           ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Divider(thickness: 1.5, color: Colors.grey),
-                      ),
-                    ],
-                  ),
-
-                  SizedBox(height: 10),
-
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextButton.icon(
-                          onPressed: () {},
-                          label: Text(
-                            "Google",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w400,
+                          obscureText: textHide,
+                          decoration: InputDecoration(
+                            hintText: "•••••••••••",
+                            hintStyle: GoogleFonts.quicksand(
+                              color: Color.fromRGBO(64, 63, 63, 0.673),
+                              fontSize: 14,
                             ),
-                          ),
-                          icon: FaIcon(FontAwesomeIcons.google, size: 15),
-                          style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              side: BorderSide(
-                                color: Color.fromRGBO(199, 195, 195, 1),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: AppColors.blueColor,
+                                width: 2,
+                              ),
+
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.grey,
                                 width: 1.5,
                               ),
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            minimumSize: Size(double.infinity, 50),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 20),
-                      Expanded(
-                        child: TextButton.icon(
-                          onPressed: () {},
-                          label: Text(
-                            "Microsoft",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          icon: FaIcon(FontAwesomeIcons.microsoft, size: 15),
-                          style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              side: BorderSide(
-                                color: Color.fromRGBO(199, 195, 195, 1),
-                                width: 1.5,
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  textHide = !textHide;
+                                });
+                              },
+                              icon: Icon(
+                                textHide
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
                               ),
+                              color: Color.fromRGBO(108, 108, 109, 1),
                             ),
-                            minimumSize: Size(double.infinity, 50),
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
+                  );
+  }
+}
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Don't have an account?",
-                        textAlign: TextAlign.center,
-                      ),
 
-                      SizedBox(width: 5),
 
-                      InkWell(
-                        onTap: () {},
-                        child: Text(
-                          "Sign Up",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Color.fromRGBO(48, 102, 208, 1),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+class MobileLoginOptionsButtonWidget extends StatelessWidget {
+  const MobileLoginOptionsButtonWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: TextButton.icon(
+            onPressed: () {},
+            label: Text(
+              "Google",
+              style: GoogleFonts.quicksand(
+                color: Colors.black,
+                fontWeight: FontWeight.w400,
               ),
+            ),
+            icon: Iconify(Logos.google_icon, size: 20,),
+            style: TextButton.styleFrom(
+              overlayColor: AppColors.blueColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+                side: BorderSide(
+                  color: Color.fromRGBO(199, 195, 195, 1),
+                  width: 1.5,
+                ),
+              ),
+              minimumSize: Size(double.infinity, 50),
             ),
           ),
         ),
+    
+        SizedBox(width: 20),
+        Expanded(
+          child: TextButton.icon(
+            onPressed: () {},
+            label: Text(
+              "Microsoft",
+              style: GoogleFonts.quicksand(
+                color: Colors.black,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            icon:  Iconify(Logos.microsoft_icon, size: 20,),
+            style: TextButton.styleFrom(
+              overlayColor: AppColors.blueColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+                side: BorderSide(
+                  color: Color.fromRGBO(199, 195, 195, 1),
+                  width: 1.5,
+                ),
+              ),
+              minimumSize: Size(double.infinity, 50),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class MobileLoginDividerWIdget extends StatelessWidget {
+  const MobileLoginDividerWIdget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Divider(thickness: 1.5, color: Colors.grey),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15.0),
+          child: Text(
+            "OR",
+            style: GoogleFonts.quicksand(
+              color: Colors.grey[600],
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Divider(thickness: 1.5, color: Colors.grey),
+        ),
+      ],
+    );
+  }
+}
+
+class MobileLoginLoginButtonWidget extends StatelessWidget {
+  const MobileLoginLoginButtonWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () {},
+      style: TextButton.styleFrom(
+        minimumSize: Size(double.infinity, 50),
+        foregroundColor: Color.fromRGBO(255, 255, 255, 1),
+        backgroundColor: Color.fromRGBO(48, 102, 208, 1),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusGeometry.circular(10),
+        ),
+      ),
+      child: Text( "Login",
+        style: GoogleFonts.quicksand(
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+        )
+      ),
+    );
+  }
+}
+
+class MobileLoginPasswordForgotWidget extends StatelessWidget {
+  const MobileLoginPasswordForgotWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 2,
+          child: Text(
+            "Password",
+            style: GoogleFonts.quicksand(
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+          ),
+        ),
+    
+        InkWell(
+          onTap: () {},
+          child: Text(
+            "Forgot Password ?",
+            style: GoogleFonts.quicksand(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: AppColors.blueColor,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class MobileLoginEmailFieldWidget extends StatelessWidget {
+  const MobileLoginEmailFieldWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          "Email Address",
+          style: GoogleFonts.quicksand(
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+          ),
+        ),
+        SizedBox(height: 8),
+        TextField(
+          style: GoogleFonts.quicksand(
+            fontWeight: FontWeight.w500,
+          ),
+          cursorColor: AppColors.blueColor,
+          decoration: InputDecoration(
+            hintText: "name@company.com",
+            hintStyle: GoogleFonts.quicksand(
+              color: Color.fromRGBO(64, 63, 63, 0.673),
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: AppColors.blueColor,
+                width: 2,
+              ),
+        
+              borderRadius: BorderRadius.circular(10),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.grey,
+                width: 1.5,
+              ),
+        
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        ),
+        SizedBox(height: 20),
+      ],
+    );
+  }
+}
+
+class MobileLoginDescriptionWidget extends StatelessWidget {
+  const MobileLoginDescriptionWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      "Login to manage attendance records",
+      style: GoogleFonts.quicksand(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: Color.fromRGBO(0, 0, 0, 1),
+      ),
+    );
+  }
+}
+
+class MobileLoginTitleWidget extends StatelessWidget {
+  const MobileLoginTitleWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      "Welcome Back",
+      style: GoogleFonts.quicksand(
+        fontSize: 22,
+        fontWeight: FontWeight.w600,
       ),
     );
   }
