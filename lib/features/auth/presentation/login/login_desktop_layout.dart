@@ -12,8 +12,6 @@ class LoginDesktopLayout extends StatefulWidget {
 }
 
 class _LoginDesktopLayout extends State<LoginDesktopLayout> {
-  
- 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -30,13 +28,22 @@ class _LoginDesktopLayout extends State<LoginDesktopLayout> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    LeftLoginTitleWidget(),
+                    LoginImageTitleWidget(),
                     SizedBox(height: 10),
 
-                    LeftLoginImageWidget(),
-                    SizedBox(height: 15),
+                    Expanded(
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            LoginImageWidget(),
+                            SizedBox(height: 15),
 
-                    LeftLoginDescriptionWidget(),
+                            LoginImageDescriptionWidget(),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -62,17 +69,17 @@ class _LoginDesktopLayout extends State<LoginDesktopLayout> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        RightLoginCardTitleWidget(),
+                        LoginFormTitleWidget(),
 
                         SizedBox(height: 10),
 
-                        RightLoginCardDescriptionWidget(),
-                        
+                        LoginFormTitleDescriptionWidget(),
+
                         SizedBox(height: 35),
 
-                        RightLoginEmailFieldWidget(),
+                        LoginFormEmailFieldWidget(),
 
-                        RightLoginPasswordForgotWidget(),
+                        LoginFormPasswordFieldWidget(),
 
                         SizedBox(height: 8),
 
@@ -110,47 +117,39 @@ class _LoginDesktopLayout extends State<LoginDesktopLayout> {
   }
 }
 
-
-
-class RightLoginCheckBoxWidget extends StatefulWidget{
+class RightLoginCheckBoxWidget extends StatefulWidget {
   const RightLoginCheckBoxWidget({super.key});
-  
+
   @override
   State<RightLoginCheckBoxWidget> createState() => _RightLoginCheckBoxWidget();
 }
 
-class _RightLoginCheckBoxWidget extends State<RightLoginCheckBoxWidget>{
+class _RightLoginCheckBoxWidget extends State<RightLoginCheckBoxWidget> {
   bool isChecked = false;
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Row(
-                          children: [
-                            Checkbox(
-                              value: isChecked,
-                              onChanged: (bool? newValue) {
-                                setState(() {
-                                  isChecked = newValue ?? false;
-                                });
-                              },
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(5),
-                                ),
-                              ),
-                              side: BorderSide(
-                                color: const Color.fromARGB(120, 0, 0, 0),
-                              ),
-                              activeColor: AppColors.blueColor,
-                              checkColor: AppColors.whiteColor,
-                            ),
-                            Text(
-                              "Remember Me",
-                              style: GoogleFonts.quicksand(
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        );
+      children: [
+        Checkbox(
+          value: isChecked,
+          onChanged: (bool? newValue) {
+            setState(() {
+              isChecked = newValue ?? false;
+            });
+          },
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+          ),
+          side: BorderSide(color: const Color.fromARGB(120, 0, 0, 0)),
+          activeColor: AppColors.blueColor,
+          checkColor: AppColors.whiteColor,
+        ),
+        Text(
+          "Remember Me",
+          style: GoogleFonts.quicksand(fontWeight: FontWeight.w500),
+        ),
+      ],
+    );
   }
 }
 
@@ -158,63 +157,51 @@ class RightLoginPasswordTextfieldWidget extends StatefulWidget {
   const RightLoginPasswordTextfieldWidget({super.key});
 
   @override
-  State<RightLoginPasswordTextfieldWidget> createState() => _RightLoginPasswordTextfieldWidget();
+  State<RightLoginPasswordTextfieldWidget> createState() =>
+      _RightLoginPasswordTextfieldWidget();
 }
 
-class _RightLoginPasswordTextfieldWidget extends State<RightLoginPasswordTextfieldWidget>{
-   bool textHide = true;
+class _RightLoginPasswordTextfieldWidget
+    extends State<RightLoginPasswordTextfieldWidget> {
+  bool textHide = true;
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return TextField(
-                          cursorColor: AppColors.blueColor,
-                          style: GoogleFonts.quicksand(
-                            fontWeight: FontWeight.w500,
-                          ),
-                          obscureText: textHide,
-                          decoration: InputDecoration(
-                            hintText: "•••••••••••",
-                            hintStyle: GoogleFonts.quicksand(
-                              color: Color.fromRGBO(64, 63, 63, 0.673),
-                              fontSize: 14,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: AppColors.blueColor,
-                                width: 2,
-                              ),
+      cursorColor: AppColors.blueColor,
+      style: GoogleFonts.quicksand(fontWeight: FontWeight.w500),
+      obscureText: textHide,
+      decoration: InputDecoration(
+        hintText: "•••••••••••",
+        hintStyle: GoogleFonts.quicksand(
+          color: Color.fromRGBO(64, 63, 63, 0.673),
+          fontSize: 14,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: AppColors.blueColor, width: 2),
 
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.grey,
-                                width: 1.5,
-                              ),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey, width: 1.5),
 
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  textHide = !textHide;
-                                });
-                              },
-                              icon: Icon(
-                                textHide
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                              ),
-                              color: Color.fromRGBO(108, 108, 109, 1),
-                            ),
-                          ),
-                        );
+          borderRadius: BorderRadius.circular(10),
+        ),
+        suffixIcon: IconButton(
+          onPressed: () {
+            setState(() {
+              textHide = !textHide;
+            });
+          },
+          icon: Icon(textHide ? Icons.visibility : Icons.visibility_off),
+          color: Color.fromRGBO(108, 108, 109, 1),
+        ),
+      ),
+    );
   }
 }
 
 class RightLoginSignupOptionWidget extends StatelessWidget {
-  const RightLoginSignupOptionWidget({
-    super.key,
-  });
+  const RightLoginSignupOptionWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -224,13 +211,11 @@ class RightLoginSignupOptionWidget extends StatelessWidget {
         Text(
           "Don't have an account?",
           textAlign: TextAlign.center,
-          style: GoogleFonts.quicksand(
-            fontWeight: FontWeight.w500,
-          ),
+          style: GoogleFonts.quicksand(fontWeight: FontWeight.w500),
         ),
-    
+
         SizedBox(width: 5),
-    
+
         InkWell(
           onTap: () {},
           child: Text(
@@ -248,9 +233,7 @@ class RightLoginSignupOptionWidget extends StatelessWidget {
 }
 
 class RightLoginOptionsButtonWidget extends StatelessWidget {
-  const RightLoginOptionsButtonWidget({
-    super.key,
-  });
+  const RightLoginOptionsButtonWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -266,7 +249,7 @@ class RightLoginOptionsButtonWidget extends StatelessWidget {
                 fontWeight: FontWeight.w400,
               ),
             ),
-            icon: Iconify(Logos.google_icon, size: 20,),
+            icon: Iconify(Logos.google_icon, size: 20),
             style: TextButton.styleFrom(
               overlayColor: AppColors.blueColor,
               shape: RoundedRectangleBorder(
@@ -280,7 +263,7 @@ class RightLoginOptionsButtonWidget extends StatelessWidget {
             ),
           ),
         ),
-    
+
         SizedBox(width: 20),
         Expanded(
           child: TextButton.icon(
@@ -292,7 +275,7 @@ class RightLoginOptionsButtonWidget extends StatelessWidget {
                 fontWeight: FontWeight.w400,
               ),
             ),
-            icon: Iconify(Logos.microsoft_icon, size: 20,),
+            icon: Iconify(Logos.microsoft_icon, size: 20),
             style: TextButton.styleFrom(
               overlayColor: AppColors.blueColor,
               shape: RoundedRectangleBorder(
@@ -312,9 +295,7 @@ class RightLoginOptionsButtonWidget extends StatelessWidget {
 }
 
 class RightLoginButtonWIdget extends StatelessWidget {
-  const RightLoginButtonWIdget({
-    super.key,
-  });
+  const RightLoginButtonWIdget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -330,30 +311,20 @@ class RightLoginButtonWIdget extends StatelessWidget {
       ),
       child: Text(
         "Login",
-        style: GoogleFonts.quicksand(
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-        ),
+        style: GoogleFonts.quicksand(fontSize: 20, fontWeight: FontWeight.w600),
       ),
     );
   }
 }
 
 class RightLoginDividerWidget extends StatelessWidget {
-  const RightLoginDividerWidget({
-    super.key,
-  });
+  const RightLoginDividerWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(
-          child: Divider(
-            thickness: 1.5,
-            color: Colors.grey,
-          ),
-        ),
+        Expanded(child: Divider(thickness: 1.5, color: Colors.grey)),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 15.0),
           child: Text(
@@ -364,21 +335,14 @@ class RightLoginDividerWidget extends StatelessWidget {
             ),
           ),
         ),
-        Expanded(
-          child: Divider(
-            thickness: 1.5,
-            color: Colors.grey,
-          ),
-        ),
+        Expanded(child: Divider(thickness: 1.5, color: Colors.grey)),
       ],
     );
   }
 }
 
-class RightLoginPasswordForgotWidget extends StatelessWidget {
-  const RightLoginPasswordForgotWidget({
-    super.key,
-  });
+class LoginFormPasswordFieldWidget extends StatelessWidget {
+  const LoginFormPasswordFieldWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -394,7 +358,7 @@ class RightLoginPasswordForgotWidget extends StatelessWidget {
             ),
           ),
         ),
-    
+
         InkWell(
           onTap: () {},
           child: Text(
@@ -411,10 +375,8 @@ class RightLoginPasswordForgotWidget extends StatelessWidget {
   }
 }
 
-class RightLoginEmailFieldWidget extends StatelessWidget {
-  const RightLoginEmailFieldWidget({
-    super.key,
-  });
+class LoginFormEmailFieldWidget extends StatelessWidget {
+  const LoginFormEmailFieldWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -429,9 +391,7 @@ class RightLoginEmailFieldWidget extends StatelessWidget {
         ),
         SizedBox(height: 8),
         TextField(
-          style: GoogleFonts.quicksand(
-            fontWeight: FontWeight.w500,
-          ),
+          style: GoogleFonts.quicksand(fontWeight: FontWeight.w500),
           cursorColor: AppColors.blueColor,
           decoration: InputDecoration(
             hintText: "name@company.com",
@@ -441,19 +401,13 @@ class RightLoginEmailFieldWidget extends StatelessWidget {
               fontWeight: FontWeight.w600,
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: AppColors.blueColor,
-                width: 2,
-              ),
-        
+              borderSide: BorderSide(color: AppColors.blueColor, width: 2),
+
               borderRadius: BorderRadius.circular(10),
             ),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.grey,
-                width: 1.5,
-              ),
-        
+              borderSide: BorderSide(color: Colors.grey, width: 1.5),
+
               borderRadius: BorderRadius.circular(10),
             ),
           ),
@@ -464,10 +418,8 @@ class RightLoginEmailFieldWidget extends StatelessWidget {
   }
 }
 
-class RightLoginCardDescriptionWidget extends StatelessWidget {
-  const RightLoginCardDescriptionWidget({
-    super.key,
-  });
+class LoginFormTitleDescriptionWidget extends StatelessWidget {
+  const LoginFormTitleDescriptionWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -482,28 +434,20 @@ class RightLoginCardDescriptionWidget extends StatelessWidget {
   }
 }
 
-class RightLoginCardTitleWidget extends StatelessWidget {
-  const RightLoginCardTitleWidget({
-    super.key,
-  });
+class LoginFormTitleWidget extends StatelessWidget {
+  const LoginFormTitleWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Text(
       "Welcome Back",
-      style: GoogleFonts.quicksand(
-        fontSize: 22,
-        fontWeight: FontWeight.w600,
-      ),
+      style: GoogleFonts.quicksand(fontSize: 22, fontWeight: FontWeight.w600),
     );
   }
 }
 
-
-class LeftLoginDescriptionWidget extends StatelessWidget {
-  const LeftLoginDescriptionWidget({
-    super.key,
-  });
+class LoginImageDescriptionWidget extends StatelessWidget {
+  const LoginImageDescriptionWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -536,10 +480,8 @@ class LeftLoginDescriptionWidget extends StatelessWidget {
   }
 }
 
-class LeftLoginImageWidget extends StatelessWidget {
-  const LeftLoginImageWidget({
-    super.key,
-  });
+class LoginImageWidget extends StatelessWidget {
+  const LoginImageWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -553,10 +495,8 @@ class LeftLoginImageWidget extends StatelessWidget {
   }
 }
 
-class LeftLoginTitleWidget extends StatelessWidget {
-  const LeftLoginTitleWidget({
-    super.key,
-  });
+class LoginImageTitleWidget extends StatelessWidget {
+  const LoginImageTitleWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
