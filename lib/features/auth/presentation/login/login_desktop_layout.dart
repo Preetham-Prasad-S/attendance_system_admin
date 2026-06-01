@@ -376,6 +376,7 @@ class LoginFormPasswordFieldWidget extends StatelessWidget {
 }
 
 class LoginFormEmailFieldWidget extends StatelessWidget {
+  
   const LoginFormEmailFieldWidget({super.key});
 
   @override
