@@ -9,14 +9,39 @@ class AuthDatasourceImpl implements AuthDatasource {
     : _supabaseClient = supabaseClient;
 
   @override
-  Future<UserModel?> login(String email, String password) {
-    // TODO: implement login
+  Future<UserModel?> login(String email, String password) async {
+    // TODO: implement signup
     throw UnimplementedError();
   }
 
   @override
-  Future<UserModel?> signup(String email, String password) {
-    // TODO: implement signup
-    throw UnimplementedError();
+  Future<UserModel?> signup(UserModel user, String password) async {
+    try {
+      final request = await _supabaseClient.auth.signUp(
+        email: user.email,
+        password: password,
+      );
+
+      final response = request.user;
+
+      if (response != null) {
+        return UserModel(
+          id: response.id,
+          email: user.email,
+          name: user.name,
+          department: user.department,
+          phoneNo: user.phoneNo,
+          userRole: user.userRole,
+        );
+      }
+
+      throw AuthException(
+        "AuthException : User is null --> AuthDatasource.signup()",
+      );
+    } catch (e) {
+      throw AuthException(
+        "AuthException : ${e.toString()} --> AuthDatasource.signup()",
+      );
+    }
   }
 }
