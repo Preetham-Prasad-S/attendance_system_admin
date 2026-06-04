@@ -1,4 +1,5 @@
 import 'dart:convert';
+import '../../features/auth/data/models/user_model.dart';
 
 class UserEntity {
   final String id;
@@ -43,4 +44,26 @@ class UserEntity {
 
   factory UserEntity.fromJson(String source) =>
       UserEntity.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  UserModel toModel() {
+    return UserModel(
+      id: id,
+      email: email,
+      name: name,
+      department: department,
+      phoneNo: phoneNo,
+      userRole: userRole,
+    );
+  }
+
+  factory UserEntity.fromModel(UserModel model) {
+    return UserEntity(
+      id: model.id,
+      email: model.email,
+      name: model.name,
+      department: model.department,
+      phoneNo: model.phoneNo,
+      userRole: model.userRole,
+    );
+  }
 }
