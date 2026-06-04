@@ -1,5 +1,5 @@
 import 'package:attendance_system_admin/core/entities/user_entity.dart';
-import 'package:attendance_system_admin/core/auth_failure.dart';
+import 'package:attendance_system_admin/core/failure.dart';
 import 'package:attendance_system_admin/features/auth/data/datasources/auth_datasource.dart';
 import 'package:attendance_system_admin/features/auth/domain/repositories/auth_repository.dart';
 import 'package:fpdart/fpdart.dart';

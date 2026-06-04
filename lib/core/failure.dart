@@ -9,3 +9,8 @@ class AuthException implements Exception {
 
   AuthException({required this.message});
 }
+
+/// Failure type specific to authentication errors.
+class AuthFailure extends Failure {
+  AuthFailure({required String message}) : super(message: message);
+}
