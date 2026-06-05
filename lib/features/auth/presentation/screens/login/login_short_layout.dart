@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 
-import 'auth_textfield_widget.dart';
+import '../../widgets/auth_textfield_widget.dart';
 
 class LoginShortLayout extends StatefulWidget {
   const LoginShortLayout({super.key});
@@ -12,7 +12,7 @@ class LoginShortLayout extends StatefulWidget {
   State<LoginShortLayout> createState() => _ShortLayout();
 }
 
-class _ShortLayout extends State<LoginShortLayout> {  
+class _ShortLayout extends State<LoginShortLayout> {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -65,112 +65,117 @@ class _ShortLayout extends State<LoginShortLayout> {
   }
 }
 
-class ShortLoginPasswordWidget extends StatefulWidget{
+class ShortLoginPasswordWidget extends StatefulWidget {
   const ShortLoginPasswordWidget({super.key});
   @override
   State<ShortLoginPasswordWidget> createState() => _ShortLoginPasswordWidget();
 }
 
-class _ShortLoginPasswordWidget extends State<ShortLoginPasswordWidget>{
+class _ShortLoginPasswordWidget extends State<ShortLoginPasswordWidget> {
   @override
-  Widget build(BuildContext context){
-   return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-         Text(
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
           "Email Address",
           style: GoogleFonts.quicksand(
             fontWeight: FontWeight.bold,
             fontSize: 14,
           ),
         ),
-        
-        SizedBox(height: 10,),
-        AuthTextFieldWidget(hintText: "name@company.com"),
 
-        SizedBox(height: 10,),
-
-        Row(
-      children: [
-        Expanded(
-          flex: 2,
-          child: Text(
-            "Password",
-            style: GoogleFonts.quicksand(
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-            ),
-          ),
+        SizedBox(height: 10),
+        AuthTextFieldWidget(
+          hintText: "name@company.com",
+          labelText: "Email Address",
         ),
 
-        InkWell(
-          onTap: () {},
-          child: Text(
-            "Forgot Password ?",
-            style: GoogleFonts.quicksand(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: AppColors.blueColor,
+        SizedBox(height: 10),
+
+        Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: Text(
+                "Password",
+                style: GoogleFonts.quicksand(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+              ),
             ),
-           ),
-          ),
-        ],
-       ),
 
-       SizedBox(height: 10,),
-       
-      AuthTextFieldWidget(hintText: "•••••••••••", isPassword: true,)
+            InkWell(
+              onTap: () {},
+              child: Text(
+                "Forgot Password ?",
+                style: GoogleFonts.quicksand(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.blueColor,
+                ),
+              ),
+            ),
+          ],
+        ),
 
-    ],
-   );
+        SizedBox(height: 10),
+
+        AuthTextFieldWidget(
+          hintText: "•••••••••••",
+          isPassword: true,
+          labelText: 'Password',
+        ),
+      ],
+    );
   }
 }
 
-class ShortLoginChechboxWidget extends StatefulWidget{
+class ShortLoginChechboxWidget extends StatefulWidget {
   const ShortLoginChechboxWidget({super.key});
   @override
   State<ShortLoginChechboxWidget> createState() => _ShortLoginChechboxWidget();
 }
 
-class _ShortLoginChechboxWidget extends State<ShortLoginChechboxWidget>{
+class _ShortLoginChechboxWidget extends State<ShortLoginChechboxWidget> {
   bool isChecked = false;
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Row(
-                  children: [
-                    Checkbox(
-                      value: isChecked,
-                      onChanged: (bool? newValue) {
-                        setState(() {
-                          isChecked = newValue ?? false;
-                        });
-                      },
-                      activeColor: Colors.blue,
-                      checkColor: Colors.white,
-                    ),
-                    Text("Remember Me"),
-                  ],
-                );
+      children: [
+        Checkbox(
+          value: isChecked,
+          onChanged: (bool? newValue) {
+            setState(() {
+              isChecked = newValue ?? false;
+            });
+          },
+          activeColor: Colors.blue,
+          checkColor: Colors.white,
+        ),
+        Text("Remember Me"),
+      ],
+    );
   }
 }
 
 class ShortLoginSignupOptionWidget extends StatelessWidget {
-  const ShortLoginSignupOptionWidget({super.key,});
+  const ShortLoginSignupOptionWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("Don't have an account?",
+        Text(
+          "Don't have an account?",
           textAlign: TextAlign.center,
-          style: GoogleFonts.quicksand(
-            fontWeight: FontWeight.w500,
-          ),
+          style: GoogleFonts.quicksand(fontWeight: FontWeight.w500),
         ),
-    
+
         SizedBox(width: 5),
-    
+
         InkWell(
           onTap: () {},
           child: Text(
@@ -204,7 +209,7 @@ class ShortLoginOptionsButtonWidget extends StatelessWidget {
                 fontWeight: FontWeight.w400,
               ),
             ),
-            icon: Iconify(Logos.google_icon, size: 20,),
+            icon: Iconify(Logos.google_icon, size: 20),
             style: TextButton.styleFrom(
               overlayColor: AppColors.blueColor,
               shape: RoundedRectangleBorder(
@@ -218,7 +223,7 @@ class ShortLoginOptionsButtonWidget extends StatelessWidget {
             ),
           ),
         ),
-    
+
         SizedBox(width: 20),
         Expanded(
           child: TextButton.icon(
@@ -230,7 +235,7 @@ class ShortLoginOptionsButtonWidget extends StatelessWidget {
                 fontWeight: FontWeight.w400,
               ),
             ),
-            icon:  Iconify(Logos.microsoft_icon, size: 20,),
+            icon: Iconify(Logos.microsoft_icon, size: 20),
             style: TextButton.styleFrom(
               overlayColor: AppColors.blueColor,
               shape: RoundedRectangleBorder(
@@ -256,9 +261,7 @@ class ShortLoginDividerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(
-          child: Divider(thickness: 1.5, color: Colors.grey),
-        ),
+        Expanded(child: Divider(thickness: 1.5, color: Colors.grey)),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 15.0),
           child: Text(
@@ -269,9 +272,7 @@ class ShortLoginDividerWidget extends StatelessWidget {
             ),
           ),
         ),
-        Expanded(
-          child: Divider(thickness: 1.5, color: Colors.grey),
-        ),
+        Expanded(child: Divider(thickness: 1.5, color: Colors.grey)),
       ],
     );
   }
@@ -292,11 +293,9 @@ class ShortLoginLoginButtonWidget extends StatelessWidget {
           borderRadius: BorderRadiusGeometry.circular(10),
         ),
       ),
-      child: Text( "Login",
-        style: GoogleFonts.quicksand(
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-        ),
+      child: Text(
+        "Login",
+        style: GoogleFonts.quicksand(fontSize: 20, fontWeight: FontWeight.w600),
       ),
     );
   }
@@ -307,18 +306,19 @@ class ShortLoginTitleDescriptionWIdget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-            "Welcome Back",
-            style: GoogleFonts.quicksand(
-              fontSize: 22,
-              fontWeight: FontWeight.w600,
-            ),
+          "Welcome Back",
+          style: GoogleFonts.quicksand(
+            fontSize: 22,
+            fontWeight: FontWeight.w600,
           ),
+        ),
 
-        SizedBox(height: 10,),
-        
+        SizedBox(height: 10),
+
         Text(
           "Login to manage attendance records",
           style: GoogleFonts.quicksand(

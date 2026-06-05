@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 
-import 'auth_textfield_widget.dart';
+import '../../widgets/auth_textfield_widget.dart';
 
 class LoginDesktopLayout extends StatefulWidget {
   const LoginDesktopLayout({super.key});
@@ -38,10 +38,16 @@ class _LoginDesktopLayout extends State<LoginDesktopLayout> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            LoginImageWidget(),
+                            AuthDesktopImageWidget(
+                              imageUrl: "assets/login-screen-picture.png",
+                            ),
                             SizedBox(height: 15),
 
-                            LoginImageDescriptionWidget(),
+                            AuthDesktopImageDescriptionWidget(
+                              titleText: "Precision Workforce Tracking",
+                              subTitleText:
+                                  "Experience the future of attendance management with our cutting-edge isometric reporting and real-time kiosk integration.",
+                            ),
                           ],
                         ),
                       ),
@@ -71,31 +77,34 @@ class _LoginDesktopLayout extends State<LoginDesktopLayout> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        LoginFormTitleDescriptionWidget(),
+                        AuthDesktopFormTitleDescriptionWidget(
+                          titleText: "Welcome Back",
+                          detailText: "Login to manage attendance records",
+                        ),
 
                         SizedBox(height: 35),
 
-                        RightLoginPasswordWidget(),
+                        AuthDesktopLoginCredentialsWidget(),
 
                         SizedBox(height: 10),
 
-                        RightLoginCheckBoxWidget(),
+                        AuthDesktopCheckBoxWidget(),
 
                         SizedBox(height: 20),
 
-                        RightLoginButtonWIdget(),
+                        AuthDesktopButtonWidget(),
 
                         SizedBox(height: 20),
 
-                        RightLoginDividerWidget(),
+                        AuthDesktopDividerWidget(),
 
                         SizedBox(height: 20),
 
-                        RightLoginOptionsButtonWidget(),
+                        AuthDesktopOptionsButtonWidget(),
 
                         SizedBox(height: 40),
 
-                        RightLoginSignupOptionWidget(),
+                        AuthDesktopSignupOptionWidget(),
                       ],
                     ),
                   ),
@@ -109,76 +118,49 @@ class _LoginDesktopLayout extends State<LoginDesktopLayout> {
   }
 }
 
-
-class RightLoginPasswordWidget extends StatefulWidget{
-  const RightLoginPasswordWidget({super.key});
+class AuthDesktopLoginCredentialsWidget extends StatefulWidget {
+  const AuthDesktopLoginCredentialsWidget({super.key});
   @override
-  State<RightLoginPasswordWidget> createState() => _RightLoginPasswordWidget();
+  State<AuthDesktopLoginCredentialsWidget> createState() =>
+      _AuthDesktopLoginCredentialWidget();
 }
 
-class _RightLoginPasswordWidget extends State<RightLoginPasswordWidget>{
+class _AuthDesktopLoginCredentialWidget
+    extends State<AuthDesktopLoginCredentialsWidget> {
   @override
-  Widget build(BuildContext context){
-   return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-         Text(
-          "Email Address",
-          style: GoogleFonts.quicksand(
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-          ),
-        ),
-        
-        SizedBox(height: 10,),
-        AuthTextFieldWidget(hintText: "name@company.com"),
-
-        SizedBox(height: 10,),
-
-        Row(
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          flex: 2,
-          child: Text(
-            "Password",
-            style: GoogleFonts.quicksand(
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-            ),
-          ),
+        SizedBox(height: 10),
+        AuthTextFieldWidget(
+          hintText: "name@company.com",
+          labelText: "Email Address",
         ),
 
-        InkWell(
-          onTap: () {},
-          child: Text(
-            "Forgot Password ?",
-            style: GoogleFonts.quicksand(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: AppColors.blueColor,
-            ),
-           ),
-          ),
-        ],
-       ),
+        SizedBox(height: 10),
 
-       SizedBox(height: 10,),
-       
-      AuthTextFieldWidget(hintText: "•••••••••••", isPassword: true,)
+        SizedBox(height: 10),
 
-    ],
-   );
+        AuthTextFieldWidget(
+          hintText: "•••••••••••",
+          isPassword: true,
+          labelText: "Password",
+        ),
+      ],
+    );
   }
 }
 
-class RightLoginCheckBoxWidget extends StatefulWidget {
-  const RightLoginCheckBoxWidget({super.key});
+class AuthDesktopCheckBoxWidget extends StatefulWidget {
+  const AuthDesktopCheckBoxWidget({super.key});
 
   @override
-  State<RightLoginCheckBoxWidget> createState() => _RightLoginCheckBoxWidget();
+  State<AuthDesktopCheckBoxWidget> createState() =>
+      _AuthDesktopCheckBoxWidget();
 }
 
-class _RightLoginCheckBoxWidget extends State<RightLoginCheckBoxWidget> {
+class _AuthDesktopCheckBoxWidget extends State<AuthDesktopCheckBoxWidget> {
   bool isChecked = false;
   @override
   Widget build(BuildContext context) {
@@ -202,13 +184,25 @@ class _RightLoginCheckBoxWidget extends State<RightLoginCheckBoxWidget> {
           "Remember Me",
           style: GoogleFonts.quicksand(fontWeight: FontWeight.w500),
         ),
+        const Spacer(),
+        InkWell(
+          onTap: () {},
+          child: Text(
+            "Forgot Password ?",
+            style: GoogleFonts.quicksand(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: AppColors.blueColor,
+            ),
+          ),
+        ),
       ],
     );
   }
 }
 
-class RightLoginSignupOptionWidget extends StatelessWidget {
-  const RightLoginSignupOptionWidget({super.key});
+class AuthDesktopSignupOptionWidget extends StatelessWidget {
+  const AuthDesktopSignupOptionWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -239,8 +233,8 @@ class RightLoginSignupOptionWidget extends StatelessWidget {
   }
 }
 
-class RightLoginOptionsButtonWidget extends StatelessWidget {
-  const RightLoginOptionsButtonWidget({super.key});
+class AuthDesktopOptionsButtonWidget extends StatelessWidget {
+  const AuthDesktopOptionsButtonWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -301,8 +295,8 @@ class RightLoginOptionsButtonWidget extends StatelessWidget {
   }
 }
 
-class RightLoginButtonWIdget extends StatelessWidget {
-  const RightLoginButtonWIdget({super.key});
+class AuthDesktopButtonWidget extends StatelessWidget {
+  const AuthDesktopButtonWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -324,8 +318,8 @@ class RightLoginButtonWIdget extends StatelessWidget {
   }
 }
 
-class RightLoginDividerWidget extends StatelessWidget {
-  const RightLoginDividerWidget({super.key});
+class AuthDesktopDividerWidget extends StatelessWidget {
+  const AuthDesktopDividerWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -348,8 +342,14 @@ class RightLoginDividerWidget extends StatelessWidget {
   }
 }
 
-class LoginFormTitleDescriptionWidget extends StatelessWidget {
-  const LoginFormTitleDescriptionWidget({super.key});
+class AuthDesktopFormTitleDescriptionWidget extends StatelessWidget {
+  final String titleText;
+  final String detailText;
+  const AuthDesktopFormTitleDescriptionWidget({
+    super.key,
+    required this.titleText,
+    required this.detailText,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -357,12 +357,15 @@ class LoginFormTitleDescriptionWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Welcome Back",
-          style: GoogleFonts.quicksand(fontSize: 22, fontWeight: FontWeight.w600),
+          titleText,
+          style: GoogleFonts.quicksand(
+            fontSize: 22,
+            fontWeight: FontWeight.w600,
+          ),
         ),
         SizedBox(height: 10),
         Text(
-          "Login to manage attendance records",
+          detailText,
           style: GoogleFonts.quicksand(
             fontSize: 14,
             fontWeight: FontWeight.w500,
@@ -374,8 +377,14 @@ class LoginFormTitleDescriptionWidget extends StatelessWidget {
   }
 }
 
-class LoginImageDescriptionWidget extends StatelessWidget {
-  const LoginImageDescriptionWidget({super.key});
+class AuthDesktopImageDescriptionWidget extends StatelessWidget {
+  final String titleText;
+  final String subTitleText;
+  const AuthDesktopImageDescriptionWidget({
+    super.key,
+    required this.titleText,
+    required this.subTitleText,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -385,7 +394,7 @@ class LoginImageDescriptionWidget extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              "Precision Workforce Tracking",
+              titleText,
               style: GoogleFonts.quicksand(
                 fontSize: 26,
                 fontWeight: FontWeight.bold,
@@ -393,7 +402,7 @@ class LoginImageDescriptionWidget extends StatelessWidget {
             ),
             SizedBox(height: 10),
             Text(
-              "Experience the future of attendance management with our cutting-edge isometric reporting and real-time kiosk integration.",
+              subTitleText,
               textAlign: TextAlign.center,
               style: GoogleFonts.quicksand(
                 fontSize: 16,
@@ -408,18 +417,13 @@ class LoginImageDescriptionWidget extends StatelessWidget {
   }
 }
 
-class LoginImageWidget extends StatelessWidget {
-  const LoginImageWidget({super.key});
+class AuthDesktopImageWidget extends StatelessWidget {
+  final String imageUrl;
+  const AuthDesktopImageWidget({super.key, required this.imageUrl});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Image.asset(
-        "assets/login-screen-picture.png",
-        width: 500,
-        height: 500,
-      ),
-    );
+    return Center(child: Image.asset(imageUrl, width: 500, height: 500));
   }
 }
 
