@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 
+import 'auth_textfield_widget.dart';
+
 class LoginShortLayout extends StatefulWidget {
   const LoginShortLayout({super.key});
   @override
@@ -29,21 +31,11 @@ class _ShortLayout extends State<LoginShortLayout> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ShortLoginTitleWIdget(),
-
-                SizedBox(height: 10),
-
-                ShortLoginDescriptionWIdget(),
+                ShortLoginTitleDescriptionWIdget(),
 
                 SizedBox(height: 15),
 
-                ShortLoginEmailFieldWidget(),
-
-                ShortLoginPasswordForgotWidget(),
-
-                SizedBox(height: 8),
-
-                ShortLoginPasswordTextfieldWidget(),
+                ShortLoginPasswordWidget(),
 
                 SizedBox(height: 10),
 
@@ -73,6 +65,67 @@ class _ShortLayout extends State<LoginShortLayout> {
   }
 }
 
+class ShortLoginPasswordWidget extends StatefulWidget{
+  const ShortLoginPasswordWidget({super.key});
+  @override
+  State<ShortLoginPasswordWidget> createState() => _ShortLoginPasswordWidget();
+}
+
+class _ShortLoginPasswordWidget extends State<ShortLoginPasswordWidget>{
+  @override
+  Widget build(BuildContext context){
+   return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+         Text(
+          "Email Address",
+          style: GoogleFonts.quicksand(
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+          ),
+        ),
+        
+        SizedBox(height: 10,),
+        AuthTextFieldWidget(hintText: "name@company.com"),
+
+        SizedBox(height: 10,),
+
+        Row(
+      children: [
+        Expanded(
+          flex: 2,
+          child: Text(
+            "Password",
+            style: GoogleFonts.quicksand(
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+          ),
+        ),
+
+        InkWell(
+          onTap: () {},
+          child: Text(
+            "Forgot Password ?",
+            style: GoogleFonts.quicksand(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: AppColors.blueColor,
+            ),
+           ),
+          ),
+        ],
+       ),
+
+       SizedBox(height: 10,),
+       
+      AuthTextFieldWidget(hintText: "•••••••••••", isPassword: true,)
+
+    ],
+   );
+  }
+}
+
 class ShortLoginChechboxWidget extends StatefulWidget{
   const ShortLoginChechboxWidget({super.key});
   @override
@@ -97,60 +150,6 @@ class _ShortLoginChechboxWidget extends State<ShortLoginChechboxWidget>{
                     ),
                     Text("Remember Me"),
                   ],
-                );
-  }
-}
-class ShortLoginPasswordTextfieldWidget extends StatefulWidget{
-  const ShortLoginPasswordTextfieldWidget({super.key});
-  @override
-  State<ShortLoginPasswordTextfieldWidget> createState() => _ShortLoginPasswordTextfieldWidget();
-}
-
-class _ShortLoginPasswordTextfieldWidget extends State<ShortLoginPasswordTextfieldWidget>{
-  bool textHide = true;
-  @override
-  Widget build(BuildContext context){
-    return TextField(
-                 cursorColor: AppColors.blueColor,
-                          style: GoogleFonts.quicksand(
-                            fontWeight: FontWeight.w500,
-                          ),
-                          obscureText: textHide,
-                          decoration: InputDecoration(
-                            hintText: "•••••••••••",
-                            hintStyle: GoogleFonts.quicksand(
-                              color: Color.fromRGBO(64, 63, 63, 0.673),
-                              fontSize: 14,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: AppColors.blueColor,
-                                width: 2,
-                              ),
-
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.grey,
-                                width: 1.5,
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  textHide = !textHide;
-                                });
-                              },
-                              icon: Icon(
-                                textHide
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                              ),
-                              color: Color.fromRGBO(108, 108, 109, 1),
-                            ),
-                          ),
                 );
   }
 }
@@ -303,120 +302,32 @@ class ShortLoginLoginButtonWidget extends StatelessWidget {
   }
 }
 
-class ShortLoginPasswordForgotWidget extends StatelessWidget {
-  const ShortLoginPasswordForgotWidget({super.key});
+class ShortLoginTitleDescriptionWIdget extends StatelessWidget {
+  const ShortLoginTitleDescriptionWIdget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          flex: 2,
-          child: Text(
-            "Password",
-            style: GoogleFonts.quicksand(
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-            ),
-          ),
-        ),
-    
-        InkWell(
-          onTap: () {},
-          child: Text(
-            "Forgot Password ?",
-            style: GoogleFonts.quicksand(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: AppColors.blueColor,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class ShortLoginEmailFieldWidget extends StatelessWidget {
-  const ShortLoginEmailFieldWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
+    return Column(crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Email Address",
-          style: GoogleFonts.quicksand(
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-          ),
-        ),
-        SizedBox(height: 8),
-        TextField(
-          style: GoogleFonts.quicksand(
-            fontWeight: FontWeight.w500,
-          ),
-          cursorColor: AppColors.blueColor,
-          decoration: InputDecoration(
-            hintText: "name@company.com",
-            hintStyle: GoogleFonts.quicksand(
-              color: Color.fromRGBO(64, 63, 63, 0.673),
-              fontSize: 14,
+            "Welcome Back",
+            style: GoogleFonts.quicksand(
+              fontSize: 22,
               fontWeight: FontWeight.w600,
             ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: AppColors.blueColor,
-                width: 2,
-              ),
+          ),
+
+        SizedBox(height: 10,),
         
-              borderRadius: BorderRadius.circular(10),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.grey,
-                width: 1.5,
-              ),
-        
-              borderRadius: BorderRadius.circular(10),
-            ),
+        Text(
+          "Login to manage attendance records",
+          style: GoogleFonts.quicksand(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: Color.fromRGBO(0, 0, 0, 1),
           ),
         ),
-        SizedBox(height: 20),
       ],
-    );
-  }
-}
-
-class ShortLoginDescriptionWIdget extends StatelessWidget {
-  const ShortLoginDescriptionWIdget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      "Login to manage attendance records",
-      style: GoogleFonts.quicksand(
-        fontSize: 14,
-        fontWeight: FontWeight.w500,
-        color: Color.fromRGBO(0, 0, 0, 1),
-      ),
-    );
-  }
-}
-
-class ShortLoginTitleWIdget extends StatelessWidget {
-  const ShortLoginTitleWIdget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      "Welcome Back",
-      style: GoogleFonts.quicksand(
-        fontSize: 22,
-        fontWeight: FontWeight.w600,
-      ),
     );
   }
 }

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 
+import 'auth_textfield_widget.dart';
+
 class LoginDesktopLayout extends StatefulWidget {
   const LoginDesktopLayout({super.key});
 
@@ -69,21 +71,11 @@ class _LoginDesktopLayout extends State<LoginDesktopLayout> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        LoginFormTitleWidget(),
-
-                        SizedBox(height: 10),
-
                         LoginFormTitleDescriptionWidget(),
 
                         SizedBox(height: 35),
 
-                        LoginFormEmailFieldWidget(),
-
-                        LoginFormPasswordFieldWidget(),
-
-                        SizedBox(height: 8),
-
-                        RightLoginPasswordTextfieldWidget(),
+                        RightLoginPasswordWidget(),
 
                         SizedBox(height: 10),
 
@@ -114,6 +106,68 @@ class _LoginDesktopLayout extends State<LoginDesktopLayout> {
         ],
       ),
     );
+  }
+}
+
+
+class RightLoginPasswordWidget extends StatefulWidget{
+  const RightLoginPasswordWidget({super.key});
+  @override
+  State<RightLoginPasswordWidget> createState() => _RightLoginPasswordWidget();
+}
+
+class _RightLoginPasswordWidget extends State<RightLoginPasswordWidget>{
+  @override
+  Widget build(BuildContext context){
+   return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+         Text(
+          "Email Address",
+          style: GoogleFonts.quicksand(
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+          ),
+        ),
+        
+        SizedBox(height: 10,),
+        AuthTextFieldWidget(hintText: "name@company.com"),
+
+        SizedBox(height: 10,),
+
+        Row(
+      children: [
+        Expanded(
+          flex: 2,
+          child: Text(
+            "Password",
+            style: GoogleFonts.quicksand(
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+          ),
+        ),
+
+        InkWell(
+          onTap: () {},
+          child: Text(
+            "Forgot Password ?",
+            style: GoogleFonts.quicksand(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: AppColors.blueColor,
+            ),
+           ),
+          ),
+        ],
+       ),
+
+       SizedBox(height: 10,),
+       
+      AuthTextFieldWidget(hintText: "•••••••••••", isPassword: true,)
+
+    ],
+   );
   }
 }
 
@@ -149,53 +203,6 @@ class _RightLoginCheckBoxWidget extends State<RightLoginCheckBoxWidget> {
           style: GoogleFonts.quicksand(fontWeight: FontWeight.w500),
         ),
       ],
-    );
-  }
-}
-
-class RightLoginPasswordTextfieldWidget extends StatefulWidget {
-  const RightLoginPasswordTextfieldWidget({super.key});
-
-  @override
-  State<RightLoginPasswordTextfieldWidget> createState() =>
-      _RightLoginPasswordTextfieldWidget();
-}
-
-class _RightLoginPasswordTextfieldWidget
-    extends State<RightLoginPasswordTextfieldWidget> {
-  bool textHide = true;
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      cursorColor: AppColors.blueColor,
-      style: GoogleFonts.quicksand(fontWeight: FontWeight.w500),
-      obscureText: textHide,
-      decoration: InputDecoration(
-        hintText: "•••••••••••",
-        hintStyle: GoogleFonts.quicksand(
-          color: Color.fromRGBO(64, 63, 63, 0.673),
-          fontSize: 14,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AppColors.blueColor, width: 2),
-
-          borderRadius: BorderRadius.circular(10),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey, width: 1.5),
-
-          borderRadius: BorderRadius.circular(10),
-        ),
-        suffixIcon: IconButton(
-          onPressed: () {
-            setState(() {
-              textHide = !textHide;
-            });
-          },
-          icon: Icon(textHide ? Icons.visibility : Icons.visibility_off),
-          color: Color.fromRGBO(108, 108, 109, 1),
-        ),
-      ),
     );
   }
 }
@@ -341,108 +348,28 @@ class RightLoginDividerWidget extends StatelessWidget {
   }
 }
 
-class LoginFormPasswordFieldWidget extends StatelessWidget {
-  const LoginFormPasswordFieldWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          flex: 2,
-          child: Text(
-            "Password",
-            style: GoogleFonts.quicksand(
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-            ),
-          ),
-        ),
-
-        InkWell(
-          onTap: () {},
-          child: Text(
-            "Forgot Password ?",
-            style: GoogleFonts.quicksand(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: AppColors.blueColor,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class LoginFormEmailFieldWidget extends StatelessWidget {
-  
-  const LoginFormEmailFieldWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          "Email Address",
-          style: GoogleFonts.quicksand(
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-          ),
-        ),
-        SizedBox(height: 8),
-        TextField(
-          style: GoogleFonts.quicksand(fontWeight: FontWeight.w500),
-          cursorColor: AppColors.blueColor,
-          decoration: InputDecoration(
-            hintText: "name@company.com",
-            hintStyle: GoogleFonts.quicksand(
-              color: Color.fromRGBO(64, 63, 63, 0.673),
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.blueColor, width: 2),
-
-              borderRadius: BorderRadius.circular(10),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey, width: 1.5),
-
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-        ),
-        SizedBox(height: 20),
-      ],
-    );
-  }
-}
-
 class LoginFormTitleDescriptionWidget extends StatelessWidget {
   const LoginFormTitleDescriptionWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      "Login to manage attendance records",
-      style: GoogleFonts.quicksand(
-        fontSize: 14,
-        fontWeight: FontWeight.w500,
-        color: Color.fromRGBO(0, 0, 0, 1),
-      ),
-    );
-  }
-}
-
-class LoginFormTitleWidget extends StatelessWidget {
-  const LoginFormTitleWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      "Welcome Back",
-      style: GoogleFonts.quicksand(fontSize: 22, fontWeight: FontWeight.w600),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Welcome Back",
+          style: GoogleFonts.quicksand(fontSize: 22, fontWeight: FontWeight.w600),
+        ),
+        SizedBox(height: 10),
+        Text(
+          "Login to manage attendance records",
+          style: GoogleFonts.quicksand(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: Color.fromRGBO(0, 0, 0, 1),
+          ),
+        ),
+      ],
     );
   }
 }
