@@ -45,6 +45,7 @@ dependencies:
   ionicons: ^0.2.2
   iconify_flutter: ^0.0.7
   colorful_iconify_flutter: ^0.0.3
+  flutter_bloc: ^9.1.1
   
 
 dev_dependencies:
