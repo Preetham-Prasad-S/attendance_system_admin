@@ -1,4 +1,4 @@
-import 'package:attendance_system_admin/features/auth/presentation/screens/login/login_screen.dart';
+import 'package:attendance_system_admin/features/auth/presentation/screens/signup/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       title: 'Attendance System',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(useMaterial3: true),
-      home: LoginScreen(),
+      home: SignupScreen(),
     );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:attendance_system_admin/core/app_colors.dart';
 
 class AuthDesktopButtonWidget extends StatelessWidget {
   const AuthDesktopButtonWidget({super.key});
