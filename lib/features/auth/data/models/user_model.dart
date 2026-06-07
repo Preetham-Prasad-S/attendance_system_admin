@@ -4,9 +4,9 @@ class UserModel {
   final String id;
   final String email;
   final String name;
-  final String department;
+  final String? department;
   final String phoneNo;
-  final String userRole;
+  final String? userRole;
 
   UserModel({
     required this.id,
