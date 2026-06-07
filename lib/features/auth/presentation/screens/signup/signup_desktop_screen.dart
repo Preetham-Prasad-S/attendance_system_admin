@@ -70,7 +70,7 @@ class SignupDesktopScreen extends StatelessWidget {
                   ),
                   child: Container(
                     padding: EdgeInsets.all(40),
-                    width: 500,
+                    width: 600,
 
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -89,31 +89,15 @@ class SignupDesktopScreen extends StatelessWidget {
                           children: [
                             Flexible(
                               child: AuthTextFieldWidget(
-                                hintText: "Full Name",
-                                labelText: "John Doe DK",
+                                hintText: "John Doe DK",
+                                labelText: "Full Name",
                               ),
                             ),
+                            SizedBox(width: 20),
                             Flexible(
                               child: AuthTextFieldWidget(
-                                hintText: "Organization Name",
-                                labelText: "ABC Private Limited",
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          children: [
-                            Flexible(
-                              child: AuthTextFieldWidget(
-                                hintText: "Work Email",
-                                labelText: "example@gmail.com",
-                              ),
-                            ),
-                            Flexible(
-                              child: AuthTextFieldWidget(
-                                hintText: "Phone Number",
-                                labelText: "+91 1234567890",
+                                hintText: "ABC Private Limited",
+                                labelText: "Organization Name",
                               ),
                             ),
                           ],
@@ -123,14 +107,34 @@ class SignupDesktopScreen extends StatelessWidget {
                           children: [
                             Flexible(
                               child: AuthTextFieldWidget(
-                                hintText: "Password",
-                                labelText: "•••••••••••",
+                                hintText: "example@gmail.com",
+                                labelText: "Work Email",
                               ),
                             ),
+                            SizedBox(width: 20),
+
                             Flexible(
                               child: AuthTextFieldWidget(
-                                hintText: "Confirm Password",
-                                labelText: "•••••••••••",
+                                hintText: "+91 1234567890",
+                                labelText: "Phone Number  ",
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          children: [
+                            Flexible(
+                              child: AuthTextFieldWidget(
+                                hintText: "•••••••••••",
+                                labelText: "Password",
+                              ),
+                            ),
+                            SizedBox(width: 20),
+                            Flexible(
+                              child: AuthTextFieldWidget(
+                                hintText: "•••••••••••",
+                                labelText: "Confirm Password",
                               ),
                             ),
                           ],
@@ -141,7 +145,10 @@ class SignupDesktopScreen extends StatelessWidget {
 
                         SizedBox(height: 20),
 
-                        AuthDesktopButtonWidget(),
+                        AuthDesktopButtonWidget(
+                          onPressed: () {},
+                          text: "SignUp",
+                        ),
 
                         SizedBox(height: 20),
 
@@ -153,7 +160,10 @@ class SignupDesktopScreen extends StatelessWidget {
 
                         SizedBox(height: 40),
 
-                        AuthDesktopSignupOptionWidget(),
+                        AuthDesktopSignupOptionWidget(
+                          message: "Already have an account",
+                          title: "Login",
+                        ),
                       ],
                     ),
                   ),

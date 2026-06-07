@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AuthDesktopSignupOptionWidget extends StatelessWidget {
-  const AuthDesktopSignupOptionWidget({super.key});
+  final String message;
+  final String title;
+  const AuthDesktopSignupOptionWidget({
+    super.key,
+    required this.message,
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +16,7 @@ class AuthDesktopSignupOptionWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          "Don't have an account?",
+          message,
           textAlign: TextAlign.center,
           style: GoogleFonts.quicksand(fontWeight: FontWeight.w500),
         ),
@@ -18,7 +24,7 @@ class AuthDesktopSignupOptionWidget extends StatelessWidget {
         InkWell(
           onTap: () {},
           child: Text(
-            "Sign Up",
+            title,
             textAlign: TextAlign.center,
             style: GoogleFonts.quicksand(
               fontWeight: FontWeight.w500,

@@ -1,4 +1,3 @@
-
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_button_widget.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_check_box_widget.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_divider_widget.dart';
@@ -10,7 +9,6 @@ import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_signup_option_widget.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/login_image_title_widget.dart';
 import 'package:flutter/material.dart';
-
 
 class LoginDesktopLayout extends StatefulWidget {
   const LoginDesktopLayout({super.key});
@@ -37,7 +35,7 @@ class _LoginDesktopLayout extends State<LoginDesktopLayout> {
                   children: [
                     LoginImageTitleWidget(),
                     SizedBox(height: 10),
-      
+
                     Expanded(
                       child: Center(
                         child: Column(
@@ -47,7 +45,7 @@ class _LoginDesktopLayout extends State<LoginDesktopLayout> {
                               imageUrl: "assets/login-screen-picture.png",
                             ),
                             SizedBox(height: 15),
-      
+
                             AuthDesktopImageDescriptionWidget(
                               titleText: "Precision Workforce Tracking",
                               subTitleText:
@@ -62,7 +60,7 @@ class _LoginDesktopLayout extends State<LoginDesktopLayout> {
               ),
             ),
           ),
-      
+
           Flexible(
             flex: 5,
             child: Center(
@@ -77,7 +75,7 @@ class _LoginDesktopLayout extends State<LoginDesktopLayout> {
                   child: Container(
                     padding: EdgeInsets.all(40),
                     width: 500,
-      
+
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -87,30 +85,36 @@ class _LoginDesktopLayout extends State<LoginDesktopLayout> {
                           titleText: "Welcome Back",
                           detailText: "Login to manage attendance records",
                         ),
-      
+
                         SizedBox(height: 35),
-      
+
                         AuthDesktopLoginCredentialsWidget(),
-      
+
                         SizedBox(height: 10),
-      
+
                         AuthDesktopCheckBoxWidget(),
-      
+
                         SizedBox(height: 20),
-      
-                        AuthDesktopButtonWidget(),
-      
+
+                        AuthDesktopButtonWidget(
+                          onPressed: () {},
+                          text: "Login",
+                        ),
+
                         SizedBox(height: 20),
-      
+
                         AuthDesktopDividerWidget(),
-      
+
                         SizedBox(height: 20),
-      
+
                         AuthDesktopOptionsButtonWidget(),
-      
+
                         SizedBox(height: 40),
-      
-                        AuthDesktopSignupOptionWidget(),
+
+                        AuthDesktopSignupOptionWidget(
+                          message: "Don't have an accoutn",
+                          title: "SignUp",
+                        ),
                       ],
                     ),
                   ),
