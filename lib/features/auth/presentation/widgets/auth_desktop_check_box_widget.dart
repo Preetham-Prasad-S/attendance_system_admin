@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:attendance_system_admin/core/app_colors.dart';
+import 'auth_textfield_widget.dart';
 
 class AuthDesktopCheckBoxWidget extends StatefulWidget {
   const AuthDesktopCheckBoxWidget({super.key});
 
   @override
-  State<AuthDesktopCheckBoxWidget> createState() =>
-      _AuthDesktopCheckBoxWidget();
+  State<AuthDesktopCheckBoxWidget> createState() => _AuthDesktopCheckBoxWidget();
 }
 
 class _AuthDesktopCheckBoxWidget extends State<AuthDesktopCheckBoxWidget> {
