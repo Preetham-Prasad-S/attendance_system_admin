@@ -11,8 +11,29 @@ import 'package:flutter/material.dart';
 
 import '../../widgets/login_image_title_widget.dart';
 
-class SignupDesktopScreen extends StatelessWidget {
+class SignupDesktopScreen extends StatefulWidget {
   const SignupDesktopScreen({super.key});
+
+  @override
+  State<SignupDesktopScreen> createState() => _SignupDesktopScreenState();
+}
+
+class _SignupDesktopScreenState extends State<SignupDesktopScreen> {
+  late final TextEditingController _emailController;
+  late final TextEditingController _name;
+  late final TextEditingController _password;
+  late final TextEditingController _phoneNumber;
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController = TextEditingController();
+    _name = TextEditingController();
+    _password = TextEditingController();
+    _phoneNumber = TextEditingController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,61 +106,7 @@ class SignupDesktopScreen extends StatelessWidget {
 
                         SizedBox(height: 35),
 
-                        Row(
-                          children: [
-                            Flexible(
-                              child: AuthTextFieldWidget(
-                                hintText: "John Doe DK",
-                                labelText: "Full Name",
-                              ),
-                            ),
-                            SizedBox(width: 20),
-                            Flexible(
-                              child: AuthTextFieldWidget(
-                                hintText: "ABC Private Limited",
-                                labelText: "Organization Name",
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          children: [
-                            Flexible(
-                              child: AuthTextFieldWidget(
-                                hintText: "example@gmail.com",
-                                labelText: "Work Email",
-                              ),
-                            ),
-                            SizedBox(width: 20),
-
-                            Flexible(
-                              child: AuthTextFieldWidget(
-                                hintText: "+91 1234567890",
-                                labelText: "Phone Number  ",
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          children: [
-                            Flexible(
-                              child: AuthTextFieldWidget(
-                                hintText: "•••••••••••",
-                                labelText: "Password",
-                              ),
-                            ),
-                            SizedBox(width: 20),
-                            Flexible(
-                              child: AuthTextFieldWidget(
-                                hintText: "•••••••••••",
-                                labelText: "Confirm Password",
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10),
+                        Form(key: _formKey, child: AuthSigupCredentialWidget()),
 
                         AuthDesktopCheckBoxWidget(),
 
@@ -173,6 +140,73 @@ class SignupDesktopScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class AuthSigupCredentialWidget extends StatelessWidget {
+  const AuthSigupCredentialWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Flexible(
+              child: AuthTextFieldWidget(
+                hintText: "John Doe DK",
+                labelText: "Full Name",
+              ),
+            ),
+            SizedBox(width: 20),
+            Flexible(
+              child: AuthTextFieldWidget(
+                hintText: "ABC Private Limited",
+                labelText: "Organization Name",
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 10),
+        Row(
+          children: [
+            Flexible(
+              child: AuthTextFieldWidget(
+                hintText: "example@gmail.com",
+                labelText: "Work Email",
+              ),
+            ),
+            SizedBox(width: 20),
+
+            Flexible(
+              child: AuthTextFieldWidget(
+                hintText: "+91 1234567890",
+                labelText: "Phone Number  ",
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 10),
+        Row(
+          children: [
+            Flexible(
+              child: AuthTextFieldWidget(
+                hintText: "•••••••••••",
+                labelText: "Password",
+              ),
+            ),
+            SizedBox(width: 20),
+            Flexible(
+              child: AuthTextFieldWidget(
+                hintText: "•••••••••••",
+                labelText: "Confirm Password",
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 10),
+      ],
     );
   }
 }
