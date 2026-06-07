@@ -32,7 +32,8 @@ class _AuthTextFieldWidget extends State<AuthTextFieldWidget> {
           ),
         ),
         const SizedBox(height: 10),
-        TextField(
+        TextFormField(
+          validator: (value) {},
           cursorColor: AppColors.blueColor,
           style: GoogleFonts.quicksand(fontWeight: FontWeight.w500),
           obscureText: widget.isPassword ? textHide : false,
