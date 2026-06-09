@@ -90,6 +90,7 @@ class _MobileLoginPasswordWidget extends State<MobileLoginPasswordWidget> {
 
         SizedBox(height: 10),
         AuthTextFieldWidget(
+          textEditingController: TextEditingController(),
           hintText: "name@company.com",
           labelText: "Email Address",
         ),
@@ -126,6 +127,7 @@ class _MobileLoginPasswordWidget extends State<MobileLoginPasswordWidget> {
         SizedBox(height: 10),
 
         AuthTextFieldWidget(
+          textEditingController: TextEditingController(),
           hintText: "•••••••••••",
           isPassword: true,
           labelText: "Password",

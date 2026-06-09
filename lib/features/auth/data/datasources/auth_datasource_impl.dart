@@ -22,6 +22,8 @@ class AuthDatasourceImpl implements AuthDatasource {
         password: password,
       );
 
+      
+
       final response = request.user;
 
       if (response != null) {
@@ -32,6 +34,7 @@ class AuthDatasourceImpl implements AuthDatasource {
           department: user.department,
           phoneNo: user.phoneNo,
           userRole: user.userRole,
+          organization: user.organization,
         );
       }
 

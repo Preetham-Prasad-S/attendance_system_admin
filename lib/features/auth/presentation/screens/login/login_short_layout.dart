@@ -87,6 +87,7 @@ class _ShortLoginPasswordWidget extends State<ShortLoginPasswordWidget> {
 
         SizedBox(height: 10),
         AuthTextFieldWidget(
+          textEditingController: TextEditingController(),
           hintText: "name@company.com",
           labelText: "Email Address",
         ),
@@ -123,6 +124,7 @@ class _ShortLoginPasswordWidget extends State<ShortLoginPasswordWidget> {
         SizedBox(height: 10),
 
         AuthTextFieldWidget(
+          textEditingController: TextEditingController(),
           hintText: "•••••••••••",
           isPassword: true,
           labelText: 'Password',

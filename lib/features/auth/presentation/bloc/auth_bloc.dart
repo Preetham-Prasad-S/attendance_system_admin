@@ -1,3 +1,4 @@
+import 'package:attendance_system_admin/features/auth/domain/entities/signup_user_entity.dart';
 import 'package:attendance_system_admin/features/auth/domain/usecases/signup_usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'auth_event.dart';
@@ -19,8 +20,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     emit(AuthLoading());
     final result = await _signupUsecase.call(
-      SignupUsecaseParams(user: event.user, password: event.password),
+      SignupUsecaseParams(
+        signUpUserEntity: SignUpUserEntity(
+          id: null,
+          name: event.name,
+          email: event.email,
+          phoneNumber: event.phoneNumber,
+          rememberMe: event.rememberMe,
+          organization: event.organization,
+          password: event.password,
+        ),
+      ),
     );
+    print("Testings");
     result.fold(
       (failure) => emit(AuthFailureState(failure.message)),
       (user) => emit(AuthSuccess(user)),

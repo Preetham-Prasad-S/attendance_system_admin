@@ -6,6 +6,7 @@ class UserEntity {
   final String email;
   final String name;
   final String? department;
+  final String organization;
   final String phoneNo;
   final String? userRole;
 
@@ -16,6 +17,7 @@ class UserEntity {
     required this.department,
     required this.phoneNo,
     required this.userRole,
+    required this.organization,
   });
 
   Map<String, dynamic> toMap() {
@@ -37,6 +39,7 @@ class UserEntity {
       department: map['department'] as String,
       phoneNo: map['phoneNo'] as String,
       userRole: map['userRole'] as String,
+      organization: map['organization'] as String,
     );
   }
 
@@ -53,6 +56,7 @@ class UserEntity {
       department: department,
       phoneNo: phoneNo,
       userRole: userRole,
+      organization: organization,
     );
   }
 
@@ -64,6 +68,7 @@ class UserEntity {
       department: model.department,
       phoneNo: model.phoneNo,
       userRole: model.userRole,
+      organization: model.organization,
     );
   }
 }

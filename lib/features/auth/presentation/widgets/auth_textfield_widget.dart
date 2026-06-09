@@ -6,11 +6,13 @@ class AuthTextFieldWidget extends StatefulWidget {
   final String hintText;
   final String labelText;
   final bool isPassword;
+  final TextEditingController textEditingController;
 
   const AuthTextFieldWidget({
     super.key,
     required this.hintText,
     required this.labelText,
+    required this.textEditingController,
     this.isPassword = false,
   });
   @override

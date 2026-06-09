@@ -1,3 +1,5 @@
+import 'package:attendance_system_admin/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:attendance_system_admin/features/auth/presentation/bloc/auth_event.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_button_widget.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_check_box_widget.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_divider_widget.dart';
@@ -8,6 +10,7 @@ import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_signup_option_widget.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_textfield_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../widgets/login_image_title_widget.dart';
 
@@ -20,9 +23,13 @@ class SignupDesktopScreen extends StatefulWidget {
 
 class _SignupDesktopScreenState extends State<SignupDesktopScreen> {
   late final TextEditingController _emailController;
-  late final TextEditingController _name;
-  late final TextEditingController _password;
-  late final TextEditingController _phoneNumber;
+  late final TextEditingController _nameController;
+  late final TextEditingController _passwordController;
+  late final TextEditingController _confirmPasswordController;
+  late final TextEditingController _phoneNumberController;
+  late final TextEditingController _organizationController;
+
+  bool _rememberMe = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -30,9 +37,11 @@ class _SignupDesktopScreenState extends State<SignupDesktopScreen> {
   void initState() {
     super.initState();
     _emailController = TextEditingController();
-    _name = TextEditingController();
-    _password = TextEditingController();
-    _phoneNumber = TextEditingController();
+    _nameController = TextEditingController();
+    _passwordController = TextEditingController();
+    _confirmPasswordController = TextEditingController();
+    _phoneNumberController = TextEditingController();
+    _organizationController = TextEditingController();
   }
 
   @override
@@ -41,7 +50,6 @@ class _SignupDesktopScreenState extends State<SignupDesktopScreen> {
       child: Row(
         children: [
           Expanded(
-            flex: 5,
             child: Container(
               color: const Color.fromARGB(255, 255, 255, 255),
               padding: EdgeInsets.only(left: 45, top: 45, right: 25),
@@ -78,8 +86,7 @@ class _SignupDesktopScreenState extends State<SignupDesktopScreen> {
             ),
           ),
 
-          Flexible(
-            flex: 5,
+          Expanded(
             child: Center(
               child: Padding(
                 padding: const EdgeInsets.all(40.0),
@@ -106,26 +113,54 @@ class _SignupDesktopScreenState extends State<SignupDesktopScreen> {
 
                         SizedBox(height: 35),
 
-                        Form(key: _formKey, child: AuthSigupCredentialWidget()),
+                        Form(
+                          key: _formKey,
+                          child: AuthSigupCredentialWidget(
+                            organizationController: _organizationController,
+                            emailController: _emailController,
+                            passwordController: _passwordController,
+                            confirmPasswordController:
+                                _confirmPasswordController,
+                            phoneNumberController: _phoneNumberController,
+                            nameController: _nameController,
+                          ),
+                        ),
 
-                        AuthDesktopCheckBoxWidget(),
+                        AuthDesktopCheckBoxWidget(
+                          isChecked: _rememberMe,
+                          onChanged: (value) {
+                            _rememberMe = value;
+                          },
+                        ),
 
-                        SizedBox(height: 20),
+                        SizedBox(height: 15),
 
                         AuthDesktopButtonWidget(
-                          onPressed: () {},
+                          onPressed: () {
+                            context.read<AuthBloc>().add(
+                              SignupRequested(
+                                email: _emailController.text.trim(),
+                                name: _nameController.text.trim(),
+                                password: _passwordController.text.trim(),
+                                organization: _organizationController.text
+                                    .trim(),
+                                phoneNumber: _phoneNumberController.text.trim(),
+                                rememberMe: _rememberMe,
+                              ),
+                            );
+                          },
                           text: "SignUp",
                         ),
 
-                        SizedBox(height: 20),
+                        SizedBox(height: 15),
 
                         AuthDesktopDividerWidget(),
 
-                        SizedBox(height: 20),
+                        SizedBox(height: 15),
 
                         AuthDesktopOptionsButtonWidget(),
 
-                        SizedBox(height: 40),
+                        SizedBox(height: 15),
 
                         AuthDesktopSignupOptionWidget(
                           message: "Already have an account",
@@ -145,7 +180,27 @@ class _SignupDesktopScreenState extends State<SignupDesktopScreen> {
 }
 
 class AuthSigupCredentialWidget extends StatelessWidget {
-  const AuthSigupCredentialWidget({super.key});
+  final TextEditingController _emailController;
+  final TextEditingController _nameController;
+  final TextEditingController _passwordController;
+  final TextEditingController _confirmPasswordController;
+  final TextEditingController _phoneNumberController;
+  final TextEditingController _organizationController;
+
+  const AuthSigupCredentialWidget({
+    super.key,
+    required TextEditingController emailController,
+    required TextEditingController nameController,
+    required TextEditingController passwordController,
+    required TextEditingController confirmPasswordController,
+    required TextEditingController phoneNumberController,
+    required TextEditingController organizationController,
+  }) : _confirmPasswordController = confirmPasswordController,
+       _organizationController = organizationController,
+       _emailController = emailController,
+       _nameController = nameController,
+       _passwordController = passwordController,
+       _phoneNumberController = phoneNumberController;
 
   @override
   Widget build(BuildContext context) {
@@ -155,6 +210,7 @@ class AuthSigupCredentialWidget extends StatelessWidget {
           children: [
             Flexible(
               child: AuthTextFieldWidget(
+                textEditingController: _nameController,
                 hintText: "John Doe DK",
                 labelText: "Full Name",
               ),
@@ -162,6 +218,7 @@ class AuthSigupCredentialWidget extends StatelessWidget {
             SizedBox(width: 20),
             Flexible(
               child: AuthTextFieldWidget(
+                textEditingController: _organizationController,
                 hintText: "ABC Private Limited",
                 labelText: "Organization Name",
               ),
@@ -173,6 +230,7 @@ class AuthSigupCredentialWidget extends StatelessWidget {
           children: [
             Flexible(
               child: AuthTextFieldWidget(
+                textEditingController: _emailController,
                 hintText: "example@gmail.com",
                 labelText: "Work Email",
               ),
@@ -181,6 +239,7 @@ class AuthSigupCredentialWidget extends StatelessWidget {
 
             Flexible(
               child: AuthTextFieldWidget(
+                textEditingController: _phoneNumberController,
                 hintText: "+91 1234567890",
                 labelText: "Phone Number  ",
               ),
@@ -192,6 +251,7 @@ class AuthSigupCredentialWidget extends StatelessWidget {
           children: [
             Flexible(
               child: AuthTextFieldWidget(
+                textEditingController: _passwordController,
                 hintText: "•••••••••••",
                 labelText: "Password",
               ),
@@ -199,6 +259,7 @@ class AuthSigupCredentialWidget extends StatelessWidget {
             SizedBox(width: 20),
             Flexible(
               child: AuthTextFieldWidget(
+                textEditingController: _confirmPasswordController,
                 hintText: "•••••••••••",
                 labelText: "Confirm Password",
               ),

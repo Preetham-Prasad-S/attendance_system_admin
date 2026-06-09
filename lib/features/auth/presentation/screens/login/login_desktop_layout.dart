@@ -18,6 +18,16 @@ class LoginDesktopLayout extends StatefulWidget {
 }
 
 class _LoginDesktopLayout extends State<LoginDesktopLayout> {
+  late final TextEditingController _emailController;
+  late final TextEditingController _passwordController;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -88,11 +98,17 @@ class _LoginDesktopLayout extends State<LoginDesktopLayout> {
 
                         SizedBox(height: 35),
 
-                        AuthDesktopLoginCredentialsWidget(),
+                        AuthDesktopLoginCredentialsWidget(
+                          emailController: _emailController,
+                          passwordController: _passwordController,
+                        ),
 
                         SizedBox(height: 10),
 
-                        AuthDesktopCheckBoxWidget(),
+                        AuthDesktopCheckBoxWidget(
+                          isChecked: false,
+                          onChanged: (value) {},
+                        ),
 
                         SizedBox(height: 20),
 

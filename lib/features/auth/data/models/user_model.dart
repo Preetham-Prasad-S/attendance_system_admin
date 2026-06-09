@@ -5,6 +5,7 @@ class UserModel {
   final String email;
   final String name;
   final String? department;
+  final String organization;
   final String phoneNo;
   final String? userRole;
 
@@ -15,6 +16,7 @@ class UserModel {
     required this.department,
     required this.phoneNo,
     required this.userRole,
+    required this.organization,
   });
 
   Map<String, dynamic> toMap() {
@@ -36,6 +38,7 @@ class UserModel {
       department: map['department'] as String,
       phoneNo: map['phoneNo'] as String,
       userRole: map['userRole'] as String,
+      organization: map["organization"] as String,
     );
   }
 
