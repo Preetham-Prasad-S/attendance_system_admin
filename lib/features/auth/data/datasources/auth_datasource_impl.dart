@@ -22,8 +22,6 @@ class AuthDatasourceImpl implements AuthDatasource {
         password: password,
       );
 
-      
-
       final response = request.user;
 
       if (response != null) {
@@ -38,9 +36,9 @@ class AuthDatasourceImpl implements AuthDatasource {
         );
       }
 
-      throw AuthException(
-        "AuthException : User is null --> AuthDatasource.signup()",
-      );
+      throw AuthException("User is null --> AuthDatasource.signup()");
+    } on AuthException {
+      rethrow; // don't double-wrap AuthExceptions
     } catch (e) {
       throw AuthException(
         "AuthException : ${e.toString()} --> AuthDatasource.signup()",

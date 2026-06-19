@@ -35,6 +35,7 @@ class _AuthTextFieldWidget extends State<AuthTextFieldWidget> {
         ),
         const SizedBox(height: 10),
         TextFormField(
+          controller: widget.textEditingController,
           validator: (value) {},
           cursorColor: AppColors.blueColor,
           style: GoogleFonts.quicksand(fontWeight: FontWeight.w500),

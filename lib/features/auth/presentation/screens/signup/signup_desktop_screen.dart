@@ -129,7 +129,9 @@ class _SignupDesktopScreenState extends State<SignupDesktopScreen> {
                         AuthDesktopCheckBoxWidget(
                           isChecked: _rememberMe,
                           onChanged: (value) {
-                            _rememberMe = value;
+                            setState(() {
+                              _rememberMe = value ?? false;
+                            });
                           },
                         ),
 

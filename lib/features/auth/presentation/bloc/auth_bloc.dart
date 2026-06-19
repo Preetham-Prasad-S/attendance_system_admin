@@ -32,7 +32,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         ),
       ),
     );
-    print("Testings");
+    result.fold(
+      (failure) => print(failure.message),
+      (user) => print("yeayyyyyy"),
+    );
+
     result.fold(
       (failure) => emit(AuthFailureState(failure.message)),
       (user) => emit(AuthSuccess(user)),
