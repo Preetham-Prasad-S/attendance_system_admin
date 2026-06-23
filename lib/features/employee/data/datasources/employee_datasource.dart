@@ -2,4 +2,5 @@ import 'package:attendance_system_admin/features/employee/data/models/employee_m
 
 abstract interface class EmployeeDatasource {
   Future<EmployeeModel> addEmployee(EmployeeModel employee);
+  Future<List<EmployeeModel>> getEmployees();
 }
