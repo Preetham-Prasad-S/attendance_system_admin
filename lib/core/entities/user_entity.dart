@@ -1,13 +1,14 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+import '../../features/auth/data/models/user_model.dart';
 
 class UserEntity {
   final String id;
   final String email;
   final String name;
-  final String department;
+  final String? department;
+  final String organization;
   final String phoneNo;
-  final String userRole;
+  final String? userRole;
 
   UserEntity({
     required this.id,
@@ -16,6 +17,7 @@ class UserEntity {
     required this.department,
     required this.phoneNo,
     required this.userRole,
+    required this.organization,
   });
 
   Map<String, dynamic> toMap() {
@@ -37,6 +39,7 @@ class UserEntity {
       department: map['department'] as String,
       phoneNo: map['phoneNo'] as String,
       userRole: map['userRole'] as String,
+      organization: map['organization'] as String,
     );
   }
 
@@ -44,4 +47,28 @@ class UserEntity {
 
   factory UserEntity.fromJson(String source) =>
       UserEntity.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  UserModel toModel() {
+    return UserModel(
+      id: id,
+      email: email,
+      name: name,
+      department: department,
+      phoneNo: phoneNo,
+      userRole: userRole,
+      organization: organization,
+    );
+  }
+
+  factory UserEntity.fromModel(UserModel model) {
+    return UserEntity(
+      id: model.id,
+      email: model.email,
+      name: model.name,
+      department: model.department,
+      phoneNo: model.phoneNo,
+      userRole: model.userRole,
+      organization: model.organization,
+    );
+  }
 }

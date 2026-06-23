@@ -1,13 +1,13 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class UserModel {
   final String id;
   final String email;
   final String name;
-  final String department;
+  final String? department;
+  final String organization;
   final String phoneNo;
-  final String userRole;
+  final String? userRole;
 
   UserModel({
     required this.id,
@@ -16,6 +16,7 @@ class UserModel {
     required this.department,
     required this.phoneNo,
     required this.userRole,
+    required this.organization,
   });
 
   Map<String, dynamic> toMap() {
@@ -37,6 +38,7 @@ class UserModel {
       department: map['department'] as String,
       phoneNo: map['phoneNo'] as String,
       userRole: map['userRole'] as String,
+      organization: map["organization"] as String,
     );
   }
 

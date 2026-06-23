@@ -20,12 +20,12 @@ class _LoginScreen extends State<LoginScreen> {
 
       body: Column(
         children: [
-          if (width < 1000 && width > 505)
+          if (width > 1000)
+            LoginDesktopLayout()
+          else if (width > 500)
             LoginShortLayout()
-          else if (width < 505)
-            LoginMobilelayout()
           else
-            LoginDesktopLayout(),
+            LoginMobilelayout(),
         ],
       ),
     );

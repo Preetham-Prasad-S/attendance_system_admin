@@ -43,10 +43,16 @@ dependencies:
   flutter_dotenv: ^6.0.1
   flutter_riverpod: ^3.3.1
   ionicons: ^0.2.2
+  iconify_flutter: ^0.0.7
+  colorful_iconify_flutter: ^0.0.3
+  flutter_bloc: ^9.1.1
+  uuid: ^4.5.3
+  
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  mocktail: ^1.0.4
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -67,6 +73,7 @@ flutter:
 
   assets:
     - assets/
+    
   # To add assets to your application, add an assets section, like this:
 
   # An image asset can refer to one or more resolution-specific "variants", see

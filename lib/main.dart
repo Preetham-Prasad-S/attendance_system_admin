@@ -1,5 +1,11 @@
+import 'package:attendance_system_admin/features/auth/data/datasources/auth_datasource_impl.dart';
+import 'package:attendance_system_admin/features/auth/data/repository/auth_repository_impl.dart';
+import 'package:attendance_system_admin/features/auth/domain/usecases/signup_usecase.dart';
+import 'package:attendance_system_admin/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:attendance_system_admin/features/auth/presentation/screens/signup/signup_screen.dart';
 import 'package:attendance_system_admin/core/screens/base_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -19,11 +25,22 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Attendance System',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(useMaterial3: true),
-      home: BaseScreen(),
+    return BlocProvider(
+      create: (context) => AuthBloc(
+        signupUsecase: SignupUsecase(
+          authRepository: AuthRepositoryImpl(
+            authDatasource: AuthDatasourceImpl(
+              supabaseClient: Supabase.instance.client,
+            ),
+          ),
+        ),
+      ),
+      child: MaterialApp(
+        title: 'Attendance System',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(useMaterial3: true),
+        home: SignupScreen(),
+      ),
     );
   }
 }
