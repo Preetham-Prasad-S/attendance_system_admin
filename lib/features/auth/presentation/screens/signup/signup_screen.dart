@@ -4,7 +4,6 @@ import 'package:attendance_system_admin/features/auth/presentation/screens/signu
 import 'package:attendance_system_admin/features/auth/presentation/screens/signup/signup_short_screen.dart';
 import 'package:flutter/material.dart';
 
-
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
 
@@ -15,22 +14,20 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreen extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: AppColors.lightScaffoldColor,
 
-      body: Column(
-        children: [
-          if (width > 1000)
-            SignupDesktopScreen()
-          else if (width > 500)
-            SignupShortScreen()
-          else
-            SignupMobileScreen(),
-        ],
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          if (constraints.maxWidth > 1000) {
+            return const SignupDesktopScreen();
+          } else if (constraints.maxWidth > 500) {
+            return const SignupShortScreen();
+          } else {
+            return const SignupMobileScreen();
+          }
+        },
       ),
     );
   }
 }
-
-

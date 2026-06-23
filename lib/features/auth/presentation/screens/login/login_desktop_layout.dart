@@ -7,7 +7,7 @@ import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_login_credentials_widget.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_options_button_widget.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_signup_option_widget.dart';
-import 'package:attendance_system_admin/features/auth/presentation/widgets/login_image_title_widget.dart';
+import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_image_title_widget.dart';
 import 'package:flutter/material.dart';
 
 class LoginDesktopLayout extends StatefulWidget {
@@ -43,7 +43,7 @@ class _LoginDesktopLayout extends State<LoginDesktopLayout> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    LoginImageTitleWidget(),
+                    AuthImageTitleWidget(),
                     SizedBox(height: 10),
 
                     Expanded(

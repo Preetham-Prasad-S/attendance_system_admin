@@ -5,6 +5,6 @@ class SignupShortScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: Center(child: Text("Short Signup"),),);
+    return const Scaffold(body: Center(child: Text("Short Signup")));
   }
 }

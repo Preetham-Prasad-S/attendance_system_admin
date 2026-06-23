@@ -1,3 +1,4 @@
+import 'package:attendance_system_admin/core/screens/base_screen.dart';
 import 'package:attendance_system_admin/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:attendance_system_admin/features/auth/presentation/bloc/auth_event.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_button_widget.dart';
@@ -12,7 +13,7 @@ import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../widgets/login_image_title_widget.dart';
+import '../../widgets/auth_image_title_widget.dart';
 
 class SignupDesktopScreen extends StatefulWidget {
   const SignupDesktopScreen({super.key});
@@ -46,137 +47,138 @@ class _SignupDesktopScreenState extends State<SignupDesktopScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Row(
-        children: [
-          Expanded(
-            child: Container(
-              color: const Color.fromARGB(255, 255, 255, 255),
-              padding: EdgeInsets.only(left: 45, top: 45, right: 25),
-              child: SizedBox(
-                width: 500,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    LoginImageTitleWidget(),
-                    SizedBox(height: 10),
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            color: const Color.fromARGB(255, 255, 255, 255),
+            padding: EdgeInsets.only(left: 45, top: 45, right: 25),
+            child: SizedBox(
+              width: 500,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AuthImageTitleWidget(),
+                  SizedBox(height: 10),
 
-                    Expanded(
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            AuthDesktopImageWidget(
-                              imageUrl: "assets/login-screen-picture.png",
-                            ),
-                            SizedBox(height: 15),
+                  Expanded(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          AuthDesktopImageWidget(
+                            imageUrl: "assets/login-screen-picture.png",
+                          ),
+                          SizedBox(height: 15),
 
-                            AuthDesktopImageDescriptionWidget(
-                              titleText: "Precision Workforce Tracking",
-                              subTitleText:
-                                  "Experience the future of attendance management with our cutting-edge isometric reporting and real-time kiosk integration.",
-                            ),
-                          ],
-                        ),
+                          AuthDesktopImageDescriptionWidget(
+                            titleText: "Precision Workforce Tracking",
+                            subTitleText:
+                                "Experience the future of attendance management with our cutting-edge isometric reporting and real-time kiosk integration.",
+                          ),
+                        ],
                       ),
                     ),
-                  ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+
+        Expanded(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(40.0),
+              child: Card(
+                elevation: 0,
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Container(
+                  padding: EdgeInsets.all(40),
+                  width: 600,
+
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AuthDesktopFormTitleDescriptionWidget(
+                        titleText: "Create An Account",
+                        detailText:
+                            "Setup your workspace to begin managing your team",
+                      ),
+
+                      SizedBox(height: 35),
+
+                      Form(
+                        key: _formKey,
+                        child: AuthSigupCredentialWidget(
+                          organizationController: _organizationController,
+                          emailController: _emailController,
+                          passwordController: _passwordController,
+                          confirmPasswordController: _confirmPasswordController,
+                          phoneNumberController: _phoneNumberController,
+                          nameController: _nameController,
+                        ),
+                      ),
+
+                      AuthDesktopCheckBoxWidget(
+                        isChecked: _rememberMe,
+                        onChanged: (value) {
+                          setState(() {
+                            _rememberMe = value ?? false;
+                          });
+                        },
+                      ),
+
+                      SizedBox(height: 15),
+
+                      AuthDesktopButtonWidget(
+                        onPressed: () {
+                          context.read<AuthBloc>().add(
+                            SignupRequested(
+                              email: _emailController.text.trim(),
+                              name: _nameController.text.trim(),
+                              password: _passwordController.text.trim(),
+                              organization: _organizationController.text.trim(),
+                              phoneNumber: _phoneNumberController.text.trim(),
+                              rememberMe: _rememberMe,
+                            ),
+                          );
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => BaseScreen(),
+                            ),
+                          );
+                        },
+                        text: "SignUp",
+                      ),
+
+                      SizedBox(height: 15),
+
+                      AuthDesktopDividerWidget(),
+
+                      SizedBox(height: 15),
+
+                      AuthDesktopOptionsButtonWidget(),
+
+                      SizedBox(height: 15),
+
+                      AuthDesktopSignupOptionWidget(
+                        message: "Already have an account",
+                        title: "Login",
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-
-          Expanded(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(40.0),
-                child: Card(
-                  elevation: 0,
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Container(
-                    padding: EdgeInsets.all(40),
-                    width: 600,
-
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        AuthDesktopFormTitleDescriptionWidget(
-                          titleText: "Create An Account",
-                          detailText:
-                              "Setup your workspace to begin managing your team",
-                        ),
-
-                        SizedBox(height: 35),
-
-                        Form(
-                          key: _formKey,
-                          child: AuthSigupCredentialWidget(
-                            organizationController: _organizationController,
-                            emailController: _emailController,
-                            passwordController: _passwordController,
-                            confirmPasswordController:
-                                _confirmPasswordController,
-                            phoneNumberController: _phoneNumberController,
-                            nameController: _nameController,
-                          ),
-                        ),
-
-                        AuthDesktopCheckBoxWidget(
-                          isChecked: _rememberMe,
-                          onChanged: (value) {
-                            setState(() {
-                              _rememberMe = value ?? false;
-                            });
-                          },
-                        ),
-
-                        SizedBox(height: 15),
-
-                        AuthDesktopButtonWidget(
-                          onPressed: () {
-                            context.read<AuthBloc>().add(
-                              SignupRequested(
-                                email: _emailController.text.trim(),
-                                name: _nameController.text.trim(),
-                                password: _passwordController.text.trim(),
-                                organization: _organizationController.text
-                                    .trim(),
-                                phoneNumber: _phoneNumberController.text.trim(),
-                                rememberMe: _rememberMe,
-                              ),
-                            );
-                          },
-                          text: "SignUp",
-                        ),
-
-                        SizedBox(height: 15),
-
-                        AuthDesktopDividerWidget(),
-
-                        SizedBox(height: 15),
-
-                        AuthDesktopOptionsButtonWidget(),
-
-                        SizedBox(height: 15),
-
-                        AuthDesktopSignupOptionWidget(
-                          message: "Already have an account",
-                          title: "Login",
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

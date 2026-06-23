@@ -2,8 +2,7 @@ import 'package:attendance_system_admin/features/auth/data/datasources/auth_data
 import 'package:attendance_system_admin/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:attendance_system_admin/features/auth/domain/usecases/signup_usecase.dart';
 import 'package:attendance_system_admin/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:attendance_system_admin/features/auth/presentation/screens/signup/signup_screen.dart';
-import 'package:attendance_system_admin/core/screens/base_screen.dart';
+import 'package:attendance_system_admin/features/auth/presentation/screens/auth_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -39,7 +38,7 @@ class MyApp extends StatelessWidget {
         title: 'Attendance System',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(useMaterial3: true),
-        home: SignupScreen(),
+        home: AuthScreen(),
       ),
     );
   }
