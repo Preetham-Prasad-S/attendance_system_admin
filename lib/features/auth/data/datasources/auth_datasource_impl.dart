@@ -1,5 +1,5 @@
 import 'package:attendance_system_admin/features/auth/data/datasources/auth_datasource.dart';
-import 'package:attendance_system_admin/features/auth/data/models/user_model.dart';
+import 'package:attendance_system_admin/core/models/user_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthDatasourceImpl implements AuthDatasource {
@@ -25,6 +25,20 @@ class AuthDatasourceImpl implements AuthDatasource {
       final response = request.user;
 
       if (response != null) {
+        await _supabaseClient
+            .from("User")
+            .insert(
+              UserModel(
+                id: response.id,
+                email: user.email,
+                name: user.name,
+                department: user.department,
+                phoneNo: user.phoneNo,
+                userRole: user.userRole,
+                organization: user.organization,
+              ).toJson(),
+            );
+
         return UserModel(
           id: response.id,
           email: user.email,

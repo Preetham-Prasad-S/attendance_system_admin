@@ -8,12 +8,19 @@ class AuthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentUser = Supabase.instance.client.auth.currentSession;
+    final auth = Supabase.instance.client.auth;
 
-    if (currentUser == null) {
-      return SignupScreen();
-    } else {
-      return BaseScreen();
-    }
+    return StreamBuilder<AuthChangeEvent?>(
+      stream: auth.onAuthStateChange.map((event) => event.event),
+      initialData: null,
+      builder: (context, snapshot) {
+        final session = auth.currentSession;
+
+        if (session == null) {
+          return SignupScreen();
+        }
+        return BaseScreen();
+      },
+    );
   }
 }

@@ -1,4 +1,4 @@
-import 'package:attendance_system_admin/features/auth/data/models/user_model.dart';
+import 'package:attendance_system_admin/core/models/user_model.dart';
 
 class SignUpUserEntity {
   final String? id;

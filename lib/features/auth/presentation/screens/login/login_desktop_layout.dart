@@ -1,3 +1,4 @@
+import 'package:attendance_system_admin/features/auth/presentation/screens/signup/signup_screen.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_button_widget.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_check_box_widget.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_divider_widget.dart';
@@ -128,6 +129,11 @@ class _LoginDesktopLayout extends State<LoginDesktopLayout> {
                         SizedBox(height: 40),
 
                         AuthDesktopSignupOptionWidget(
+                          onTap: () => Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => SignupScreen(),
+                            ),
+                          ),
                           message: "Don't have an accoutn",
                           title: "SignUp",
                         ),

@@ -4,10 +4,12 @@ import 'package:google_fonts/google_fonts.dart';
 class AuthDesktopSignupOptionWidget extends StatelessWidget {
   final String message;
   final String title;
+  final VoidCallback onTap;
   const AuthDesktopSignupOptionWidget({
     super.key,
     required this.message,
     required this.title,
+    required this.onTap,
   });
 
   @override
@@ -22,7 +24,7 @@ class AuthDesktopSignupOptionWidget extends StatelessWidget {
         ),
         const SizedBox(width: 5),
         InkWell(
-          onTap: () {},
+          onTap: onTap,
           child: Text(
             title,
             textAlign: TextAlign.center,

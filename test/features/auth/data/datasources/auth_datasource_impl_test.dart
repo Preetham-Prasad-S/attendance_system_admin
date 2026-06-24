@@ -1,5 +1,5 @@
 import 'package:attendance_system_admin/features/auth/data/datasources/auth_datasource_impl.dart';
-import 'package:attendance_system_admin/features/auth/data/models/user_model.dart';
+import 'package:attendance_system_admin/core/models/user_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

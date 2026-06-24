@@ -1,7 +1,7 @@
 import 'package:attendance_system_admin/core/entities/user_entity.dart';
 import 'package:attendance_system_admin/core/failure.dart';
 import 'package:attendance_system_admin/features/auth/data/datasources/auth_datasource.dart';
-import 'package:attendance_system_admin/features/auth/data/models/user_model.dart';
+import 'package:attendance_system_admin/core/models/user_model.dart';
 import 'package:attendance_system_admin/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:attendance_system_admin/features/auth/domain/entities/signup_user_entity.dart';
 import 'package:flutter_test/flutter_test.dart';

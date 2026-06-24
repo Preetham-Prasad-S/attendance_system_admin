@@ -1,5 +1,5 @@
 import 'dart:convert';
-import '../../features/auth/data/models/user_model.dart';
+import '../models/user_model.dart';
 
 class UserEntity {
   final String id;

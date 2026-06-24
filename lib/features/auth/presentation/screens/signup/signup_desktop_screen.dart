@@ -1,6 +1,7 @@
 import 'package:attendance_system_admin/core/screens/base_screen.dart';
 import 'package:attendance_system_admin/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:attendance_system_admin/features/auth/presentation/bloc/auth_event.dart';
+import 'package:attendance_system_admin/features/auth/presentation/screens/login/login_screen.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_button_widget.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_check_box_widget.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_divider_widget.dart';
@@ -168,6 +169,11 @@ class _SignupDesktopScreenState extends State<SignupDesktopScreen> {
                       SizedBox(height: 15),
 
                       AuthDesktopSignupOptionWidget(
+                        onTap: () => Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => LoginScreen(),
+                          ),
+                        ),
                         message: "Already have an account",
                         title: "Login",
                       ),
