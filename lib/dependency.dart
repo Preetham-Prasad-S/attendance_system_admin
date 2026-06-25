@@ -18,11 +18,13 @@ Future<void> initDependencies() async {
   );
 
   serviceLocator.registerLazySingleton(
-    () => AuthRepositoryImpl(authDatasource: serviceLocator<AuthDatasource>()),
+    () => AuthRepositoryImpl(
+      authDatasource: serviceLocator<AuthDatasourceImpl>(),
+    ),
   );
-
+  
   serviceLocator.registerLazySingleton(
-    () => SignupUsecase(authRepository: serviceLocator<AuthRepository>()),
+    () => SignupUsecase(authRepository: serviceLocator<AuthRepositoryImpl>()),
   );
 
   serviceLocator.registerLazySingleton(

@@ -13,6 +13,7 @@ class BaseDesktopScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.lightScaffoldColor,
       body: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomNavigationRailWidget(),
           Expanded(
