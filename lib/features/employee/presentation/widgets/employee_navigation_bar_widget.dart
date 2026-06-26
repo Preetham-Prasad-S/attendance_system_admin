@@ -1,7 +1,10 @@
 import 'package:attendance_system_admin/core/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:iconify_flutter/iconify_flutter.dart';
+import 'package:iconify_flutter/icons/ic.dart';
+import 'package:iconify_flutter/icons/ion.dart';
+
 
 class EmployeeNavigationBarWidget extends StatelessWidget {
   const EmployeeNavigationBarWidget({super.key});
@@ -23,12 +26,12 @@ class EmployeeNavigationBarWidget extends StatelessWidget {
               const Spacer(),
               IconButton(
                 onPressed: () {},
-                icon: Icon(Ionicons.notifications_outline),
+                icon: Iconify(Ion.notifications_outline),
               ),
               const SizedBox(width: 20),
               IconButton(
                 onPressed: () {},
-                icon: Icon(Ionicons.help_circle_outline),
+                icon: Iconify(Ic.help_outline),
               ),
               const SizedBox(width: 20),
               const VerticalDivider(),
@@ -79,11 +82,10 @@ class ProfileCardWidget extends StatelessWidget {
 
 class SearchBarWidget extends StatelessWidget {
   const SearchBarWidget({super.key});
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 400,
+      width: 350,
       child: TextField(
         decoration: InputDecoration(
           contentPadding: EdgeInsets.all(0),
@@ -93,9 +95,9 @@ class SearchBarWidget extends StatelessWidget {
           ),
           hintText: "Search users, department...",
           prefixIcon: Icon(
-            Ionicons.search,
-            color: const Color.fromARGB(160, 127, 152, 187),
-          ),
+            Icons.search,
+            color: Color.fromARGB(255, 177, 197, 225),
+            size: 26,),
           filled: true,
           fillColor: AppColors.lightScaffoldColor,
           enabledBorder: OutlineInputBorder(

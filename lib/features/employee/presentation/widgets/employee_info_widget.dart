@@ -1,8 +1,10 @@
 import 'package:attendance_system_admin/core/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconify_flutter/iconify_flutter.dart';
+import 'package:iconify_flutter/icons/bi.dart';
+import 'package:iconify_flutter/icons/ic.dart';
 import 'package:intl/intl.dart';
-import 'package:ionicons/ionicons.dart';
 
 class EmployeeInfoWidget extends StatelessWidget {
   const EmployeeInfoWidget({super.key});
@@ -15,15 +17,15 @@ class EmployeeInfoWidget extends StatelessWidget {
         children: [
           Flexible(
             child: EmployeeInfoCardWidget(
-              icon: Icon(Ionicons.people, color: AppColors.blueColor),
+              icon: Icon(Icons.people, color: AppColors.blueColor),
               titleString: "Total User",
               number: 1248,
             ),
           ),
           Flexible(
             child: EmployeeInfoCardWidget(
-              icon: Icon(
-                Ionicons.shield_checkmark,
+              icon: Iconify(
+                Bi.shield_fill_check,
                 color: AppColors.greenColor,
               ),
               titleString: "Active User",
@@ -97,8 +99,8 @@ class EmployeeRequestCountCardWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 5),
-                  Icon(
-                    Ionicons.arrow_forward,
+                  Iconify(
+                    Ic.arrow_forward,
                     size: 18,
                     color: AppColors.whiteColor,
                   ),
@@ -115,7 +117,7 @@ class EmployeeRequestCountCardWidget extends StatelessWidget {
 class EmployeeInfoCardWidget extends StatelessWidget {
   final String titleString;
   final int number;
-  final Icon icon;
+  final Widget icon;
   const EmployeeInfoCardWidget({
     super.key,
     required this.titleString,

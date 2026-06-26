@@ -3,9 +3,16 @@ import 'package:attendance_system_admin/core/widgets/custom_navigation_rail_widg
 import 'package:attendance_system_admin/features/employee/presentation/screens/employee_desktop_screen.dart';
 import 'package:flutter/material.dart';
 
-class BaseDesktopScreen extends StatelessWidget {
+import 'base_right_drawer.dart';
+
+class BaseDesktopScreen extends StatefulWidget {
   const BaseDesktopScreen({super.key});
 
+  @override
+  State<BaseDesktopScreen> createState() => _BaseDesktopScreenState();
+}
+
+class _BaseDesktopScreenState extends State<BaseDesktopScreen> {
   @override
   Widget build(BuildContext context) {
     // final screenWidth = MediaQuery.of(context).size.width;
@@ -23,6 +30,7 @@ class BaseDesktopScreen extends StatelessWidget {
           ),
         ],
       ),
+      endDrawer: BaseRightDrawer()
     );
   }
 }

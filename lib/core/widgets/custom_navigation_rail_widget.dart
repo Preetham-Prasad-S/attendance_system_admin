@@ -1,7 +1,8 @@
 import 'package:attendance_system_admin/core/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:iconify_flutter/iconify_flutter.dart';
+import 'package:iconify_flutter/icons/ic.dart';
 
 class CustomNavigationRailWidget extends StatelessWidget {
   const CustomNavigationRailWidget({super.key});
@@ -61,7 +62,7 @@ class NavButton extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Icon(Ionicons.people_outline, size: 25, color: AppColors.blueColor),
+          Iconify(Ic.baseline_people_alt, size: 25, color: AppColors.blueColor),
           SizedBox(width: 10),
           Text(
             "Employees",
