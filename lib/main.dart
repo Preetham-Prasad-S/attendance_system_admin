@@ -1,7 +1,6 @@
 import 'package:attendance_system_admin/core/screens/base_screen.dart';
 import 'package:attendance_system_admin/dependency.dart';
 import 'package:attendance_system_admin/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:attendance_system_admin/features/auth/presentation/screens/auth_screen.dart';
 import 'package:attendance_system_admin/features/auth/presentation/screens/signup/signup_desktop_screen.dart';
 import 'package:attendance_system_admin/features/auth/presentation/screens/signup/signup_screen.dart';
 import 'package:flutter/material.dart';
@@ -32,8 +31,21 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Attendance System',
         debugShowCheckedModeBanner: false,
+
         theme: ThemeData(useMaterial3: true),
-        home: BaseScreen(),
+        home: StreamBuilder(
+          stream: Supabase.instance.client.auth.onAuthStateChange,
+          builder: (context, snapshot) {
+            // Still waiting for the first auth event
+            if (!snapshot.hasData) {
+              final session = Supabase.instance.client.auth.currentSession;
+              return session != null ? BaseScreen() : SignupScreen();
+            }
+
+            final session = snapshot.data!.session;
+            return session != null ? BaseScreen() : SignupScreen();
+          },
+        ),
       ),
     );
   }

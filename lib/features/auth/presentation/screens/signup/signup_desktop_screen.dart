@@ -145,7 +145,9 @@ class _SignupDesktopScreenState extends State<SignupDesktopScreen> {
                               name: _nameController.text.trim(),
                               password: _passwordController.text.trim(),
                               organization: _organizationController.text.trim(),
-                              phoneNumber: _phoneNumberController.text.trim(),
+                              phoneNumber: int.parse(
+                                _phoneNumberController.text.trim(),
+                              ),
                               rememberMe: _rememberMe,
                             ),
                           );

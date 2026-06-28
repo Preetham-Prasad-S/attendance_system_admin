@@ -1,6 +1,7 @@
 import 'package:attendance_system_admin/features/auth/domain/entities/signup_user_entity.dart';
 import 'package:attendance_system_admin/features/auth/domain/usecases/signup_usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uuid/uuid.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
 
@@ -19,6 +20,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     emit(AuthLoading());
+
     final result = await _signupUsecase.call(
       SignupUsecaseParams(
         signUpUserEntity: SignUpUserEntity(

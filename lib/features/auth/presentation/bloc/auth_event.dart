@@ -15,7 +15,7 @@ class SignupRequested extends AuthEvent {
   final String name;
   final String email;
   final String password;
-  final String phoneNumber;
+  final int phoneNumber;
   final bool rememberMe;
   final String organization;
   SignupRequested({

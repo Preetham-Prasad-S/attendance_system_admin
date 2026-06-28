@@ -4,10 +4,10 @@ abstract interface class Failure {
   Failure({required this.message});
 }
 
-class AuthException implements Exception {
+class AppAuthException implements Exception {
   final String message;
 
-  AuthException({required this.message});
+  AppAuthException({required this.message});
 }
 
 /// Failure type specific to authentication errors.

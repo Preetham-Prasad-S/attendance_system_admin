@@ -10,8 +10,32 @@ class AuthDatasourceImpl implements AuthDatasource {
 
   @override
   Future<UserModel> login(String email, String password) async {
-    // TODO: implement signup
-    throw UnimplementedError();
+    try {
+      final request = await _supabaseClient.auth.signInWithPassword(
+        email: email,
+        password: password,
+      );
+
+      final response = request.user;
+
+      if (response != null) {
+        final data = await _supabaseClient
+            .from("User")
+            .select()
+            .eq("id", response.id)
+            .single();
+
+        return UserModel.fromMap(data);
+      }
+
+      throw AuthException("Login Failed --> AuthDatasource.login()");
+    } on AuthException {
+      rethrow;
+    } catch (e) {
+      throw AuthException(
+        "AuthException : ${e.toString()} --> AuthDatasource.login()",
+      );
+    }
   }
 
   @override
@@ -20,37 +44,24 @@ class AuthDatasourceImpl implements AuthDatasource {
       final request = await _supabaseClient.auth.signUp(
         email: user.email,
         password: password,
+        data: {
+          "name": user.name,
+          "department": user.department,
+          "phoneNo": user.phoneNo,
+          "userRole": user.userRole,
+          "organization": user.organization,
+        },
       );
 
       final response = request.user;
 
       if (response != null) {
-        await _supabaseClient
-            .from("User")
-            .insert(
-              UserModel(
-                id: response.id,
-                email: user.email,
-                name: user.name,
-                department: user.department,
-                phoneNo: user.phoneNo,
-                userRole: user.userRole,
-                organization: user.organization,
-              ).toJson(),
-            );
+        final createdUser = user.copyWith(id: response.id);
 
-        return UserModel(
-          id: response.id,
-          email: user.email,
-          name: user.name,
-          department: user.department,
-          phoneNo: user.phoneNo,
-          userRole: user.userRole,
-          organization: user.organization,
-        );
+        return createdUser;
       }
 
-      throw AuthException("User is null --> AuthDatasource.signup()");
+      throw AuthException("Sign In Failed --> AuthDatasource.signup()");
     } on AuthException {
       rethrow; // don't double-wrap AuthExceptions
     } catch (e) {

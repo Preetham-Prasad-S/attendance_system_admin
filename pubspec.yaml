@@ -46,6 +46,7 @@ dependencies:
   flutter_bloc: ^9.1.1
   iconify_flutter: ^0.0.7
   get_it: ^9.2.1
+  uuid: ^4.5.3
 
 dev_dependencies:
   flutter_test:

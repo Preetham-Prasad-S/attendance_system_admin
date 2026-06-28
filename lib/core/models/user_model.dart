@@ -6,7 +6,7 @@ class UserModel {
   final String name;
   final String? department;
   final String organization;
-  final String phoneNo;
+  final int phoneNo;
   final String? userRole;
 
   UserModel({
@@ -19,6 +19,26 @@ class UserModel {
     required this.organization,
   });
 
+  UserModel copyWith({
+    String? id,
+    String? email,
+    String? name,
+    String? department,
+    String? organization,
+    int? phoneNo,
+    String? userRole,
+  }) {
+    return UserModel(
+      id: id ?? this.id,
+      email: email ?? this.email,
+      name: name ?? this.name,
+      department: department ?? this.department,
+      organization: organization ?? this.organization,
+      phoneNo: phoneNo ?? this.phoneNo,
+      userRole: userRole ?? this.userRole,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
@@ -27,6 +47,7 @@ class UserModel {
       'department': department,
       'phoneNo': phoneNo,
       'userRole': userRole,
+      'organization': organization,
     };
   }
 
@@ -36,8 +57,8 @@ class UserModel {
       email: map['email'] as String,
       name: map['name'] as String,
       department: map['department'] as String,
-      phoneNo: map['phoneNo'] as String,
-      userRole: map['userRole'] as String,
+      phoneNo: map['phoneNo'] as int,
+      userRole: map['userRole'] as String?,
       organization: map["organization"] as String,
     );
   }

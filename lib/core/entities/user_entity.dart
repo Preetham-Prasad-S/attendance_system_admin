@@ -7,7 +7,7 @@ class UserEntity {
   final String name;
   final String? department;
   final String organization;
-  final String phoneNo;
+  final int phoneNo;
   final String? userRole;
 
   UserEntity({
@@ -37,7 +37,7 @@ class UserEntity {
       email: map['email'] as String,
       name: map['name'] as String,
       department: map['department'] as String,
-      phoneNo: map['phoneNo'] as String,
+      phoneNo: map['phoneNo'] as int,
       userRole: map['userRole'] as String,
       organization: map['organization'] as String,
     );

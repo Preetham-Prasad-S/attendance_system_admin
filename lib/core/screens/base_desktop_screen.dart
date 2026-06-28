@@ -1,6 +1,8 @@
 import 'package:attendance_system_admin/core/app_colors.dart';
 import 'package:attendance_system_admin/core/widgets/custom_navigation_rail_widget.dart';
 import 'package:attendance_system_admin/features/employee/presentation/screens/employee_desktop_screen.dart';
+
+import 'package:attendance_system_admin/features/profile/presentation/screens/profile_desktop_screen.dart';
 import 'package:flutter/material.dart';
 
 class BaseDesktopScreen extends StatelessWidget {
@@ -19,7 +21,10 @@ class BaseDesktopScreen extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(20),
-              child: IndexedStack(children: [EmployeeDesktopScreen()]),
+              child: IndexedStack(
+                index: 1,
+                children: [EmployeeDesktopScreen(), ProfileDesktopScreen()],
+              ),
             ),
           ),
         ],

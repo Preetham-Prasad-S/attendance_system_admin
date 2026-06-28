@@ -12,11 +12,22 @@ class AuthRepositoryImpl implements AuthRepository {
     : _authDatasource = authDatasource;
 
   @override
-  Future<Either<AuthFailure, UserEntity>> signup(
-    SignUpUserEntity user
-  ) async {
+  Future<Either<AuthFailure, UserEntity>> signup(SignUpUserEntity user) async {
     try {
       final model = await _authDatasource.signup(user.toModel(), user.password);
+      return Right(UserEntity.fromModel(model));
+    } catch (e) {
+      return Left(AuthFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<AuthFailure, UserEntity>> login(
+    String email,
+    String password,
+  ) async {
+    try {
+      final model = await _authDatasource.login(email, password);
       return Right(UserEntity.fromModel(model));
     } catch (e) {
       return Left(AuthFailure(message: e.toString()));

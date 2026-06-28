@@ -33,7 +33,8 @@ class CustomNavigationRailWidget extends StatelessWidget {
               SizedBox(height: 50),
 
               // Employee Nav Button
-              NavButton(),
+              NavButton(navText: "Employees", navIcon: Ionicons.people_outline),
+              NavButton(navText: "Profile", navIcon: Ionicons.person_outline),
             ],
           ),
         ),
@@ -43,17 +44,15 @@ class CustomNavigationRailWidget extends StatelessWidget {
 }
 
 class NavButton extends StatelessWidget {
-  const NavButton({super.key});
+  final String navText;
+  final IconData navIcon;
+  const NavButton({super.key, required this.navText, required this.navIcon});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
-        // border: Border.all(
-        //   color: const Color.fromARGB(29, 7, 129, 229),
-        //   width: 2,
-        // ),
         borderRadius: BorderRadius.all(Radius.circular(15)),
         color: AppColors.navButtonBackgroundColor,
       ),
@@ -61,10 +60,10 @@ class NavButton extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Icon(Ionicons.people_outline, size: 25, color: AppColors.blueColor),
+          Icon(navIcon, size: 25, color: AppColors.blueColor),
           SizedBox(width: 10),
           Text(
-            "Employees",
+            navText,
             style: GoogleFonts.quicksand(
               fontWeight: FontWeight.w500,
               fontSize: 18,
