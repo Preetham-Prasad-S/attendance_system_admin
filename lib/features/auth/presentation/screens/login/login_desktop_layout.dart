@@ -1,3 +1,5 @@
+import 'package:attendance_system_admin/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:attendance_system_admin/features/auth/presentation/bloc/auth_event.dart';
 import 'package:attendance_system_admin/features/auth/presentation/screens/signup/signup_screen.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_button_widget.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_check_box_widget.dart';
@@ -10,6 +12,7 @@ import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_signup_option_widget.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_image_title_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginDesktopLayout extends StatefulWidget {
   const LoginDesktopLayout({super.key});
@@ -114,7 +117,14 @@ class _LoginDesktopLayout extends State<LoginDesktopLayout> {
                         SizedBox(height: 20),
 
                         AuthDesktopButtonWidget(
-                          onPressed: () {},
+                          onPressed: () {
+                            context.read<AuthBloc>().add(
+                              LoginRequested(
+                                email: _emailController.text.trim(),
+                                password: _passwordController.text.trim(),
+                              ),
+                            );
+                          },
                           text: "Login",
                         ),
 

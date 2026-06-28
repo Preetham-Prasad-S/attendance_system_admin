@@ -5,8 +5,11 @@ import 'package:mocktail/mocktail.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MockSupabaseClient extends Mock implements SupabaseClient {}
+
 class MockGoTrueClient extends Mock implements GoTrueClient {}
+
 class MockAuthResponse extends Mock implements AuthResponse {}
+
 class MockUser extends Mock implements User {}
 
 void main() {
@@ -17,7 +20,7 @@ void main() {
   setUp(() {
     mockSupabaseClient = MockSupabaseClient();
     mockGoTrueClient = MockGoTrueClient();
-    
+
     // Stub the auth getter on SupabaseClient to return our mock GoTrueClient
     when(() => mockSupabaseClient.auth).thenReturn(mockGoTrueClient);
 
@@ -30,7 +33,7 @@ void main() {
       email: 'test@example.com',
       name: 'Test User',
       department: 'IT',
-      phoneNo: '1234567890',
+      phoneNo: 1234567890,
       userRole: 'Admin',
       organization: 'Test Org',
     );
@@ -63,7 +66,7 @@ void main() {
             password: tPassword,
           ),
         ).called(1);
-        
+
         expect(result.id, tUserId);
         expect(result.email, tUserModel.email);
         expect(result.name, tUserModel.name);

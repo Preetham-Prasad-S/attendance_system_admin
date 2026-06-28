@@ -29,7 +29,7 @@ void main() {
       name: 'Test Name',
       email: 'test@email.com',
       password: 'password123',
-      phoneNumber: '1234567890',
+      phoneNumber: 1234567890,
       rememberMe: true,
       organization: 'Test Org',
     );
@@ -39,7 +39,7 @@ void main() {
       email: 'test@email.com',
       name: 'Test Name',
       department: null,
-      phoneNo: '1234567890',
+      phoneNo: 1234567890,
       userRole: null,
       organization: 'Test Org',
     );

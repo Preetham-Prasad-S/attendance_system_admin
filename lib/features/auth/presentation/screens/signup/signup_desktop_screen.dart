@@ -151,11 +151,6 @@ class _SignupDesktopScreenState extends State<SignupDesktopScreen> {
                               rememberMe: _rememberMe,
                             ),
                           );
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (context) => BaseScreen(),
-                            ),
-                          );
                         },
                         text: "SignUp",
                       ),

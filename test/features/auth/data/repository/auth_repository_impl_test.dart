@@ -8,6 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockAuthDatasource extends Mock implements AuthDatasource {}
+
 class FakeUserModel extends Fake implements UserModel {}
 
 void main() {
@@ -29,7 +30,7 @@ void main() {
       name: 'Test Name',
       email: 'test@email.com',
       password: 'password123',
-      phoneNumber: '1234567890',
+      phoneNumber: 1234567890,
       rememberMe: true,
       organization: 'Test Org',
     );
@@ -39,7 +40,7 @@ void main() {
       email: 'test@email.com',
       name: 'Test Name',
       department: null,
-      phoneNo: '1234567890',
+      phoneNo: 1234567890,
       userRole: null,
       organization: 'Test Org',
     );
@@ -49,7 +50,7 @@ void main() {
       email: 'test@email.com',
       name: 'Test Name',
       department: null,
-      phoneNo: '1234567890',
+      phoneNo: 1234567890,
       userRole: null,
       organization: 'Test Org',
     );
@@ -58,22 +59,25 @@ void main() {
       'should return Right(UserEntity) when call to datasource is successful',
       () async {
         // arrange
-        when(() => mockAuthDatasource.signup(any(), any()))
-            .thenAnswer((_) async => tUserModel);
+        when(
+          () => mockAuthDatasource.signup(any(), any()),
+        ).thenAnswer((_) async => tUserModel);
 
         // act
         final result = await authRepositoryImpl.signup(tSignUpUserEntity);
 
         // assert
-        verify(() => mockAuthDatasource.signup(any(), tSignUpUserEntity.password)).called(1);
+        verify(
+          () => mockAuthDatasource.signup(any(), tSignUpUserEntity.password),
+        ).called(1);
         expect(result.isRight(), true);
-        
+
         late UserEntity resultUser;
         result.fold(
           (failure) => fail('Should not fail'),
           (user) => resultUser = user,
         );
-        
+
         expect(resultUser.id, tUserEntity.id);
         expect(resultUser.email, tUserEntity.email);
         expect(resultUser.name, tUserEntity.name);
@@ -89,22 +93,25 @@ void main() {
       () async {
         // arrange
         const errorMessage = 'Something went wrong';
-        when(() => mockAuthDatasource.signup(any(), any()))
-            .thenThrow(Exception(errorMessage));
+        when(
+          () => mockAuthDatasource.signup(any(), any()),
+        ).thenThrow(Exception(errorMessage));
 
         // act
         final result = await authRepositoryImpl.signup(tSignUpUserEntity);
 
         // assert
-        verify(() => mockAuthDatasource.signup(any(), tSignUpUserEntity.password)).called(1);
+        verify(
+          () => mockAuthDatasource.signup(any(), tSignUpUserEntity.password),
+        ).called(1);
         expect(result.isLeft(), true);
-        
+
         late Failure resultFailure;
         result.fold(
           (failure) => resultFailure = failure,
           (user) => fail('Should not succeed'),
         );
-        
+
         expect(resultFailure, isA<AuthFailure>());
         expect(resultFailure.message, contains(errorMessage));
       },
