@@ -1,5 +1,6 @@
 import 'package:attendance_system_admin/core/entities/user_entity.dart';
 import 'package:attendance_system_admin/core/failure.dart';
+import 'package:attendance_system_admin/core/services/remember_me_service.dart';
 import 'package:attendance_system_admin/features/auth/domain/usecases/login_usecase.dart';
 import 'package:attendance_system_admin/features/auth/domain/usecases/signup_usecase.dart';
 import 'package:attendance_system_admin/features/auth/presentation/bloc/auth_bloc.dart';
@@ -13,6 +14,8 @@ class MockSignupUsecase extends Mock implements SignupUsecase {}
 
 class MockLoginUsecase extends Mock implements LoginUsecase {}
 
+class MockRememberMeService extends Mock implements RememberMeService {}
+
 class FakeSignupUsecaseParams extends Fake implements SignupUsecaseParams {}
 
 class FakeLoginUsecaseParams extends Fake implements LoginUsecaseParams {}
@@ -21,6 +24,7 @@ void main() {
   late AuthBloc authBloc;
   late MockSignupUsecase mockSignupUsecase;
   late MockLoginUsecase mockLoginUsecase;
+  late MockRememberMeService mockRememberMeService;
 
   setUpAll(() {
     registerFallbackValue(FakeSignupUsecaseParams());
@@ -30,8 +34,10 @@ void main() {
   setUp(() {
     mockSignupUsecase = MockSignupUsecase();
     mockLoginUsecase = MockLoginUsecase();
+    mockRememberMeService = MockRememberMeService();
 
     authBloc = AuthBloc(
+      rememberMeService: mockRememberMeService,
       signupUsecase: mockSignupUsecase,
       loginUsecase: mockLoginUsecase,
     );
@@ -79,6 +85,9 @@ void main() {
         when(
           () => mockSignupUsecase.call(any()),
         ).thenAnswer((_) async => Right(tUserEntity));
+
+        when(() => mockRememberMeService.setRememberMe(any()))
+            .thenAnswer((_) async {});
 
         // assert later
         final expected = [

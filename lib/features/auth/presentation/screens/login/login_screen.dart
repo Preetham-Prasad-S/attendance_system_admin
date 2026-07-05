@@ -19,6 +19,7 @@ class _LoginScreen extends State<LoginScreen> {
       backgroundColor: AppColors.lightScaffoldColor,
 
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           if (width > 1000)
             LoginDesktopLayout()

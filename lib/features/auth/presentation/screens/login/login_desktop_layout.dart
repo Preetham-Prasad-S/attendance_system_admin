@@ -24,6 +24,7 @@ class LoginDesktopLayout extends StatefulWidget {
 class _LoginDesktopLayout extends State<LoginDesktopLayout> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
+  bool _rememberMe = false;
 
   @override
   void initState() {
@@ -110,8 +111,12 @@ class _LoginDesktopLayout extends State<LoginDesktopLayout> {
                         SizedBox(height: 10),
 
                         AuthDesktopCheckBoxWidget(
-                          isChecked: false,
-                          onChanged: (value) {},
+                          isChecked: _rememberMe,
+                          onChanged: (value) {
+                            setState(() {
+                              _rememberMe = value ?? false;
+                            });
+                          },
                         ),
 
                         SizedBox(height: 20),
@@ -122,6 +127,7 @@ class _LoginDesktopLayout extends State<LoginDesktopLayout> {
                               LoginRequested(
                                 email: _emailController.text.trim(),
                                 password: _passwordController.text.trim(),
+                                rememberMe: _rememberMe,
                               ),
                             );
                           },

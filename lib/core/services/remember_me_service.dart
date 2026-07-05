@@ -11,4 +11,12 @@ class RememberMeService {
   Future<void> setRememberMe(bool value) async {
     await _sharedPreferences.setBool(_key, value);
   }
+
+  bool getRememberme() {
+    return _sharedPreferences.getBool(_key) ?? false;
+  }
+
+  Future<void> clear() async {
+    await _sharedPreferences.remove(_key);
+  }
 }

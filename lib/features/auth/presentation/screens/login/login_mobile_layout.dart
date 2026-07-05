@@ -1,6 +1,9 @@
 import 'package:attendance_system_admin/core/app_colors.dart';
+import 'package:attendance_system_admin/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:attendance_system_admin/features/auth/presentation/bloc/auth_event.dart';
 import 'package:colorful_iconify_flutter/icons/logos.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 
@@ -13,6 +16,17 @@ class LoginMobilelayout extends StatefulWidget {
 }
 
 class _MobileLayout extends State<LoginMobilelayout> {
+  late final TextEditingController _emailController;
+  late final TextEditingController _passwordController;
+  bool _rememberMe = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -36,15 +50,35 @@ class _MobileLayout extends State<LoginMobilelayout> {
 
                   SizedBox(height: 10),
 
-                  MobileLoginPasswordWidget(),
+                  MobileLoginPasswordWidget(
+                    emailController: _emailController,
+                    passwordController: _passwordController,
+                  ),
 
                   SizedBox(height: 0),
 
-                  MobileLoginCheckboxWidget(),
+                  MobileLoginCheckboxWidget(
+                    isChecked: _rememberMe,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        _rememberMe = value ?? false;
+                      });
+                    },
+                  ),
 
                   SizedBox(height: 10),
 
-                  MobileLoginLoginButtonWidget(),
+                  MobileLoginLoginButtonWidget(
+                    onPressed: () {
+                      context.read<AuthBloc>().add(
+                        LoginRequested(
+                          email: _emailController.text.trim(),
+                          password: _passwordController.text.trim(),
+                          rememberMe: _rememberMe,
+                        ),
+                      );
+                    },
+                  ),
 
                   SizedBox(height: 10),
 
@@ -68,7 +102,13 @@ class _MobileLayout extends State<LoginMobilelayout> {
 }
 
 class MobileLoginPasswordWidget extends StatefulWidget {
-  const MobileLoginPasswordWidget({super.key});
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
+  const MobileLoginPasswordWidget({
+    super.key,
+    required this.emailController,
+    required this.passwordController,
+  });
   @override
   State<MobileLoginPasswordWidget> createState() =>
       _MobileLoginPasswordWidget();
@@ -90,7 +130,7 @@ class _MobileLoginPasswordWidget extends State<MobileLoginPasswordWidget> {
 
         SizedBox(height: 10),
         AuthTextFieldWidget(
-          textEditingController: TextEditingController(),
+          textEditingController: widget.emailController,
           hintText: "name@company.com",
           labelText: "Email Address",
         ),
@@ -127,7 +167,7 @@ class _MobileLoginPasswordWidget extends State<MobileLoginPasswordWidget> {
         SizedBox(height: 10),
 
         AuthTextFieldWidget(
-          textEditingController: TextEditingController(),
+          textEditingController: widget.passwordController,
           hintText: "•••••••••••",
           isPassword: true,
           labelText: "Password",
@@ -169,26 +209,22 @@ class MobileLoginSignupWidget extends StatelessWidget {
   }
 }
 
-class MobileLoginCheckboxWidget extends StatefulWidget {
-  const MobileLoginCheckboxWidget({super.key});
-  @override
-  State<MobileLoginCheckboxWidget> createState() =>
-      _MobileLoginCheckboxWidget();
-}
+class MobileLoginCheckboxWidget extends StatelessWidget {
+  final bool isChecked;
+  final ValueChanged<bool?> onChanged;
+  const MobileLoginCheckboxWidget({
+    super.key,
+    required this.isChecked,
+    required this.onChanged,
+  });
 
-class _MobileLoginCheckboxWidget extends State<MobileLoginCheckboxWidget> {
-  bool isChecked = false;
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Checkbox(
           value: isChecked,
-          onChanged: (bool? newValue) {
-            setState(() {
-              isChecked = newValue ?? false;
-            });
-          },
+          onChanged: onChanged,
           activeColor: Colors.blue,
           checkColor: Colors.white,
         ),
@@ -285,12 +321,13 @@ class MobileLoginDividerWIdget extends StatelessWidget {
 }
 
 class MobileLoginLoginButtonWidget extends StatelessWidget {
-  const MobileLoginLoginButtonWidget({super.key});
+  final VoidCallback onPressed;
+  const MobileLoginLoginButtonWidget({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () {},
+      onPressed: onPressed,
       style: TextButton.styleFrom(
         minimumSize: Size(double.infinity, 50),
         foregroundColor: Color.fromRGBO(255, 255, 255, 1),

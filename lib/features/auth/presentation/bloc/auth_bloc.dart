@@ -1,3 +1,4 @@
+import 'package:attendance_system_admin/core/services/remember_me_service.dart';
 import 'package:attendance_system_admin/features/auth/domain/entities/signup_user_entity.dart';
 import 'package:attendance_system_admin/features/auth/domain/usecases/login_usecase.dart';
 import 'package:attendance_system_admin/features/auth/domain/usecases/signup_usecase.dart';
@@ -10,12 +11,15 @@ import 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SignupUsecase _signupUsecase;
   final LoginUsecase _loginUsecase;
+  final RememberMeService _rememberMeService;
 
   AuthBloc({
     required SignupUsecase signupUsecase,
     required LoginUsecase loginUsecase,
+    required RememberMeService rememberMeService,
   }) : _signupUsecase = signupUsecase,
        _loginUsecase = loginUsecase,
+       _rememberMeService = rememberMeService,
        super(AuthInitial()) {
     on<SignupRequested>(_onSignupRequested);
     on<LoginRequested>(_onLoginRequested);
@@ -43,7 +47,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     result.fold(
       (failure) => emit(AuthFailureState(failure.message)),
-      (user) => emit(AuthSuccess(user)),
+      (user) {
+        _rememberMeService.setRememberMe(event.rememberMe);
+        emit(AuthSuccess(user));
+      },
     );
   }
 
@@ -59,7 +66,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     result.fold(
       (failure) => emit(AuthFailureState(failure.message)),
-      (user) => emit(AuthSuccess(user)),
+      (user) {
+        _rememberMeService.setRememberMe(event.rememberMe);
+        emit(AuthSuccess(user));
+      },
     );
   }
 }

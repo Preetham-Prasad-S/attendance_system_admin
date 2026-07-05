@@ -1,7 +1,7 @@
 import 'package:attendance_system_admin/core/screens/base_screen.dart';
+import 'package:attendance_system_admin/core/services/remember_me_service.dart';
 import 'package:attendance_system_admin/dependency.dart';
 import 'package:attendance_system_admin/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:attendance_system_admin/features/auth/presentation/screens/signup/signup_desktop_screen.dart';
 import 'package:attendance_system_admin/features/auth/presentation/screens/signup/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,6 +18,13 @@ Future<void> main() async {
   );
 
   await initDependencies();
+
+  // If "Remember Me" was not checked, clear the session on startup
+  final rememberMeService = serviceLocator<RememberMeService>();
+  if (!rememberMeService.getRememberme()) {
+    await Supabase.instance.client.auth.signOut();
+  }
+
   runApp(const MyApp());
 }
 
@@ -29,7 +36,7 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       create: (context) => serviceLocator<AuthBloc>(),
       child: MaterialApp(
-        title: 'Attendance System',
+        title: 'Attendance System Admin',
         debugShowCheckedModeBanner: false,
 
         theme: ThemeData(useMaterial3: true),
