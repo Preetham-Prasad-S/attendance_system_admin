@@ -3,7 +3,6 @@ import 'package:attendance_system_admin/features/auth/domain/entities/signup_use
 import 'package:attendance_system_admin/features/auth/domain/usecases/login_usecase.dart';
 import 'package:attendance_system_admin/features/auth/domain/usecases/signup_usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uuid/uuid.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
 
