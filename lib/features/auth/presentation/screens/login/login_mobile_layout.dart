@@ -28,36 +28,38 @@ class _MobileLayout extends State<LoginMobilelayout> {
             child: Container(
               padding: EdgeInsets.all(20),
               width: double.infinity,
-              height: 530,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  MobileLoginTitleDescriptionWidget(),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    MobileLoginTitleDescriptionWidget(),
 
-                  SizedBox(height: 10),
+                    SizedBox(height: 10),
 
-                  MobileLoginPasswordWidget(),
+                    MobileLoginPasswordWidget(),
 
-                  SizedBox(height: 0),
+                    SizedBox(height: 0),
 
-                  MobileLoginCheckboxWidget(),
+                    MobileLoginCheckboxWidget(),
 
-                  SizedBox(height: 10),
+                    SizedBox(height: 10),
 
-                  MobileLoginLoginButtonWidget(),
+                    MobileLoginLoginButtonWidget(),
 
-                  SizedBox(height: 10),
+                    SizedBox(height: 10),
 
-                  MobileLoginDividerWIdget(),
+                    MobileLoginDividerWIdget(),
 
-                  SizedBox(height: 10),
+                    SizedBox(height: 10),
 
-                  MobileLoginOptionsButtonWidget(),
+                    MobileLoginOptionsButtonWidget(),
 
-                  SizedBox(height: 20),
+                    SizedBox(height: 20),
 
-                  MobileLoginSignupWidget(),
-                ],
+                    MobileLoginSignupWidget(),
+                  ],
+                ),
               ),
             ),
           ),
