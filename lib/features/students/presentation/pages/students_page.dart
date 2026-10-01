@@ -33,25 +33,33 @@ class StudentsPage extends StatelessWidget {
     return BlocProvider(
       create: (_) =>
           serviceLocator<StudentsBloc>()..add(LoadStudentsRequested()),
-      child: const _StudentsDirectoryView(),
+      child: const StudentsDirectoryView(),
     );
   }
 }
 
-class _StudentsDirectoryView extends StatefulWidget {
-  const _StudentsDirectoryView();
+/// Layout body of the directory screen (export and dialog wiring included).
+/// Public so widget tests can pump it with a test-injected [StudentsBloc].
+class StudentsDirectoryView extends StatefulWidget {
+  const StudentsDirectoryView({super.key});
 
   @override
-  State<_StudentsDirectoryView> createState() => _StudentsDirectoryViewState();
+  State<StudentsDirectoryView> createState() => _StudentsDirectoryViewState();
 }
 
-class _StudentsDirectoryViewState extends State<_StudentsDirectoryView> {
+class _StudentsDirectoryViewState extends State<StudentsDirectoryView> {
   bool _isExporting = false;
 
   void _openAddDialog() {
+    // Dialog routes are not descendants of this page's subtree, so re-provide
+    // the bloc over the dialog.
+    final bloc = context.read<StudentsBloc>();
     showDialog<void>(
       context: context,
-      builder: (_) => const StudentsAddDialog(),
+      builder: (_) => BlocProvider.value(
+        value: bloc,
+        child: const StudentsAddDialog(),
+      ),
     );
   }
 

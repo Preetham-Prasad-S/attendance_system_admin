@@ -71,3 +71,11 @@ Features that are implemented as files/components but **not shown in the UI yet*
   - Models: `lib/features/dashboard/data/models/`
   - DI registrations: `lib/core/di/`
 - **Description:** Connect all dashboard widgets to real Supabase data (attendance records, students, staff, devices, alerts) via use cases and BLoC, replacing hardcoded UI values.
+
+### Part 7 — Student Directory & Compliance (Students screen) ✅ DONE
+- **Location:** `lib/features/students/` (domain/data/presentation) + `lib/app/shell/`
+- **Description:** Implemented — full Students sidebar screen wired to Supabase (`students`, `attendance_records`): 4 KPI cards (Total Enrolled +N this term, Compliant, Defaulters, Critical Warning over a 30-day window), 300 ms-debounced search + department/status dropdowns + quick-filter chips (All / Critical Defaulters with live count), paginated table (compliance progress bars, Regular/Defaulter/Critical chips, sessions, last-seen telemetry, initials avatars), overlay detail panel (30-day log grid with legend + summary, overall summary stats), add-student dialog (inline validation, unique roll-number errors), and CSV directory export (`file_saver`).
+- **App shell:** sidebar/topbar/footer extracted to `lib/app/shell/` with `IndexedStack` pages (Dashboard = 0, Students = 1); `SidebarNavList` gained real navigation.
+- **Placeholders (kept disabled/empty — no schema yet):** Class/Sem + Batch dropdowns, Hostellers/Day Scholars/Pending Medical Leave chips, RFID values, per-course attendance deficit, parent/emergency contact + dispatch button, Bulk Import CSV/Excel (disabled stub).
+- **Demo data:** migration `0005` reseeds 45 days of attendance records and staggers `students.created_at` so "+N this term" and the 30-day log are meaningful.
+- **Plan:** `docs/ui/student-directory/PLAN.md` (phases, design mapping, decisions D1–D4).
