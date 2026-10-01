@@ -2,7 +2,7 @@
 
 > **Target UI:** `ui_references/screens/screen.png`
 > **References:** `ui_references/screens/code.html` (Tailwind source), `ui_references/screens/DESIGN.md` (tokens), `ui_references/screens/image.png` (current dashboard = baseline)
-> **Status:** planned · **Decisions locked:** 2026-10-01
+> **Status:** Phase 1 ✅ · Phase 2 ✅ · Phases 3–5 planned · **Decisions locked:** 2026-10-01
 
 ## 1. Goal
 
