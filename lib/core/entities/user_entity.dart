@@ -7,8 +7,8 @@ class UserEntity {
   final String name;
   final String? department;
   final String organization;
-  final int phoneNo;
-  final String? userRole;
+  final String? phoneNo;
+  final String? role;
 
   UserEntity({
     required this.id,
@@ -16,7 +16,7 @@ class UserEntity {
     required this.name,
     required this.department,
     required this.phoneNo,
-    required this.userRole,
+    required this.role,
     required this.organization,
   });
 
@@ -26,8 +26,9 @@ class UserEntity {
       'email': email,
       'name': name,
       'department': department,
-      'phoneNo': phoneNo,
-      'userRole': userRole,
+      'organization': organization,
+      'phone_no': phoneNo,
+      'role': role,
     };
   }
 
@@ -36,10 +37,10 @@ class UserEntity {
       id: map['id'] as String,
       email: map['email'] as String,
       name: map['name'] as String,
-      department: map['department'] as String,
-      phoneNo: map['phoneNo'] as int,
-      userRole: map['userRole'] as String,
+      department: map['department'] as String?,
       organization: map['organization'] as String,
+      phoneNo: map['phone_no'] as String?,
+      role: map['role'] as String?,
     );
   }
 
@@ -55,7 +56,7 @@ class UserEntity {
       name: name,
       department: department,
       phoneNo: phoneNo,
-      userRole: userRole,
+      role: role,
       organization: organization,
     );
   }
@@ -67,7 +68,7 @@ class UserEntity {
       name: model.name,
       department: model.department,
       phoneNo: model.phoneNo,
-      userRole: model.userRole,
+      role: model.role,
       organization: model.organization,
     );
   }

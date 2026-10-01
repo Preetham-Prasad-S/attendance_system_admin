@@ -20,7 +20,7 @@ class AuthDatasourceImpl implements AuthDatasource {
 
       if (response != null) {
         final data = await _supabaseClient
-            .from("User")
+            .from("profiles")
             .select()
             .eq("id", response.id)
             .single();
@@ -47,8 +47,7 @@ class AuthDatasourceImpl implements AuthDatasource {
         data: {
           "name": user.name,
           "department": user.department,
-          "phoneNo": user.phoneNo,
-          "userRole": user.userRole,
+          "phone_no": user.phoneNo,
           "organization": user.organization,
         },
       );
@@ -69,5 +68,10 @@ class AuthDatasourceImpl implements AuthDatasource {
         "AuthException : ${e.toString()} --> AuthDatasource.signup()",
       );
     }
+  }
+
+  @override
+  Future<void> logout() async {
+    await _supabaseClient.auth.signOut();
   }
 }

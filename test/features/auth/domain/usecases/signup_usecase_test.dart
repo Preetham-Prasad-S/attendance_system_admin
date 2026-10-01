@@ -8,6 +8,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
+
 class FakeSignUpUserEntity extends Fake implements SignUpUserEntity {}
 
 void main() {
@@ -29,7 +30,7 @@ void main() {
       name: 'Test Name',
       email: 'test@email.com',
       password: 'password123',
-      phoneNumber: 1234567890,
+      phoneNumber: '1234567890',
       rememberMe: true,
       organization: 'Test Org',
     );
@@ -39,8 +40,8 @@ void main() {
       email: 'test@email.com',
       name: 'Test Name',
       department: null,
-      phoneNo: 1234567890,
-      userRole: null,
+      phoneNo: '1234567890',
+      role: null,
       organization: 'Test Org',
     );
 
@@ -50,8 +51,9 @@ void main() {
       'should call the signup method on the repository and return Right(UserEntity)',
       () async {
         // arrange
-        when(() => mockAuthRepository.signup(any()))
-            .thenAnswer((_) async => Right(tUserEntity));
+        when(
+          () => mockAuthRepository.signup(any()),
+        ).thenAnswer((_) async => Right(tUserEntity));
 
         // act
         final result = await signupUsecase.call(tParams);
@@ -67,8 +69,9 @@ void main() {
       () async {
         // arrange
         final tFailure = AuthFailure(message: 'Signup failed');
-        when(() => mockAuthRepository.signup(any()))
-            .thenAnswer((_) async => Left(tFailure));
+        when(
+          () => mockAuthRepository.signup(any()),
+        ).thenAnswer((_) async => Left(tFailure));
 
         // act
         final result = await signupUsecase.call(tParams);

@@ -30,7 +30,7 @@ void main() {
       name: 'Test Name',
       email: 'test@email.com',
       password: 'password123',
-      phoneNumber: 1234567890,
+      phoneNumber: '1234567890',
       rememberMe: true,
       organization: 'Test Org',
     );
@@ -40,8 +40,8 @@ void main() {
       email: 'test@email.com',
       name: 'Test Name',
       department: null,
-      phoneNo: 1234567890,
-      userRole: null,
+      phoneNo: '1234567890',
+      role: null,
       organization: 'Test Org',
     );
 
@@ -50,8 +50,8 @@ void main() {
       email: 'test@email.com',
       name: 'Test Name',
       department: null,
-      phoneNo: 1234567890,
-      userRole: null,
+      phoneNo: '1234567890',
+      role: null,
       organization: 'Test Org',
     );
 
@@ -83,7 +83,7 @@ void main() {
         expect(resultUser.name, tUserEntity.name);
         expect(resultUser.department, tUserEntity.department);
         expect(resultUser.phoneNo, tUserEntity.phoneNo);
-        expect(resultUser.userRole, tUserEntity.userRole);
+        expect(resultUser.role, tUserEntity.role);
         expect(resultUser.organization, tUserEntity.organization);
       },
     );

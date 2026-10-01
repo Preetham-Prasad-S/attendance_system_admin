@@ -6,8 +6,8 @@ class UserModel {
   final String name;
   final String? department;
   final String organization;
-  final int phoneNo;
-  final String? userRole;
+  final String? phoneNo;
+  final String? role;
 
   UserModel({
     required this.id,
@@ -15,7 +15,7 @@ class UserModel {
     required this.name,
     required this.department,
     required this.phoneNo,
-    required this.userRole,
+    required this.role,
     required this.organization,
   });
 
@@ -25,8 +25,8 @@ class UserModel {
     String? name,
     String? department,
     String? organization,
-    int? phoneNo,
-    String? userRole,
+    String? phoneNo,
+    String? role,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -35,7 +35,7 @@ class UserModel {
       department: department ?? this.department,
       organization: organization ?? this.organization,
       phoneNo: phoneNo ?? this.phoneNo,
-      userRole: userRole ?? this.userRole,
+      role: role ?? this.role,
     );
   }
 
@@ -45,9 +45,9 @@ class UserModel {
       'email': email,
       'name': name,
       'department': department,
-      'phoneNo': phoneNo,
-      'userRole': userRole,
       'organization': organization,
+      'phone_no': phoneNo,
+      'role': role,
     };
   }
 
@@ -56,10 +56,10 @@ class UserModel {
       id: map['id'] as String,
       email: map['email'] as String,
       name: map['name'] as String,
-      department: map['department'] as String,
-      phoneNo: map['phoneNo'] as int,
-      userRole: map['userRole'] as String?,
-      organization: map["organization"] as String,
+      department: map['department'] as String?,
+      organization: map['organization'] as String,
+      phoneNo: map['phone_no'] as String?,
+      role: map['role'] as String?,
     );
   }
 

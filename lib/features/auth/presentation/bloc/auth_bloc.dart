@@ -1,8 +1,9 @@
+import 'package:attendance_system_admin/core/usecase.dart';
 import 'package:attendance_system_admin/features/auth/domain/entities/signup_user_entity.dart';
 import 'package:attendance_system_admin/features/auth/domain/usecases/login_usecase.dart';
+import 'package:attendance_system_admin/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:attendance_system_admin/features/auth/domain/usecases/signup_usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uuid/uuid.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
 
@@ -10,15 +11,19 @@ import 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SignupUsecase _signupUsecase;
   final LoginUsecase _loginUsecase;
+  final LogoutUsecase _logoutUsecase;
 
   AuthBloc({
     required SignupUsecase signupUsecase,
     required LoginUsecase loginUsecase,
+    required LogoutUsecase logoutUsecase,
   }) : _signupUsecase = signupUsecase,
        _loginUsecase = loginUsecase,
+       _logoutUsecase = logoutUsecase,
        super(AuthInitial()) {
     on<SignupRequested>(_onSignupRequested);
     on<LoginRequested>(_onLoginRequested);
+    on<LogoutRequested>(_onLogoutRequested);
   }
 
   Future<void> _onSignupRequested(
@@ -60,6 +65,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     result.fold(
       (failure) => emit(AuthFailureState(failure.message)),
       (user) => emit(AuthSuccess(user)),
+    );
+  }
+
+  Future<void> _onLogoutRequested(
+    LogoutRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(AuthLoading());
+
+    final result = await _logoutUsecase.call(NoParams());
+
+    result.fold(
+      (failure) => emit(AuthFailureState(failure.message)),
+      (_) => emit(AuthInitial()),
     );
   }
 }

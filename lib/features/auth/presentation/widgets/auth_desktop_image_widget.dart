@@ -6,12 +6,6 @@ class AuthDesktopImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Image.asset(
-        imageUrl,
-        width: 500,
-        height: 500,
-      ),
-    );
+    return Center(child: Image.asset(imageUrl, width: 500, height: 500));
   }
 }

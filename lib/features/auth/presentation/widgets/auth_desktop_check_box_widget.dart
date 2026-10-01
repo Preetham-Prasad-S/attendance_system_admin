@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:attendance_system_admin/core/app_colors.dart';
+import 'package:attendance_system_admin/core/theme/app_colors.dart';
 
 class AuthDesktopCheckBoxWidget extends StatefulWidget {
   final bool _isChecked;
@@ -28,8 +28,8 @@ class _AuthDesktopCheckBoxWidget extends State<AuthDesktopCheckBoxWidget> {
             borderRadius: BorderRadius.all(Radius.circular(5)),
           ),
           side: const BorderSide(color: Color.fromARGB(120, 0, 0, 0)),
-          activeColor: AppColors.blueColor,
-          checkColor: AppColors.whiteColor,
+          activeColor: AppColors.primary,
+          checkColor: AppColors.surface,
         ),
         Text(
           "Remember Me",
@@ -43,7 +43,7 @@ class _AuthDesktopCheckBoxWidget extends State<AuthDesktopCheckBoxWidget> {
             style: GoogleFonts.quicksand(
               fontSize: 12,
               fontWeight: FontWeight.bold,
-              color: AppColors.blueColor,
+              color: AppColors.primary,
             ),
           ),
         ),

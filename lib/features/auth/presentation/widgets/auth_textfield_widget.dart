@@ -1,4 +1,4 @@
-import 'package:attendance_system_admin/core/app_colors.dart';
+import 'package:attendance_system_admin/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -36,8 +36,8 @@ class _AuthTextFieldWidget extends State<AuthTextFieldWidget> {
         const SizedBox(height: 10),
         TextFormField(
           controller: widget.textEditingController,
-          validator: (value) {},
-          cursorColor: AppColors.blueColor,
+          validator: (value) => null,
+          cursorColor: AppColors.primary,
           style: GoogleFonts.quicksand(fontWeight: FontWeight.w500),
           obscureText: widget.isPassword ? textHide : false,
           decoration: InputDecoration(
@@ -47,7 +47,7 @@ class _AuthTextFieldWidget extends State<AuthTextFieldWidget> {
               fontSize: 14,
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.blueColor, width: 2),
+              borderSide: BorderSide(color: AppColors.primary, width: 2),
 
               borderRadius: BorderRadius.circular(10),
             ),

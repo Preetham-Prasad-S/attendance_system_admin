@@ -15,7 +15,7 @@ class SignupRequested extends AuthEvent {
   final String name;
   final String email;
   final String password;
-  final int phoneNumber;
+  final String phoneNumber;
   final bool rememberMe;
   final String organization;
   SignupRequested({
@@ -27,3 +27,5 @@ class SignupRequested extends AuthEvent {
     required this.organization,
   });
 }
+
+class LogoutRequested extends AuthEvent {}

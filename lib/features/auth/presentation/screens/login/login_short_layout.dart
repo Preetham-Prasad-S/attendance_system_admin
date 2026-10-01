@@ -1,4 +1,4 @@
-import 'package:attendance_system_admin/core/app_colors.dart';
+import 'package:attendance_system_admin/core/theme/app_colors.dart';
 import 'package:colorful_iconify_flutter/icons/logos.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -114,7 +114,7 @@ class _ShortLoginPasswordWidget extends State<ShortLoginPasswordWidget> {
                 style: GoogleFonts.quicksand(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.blueColor,
+                  color: AppColors.primary,
                 ),
               ),
             ),
@@ -213,7 +213,7 @@ class ShortLoginOptionsButtonWidget extends StatelessWidget {
             ),
             icon: Iconify(Logos.google_icon, size: 20),
             style: TextButton.styleFrom(
-              overlayColor: AppColors.blueColor,
+              overlayColor: AppColors.primary,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(5),
                 side: BorderSide(
@@ -239,7 +239,7 @@ class ShortLoginOptionsButtonWidget extends StatelessWidget {
             ),
             icon: Iconify(Logos.microsoft_icon, size: 20),
             style: TextButton.styleFrom(
-              overlayColor: AppColors.blueColor,
+              overlayColor: AppColors.primary,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(5),
                 side: BorderSide(

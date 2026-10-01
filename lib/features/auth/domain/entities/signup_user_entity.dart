@@ -5,7 +5,7 @@ class SignUpUserEntity {
   final String name;
   final String email;
   final String password;
-  final int phoneNumber;
+  final String phoneNumber;
   final bool rememberMe;
   final String organization;
 
@@ -27,7 +27,7 @@ class SignUpUserEntity {
       name: name,
       department: null,
       phoneNo: phoneNumber,
-      userRole: null,
+      role: null,
       organization: organization,
     );
   }

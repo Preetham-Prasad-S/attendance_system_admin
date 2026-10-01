@@ -1,52 +1,26 @@
-import 'package:attendance_system_admin/core/screens/base_screen.dart';
-import 'package:attendance_system_admin/dependency.dart';
-import 'package:attendance_system_admin/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:attendance_system_admin/features/auth/presentation/screens/signup/signup_desktop_screen.dart';
-import 'package:attendance_system_admin/features/auth/presentation/screens/signup/signup_screen.dart';
+import 'package:attendance_system_admin/core/di/injection_container.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'app/app.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env");
+
+  // flutter_dotenv loads the exact bundle path given here (assets/.env,
+  // declared via `assets:` in pubspec.yaml). Using ".env" would throw
+  // FileNotFoundError.
+  await dotenv.load(fileName: "assets/.env");
 
   await Supabase.initialize(
-    url: dotenv.env["SUPABASE_API_URL"]!,
-    anonKey: dotenv.env["SUPABASE_API_ANNON_KEY"]!,
+    // The .env URL ends with "/", which would produce double-slash paths
+    // (e.g. "...co//auth/v1") in the client URLs — strip trailing slashes.
+    url: dotenv.env["SUPABASE_API_URL"]!.replaceAll(RegExp(r'/+$'), ''),
+    anonKey: dotenv.env["SUPABASE_API_ANON_KEY"]!,
   );
 
   await initDependencies();
-  runApp(const MyApp());
-}
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => serviceLocator<AuthBloc>(),
-      child: MaterialApp(
-        title: 'Attendance System',
-        debugShowCheckedModeBanner: false,
-
-        theme: ThemeData(useMaterial3: true),
-        home: StreamBuilder(
-          stream: Supabase.instance.client.auth.onAuthStateChange,
-          builder: (context, snapshot) {
-            // Still waiting for the first auth event
-            if (!snapshot.hasData) {
-              final session = Supabase.instance.client.auth.currentSession;
-              return session != null ? BaseScreen() : SignupScreen();
-            }
-
-            final session = snapshot.data!.session;
-            return session != null ? BaseScreen() : SignupScreen();
-          },
-        ),
-      ),
-    );
-  }
+  runApp(const CampusPulseApp());
 }

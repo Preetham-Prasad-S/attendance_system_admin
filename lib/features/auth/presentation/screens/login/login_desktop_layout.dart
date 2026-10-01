@@ -1,6 +1,5 @@
 import 'package:attendance_system_admin/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:attendance_system_admin/features/auth/presentation/bloc/auth_event.dart';
-import 'package:attendance_system_admin/features/auth/presentation/screens/signup/signup_screen.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_button_widget.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_check_box_widget.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_divider_widget.dart';
@@ -9,7 +8,6 @@ import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_image_widget.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_login_credentials_widget.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_options_button_widget.dart';
-import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_signup_option_widget.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_image_title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -135,18 +133,6 @@ class _LoginDesktopLayout extends State<LoginDesktopLayout> {
                         SizedBox(height: 20),
 
                         AuthDesktopOptionsButtonWidget(),
-
-                        SizedBox(height: 40),
-
-                        AuthDesktopSignupOptionWidget(
-                          onTap: () => Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (context) => SignupScreen(),
-                            ),
-                          ),
-                          message: "Don't have an accoutn",
-                          title: "SignUp",
-                        ),
                       ],
                     ),
                   ),

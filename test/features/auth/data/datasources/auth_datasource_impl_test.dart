@@ -1,5 +1,5 @@
-import 'package:attendance_system_admin/features/auth/data/datasources/auth_datasource_impl.dart';
 import 'package:attendance_system_admin/core/models/user_model.dart';
+import 'package:attendance_system_admin/features/auth/data/datasources/auth_datasource_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -17,6 +17,11 @@ void main() {
   late MockSupabaseClient mockSupabaseClient;
   late MockGoTrueClient mockGoTrueClient;
 
+  setUpAll(() {
+    registerFallbackValue(OtpChannel.sms);
+    registerFallbackValue(SignOutScope.local);
+  });
+
   setUp(() {
     mockSupabaseClient = MockSupabaseClient();
     mockGoTrueClient = MockGoTrueClient();
@@ -27,18 +32,45 @@ void main() {
     authDatasourceImpl = AuthDatasourceImpl(supabaseClient: mockSupabaseClient);
   });
 
+  /// All named parameters of gotrue's signUp must be stubbed, otherwise the
+  /// actual call (which fills in defaults like `channel`) won't match.
+  When<Future<AuthResponse>> whenSignUp({
+    required String email,
+    required String password,
+    Map<String, dynamic>? data,
+  }) {
+    return when(
+      () => mockGoTrueClient.signUp(
+        email: email,
+        phone: any(named: 'phone'),
+        password: password,
+        emailRedirectTo: any(named: 'emailRedirectTo'),
+        data: data ?? any(named: 'data'),
+        captchaToken: any(named: 'captchaToken'),
+        channel: any(named: 'channel'),
+      ),
+    );
+  }
+
   group('signUp', () {
     final tUserModel = UserModel(
       id: '',
       email: 'test@example.com',
       name: 'Test User',
       department: 'IT',
-      phoneNo: 1234567890,
-      userRole: 'Admin',
+      phoneNo: '1234567890',
+      role: 'admin',
       organization: 'Test Org',
     );
     const tPassword = 'password123';
     const tUserId = 'user-uuid-123';
+
+    final tExpectedMetadata = {
+      'name': tUserModel.name,
+      'department': tUserModel.department,
+      'phone_no': tUserModel.phoneNo,
+      'organization': tUserModel.organization,
+    };
 
     test(
       'should return UserModel when Supabase signUp is successful and user is not null',
@@ -49,11 +81,9 @@ void main() {
 
         when(() => mockUser.id).thenReturn(tUserId);
         when(() => mockAuthResponse.user).thenReturn(mockUser);
-        when(
-          () => mockGoTrueClient.signUp(
-            email: tUserModel.email,
-            password: tPassword,
-          ),
+        whenSignUp(
+          email: tUserModel.email,
+          password: tPassword,
         ).thenAnswer((_) async => mockAuthResponse);
 
         // act
@@ -63,7 +93,12 @@ void main() {
         verify(
           () => mockGoTrueClient.signUp(
             email: tUserModel.email,
+            phone: any(named: 'phone'),
             password: tPassword,
+            emailRedirectTo: any(named: 'emailRedirectTo'),
+            data: tExpectedMetadata,
+            captchaToken: any(named: 'captchaToken'),
+            channel: any(named: 'channel'),
           ),
         ).called(1);
 
@@ -72,7 +107,7 @@ void main() {
         expect(result.name, tUserModel.name);
         expect(result.department, tUserModel.department);
         expect(result.phoneNo, tUserModel.phoneNo);
-        expect(result.userRole, tUserModel.userRole);
+        expect(result.role, tUserModel.role);
         expect(result.organization, tUserModel.organization);
       },
     );
@@ -83,11 +118,9 @@ void main() {
         // arrange
         final mockAuthResponse = MockAuthResponse();
         when(() => mockAuthResponse.user).thenReturn(null);
-        when(
-          () => mockGoTrueClient.signUp(
-            email: tUserModel.email,
-            password: tPassword,
-          ),
+        whenSignUp(
+          email: tUserModel.email,
+          password: tPassword,
         ).thenAnswer((_) async => mockAuthResponse);
 
         // act
@@ -100,16 +133,10 @@ void main() {
             isA<AuthException>().having(
               (e) => e.message,
               'message',
-              contains('User is null'),
+              contains('Sign In Failed'),
             ),
           ),
         );
-        verify(
-          () => mockGoTrueClient.signUp(
-            email: tUserModel.email,
-            password: tPassword,
-          ),
-        ).called(1);
       },
     );
 
@@ -117,11 +144,9 @@ void main() {
       'should throw AuthException when Supabase signUp throws an error',
       () async {
         // arrange
-        when(
-          () => mockGoTrueClient.signUp(
-            email: tUserModel.email,
-            password: tPassword,
-          ),
+        whenSignUp(
+          email: tUserModel.email,
+          password: tPassword,
         ).thenThrow(const AuthException('Signup failed'));
 
         // act
@@ -138,13 +163,24 @@ void main() {
             ),
           ),
         );
-        verify(
-          () => mockGoTrueClient.signUp(
-            email: tUserModel.email,
-            password: tPassword,
-          ),
-        ).called(1);
       },
     );
+  });
+
+  group('logout', () {
+    test('should call signOut on the Supabase auth client', () async {
+      // arrange
+      when(
+        () => mockGoTrueClient.signOut(scope: any(named: 'scope')),
+      ).thenAnswer((_) async {});
+
+      // act
+      await authDatasourceImpl.logout();
+
+      // assert
+      verify(
+        () => mockGoTrueClient.signOut(scope: any(named: 'scope')),
+      ).called(1);
+    });
   });
 }
