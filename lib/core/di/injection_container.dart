@@ -11,6 +11,13 @@ import 'package:attendance_system_admin/features/dashboard/domain/usecases/get_a
 import 'package:attendance_system_admin/features/dashboard/domain/usecases/get_department_stats_usecase.dart';
 import 'package:attendance_system_admin/features/dashboard/domain/usecases/get_kpis_usecase.dart';
 import 'package:attendance_system_admin/features/dashboard/presentation/bloc/dashboard_bloc.dart';
+import 'package:attendance_system_admin/features/students/data/datasources/students_datasource_impl.dart';
+import 'package:attendance_system_admin/features/students/data/repositories/students_repository_impl.dart';
+import 'package:attendance_system_admin/features/students/domain/usecases/add_student_usecase.dart';
+import 'package:attendance_system_admin/features/students/domain/usecases/get_directory_kpis_usecase.dart';
+import 'package:attendance_system_admin/features/students/domain/usecases/get_student_attendance_log_usecase.dart';
+import 'package:attendance_system_admin/features/students/domain/usecases/get_students_page_usecase.dart';
+import 'package:attendance_system_admin/features/students/presentation/bloc/students_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -91,6 +98,52 @@ Future<void> initDependencies() async {
       getAttendanceTrendUsecase: serviceLocator<GetAttendanceTrendUsecase>(),
       getDepartmentStatsUsecase: serviceLocator<GetDepartmentStatsUsecase>(),
       getAlertsUsecase: serviceLocator<GetAlertsUsecase>(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton(
+    () => StudentsDatasourceImpl(
+      supabaseClient: serviceLocator<SupabaseClient>(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton(
+    () => StudentsRepositoryImpl(
+      studentsDatasource: serviceLocator<StudentsDatasourceImpl>(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton(
+    () => GetDirectoryKpisUsecase(
+      studentsRepository: serviceLocator<StudentsRepositoryImpl>(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton(
+    () => GetStudentsPageUsecase(
+      studentsRepository: serviceLocator<StudentsRepositoryImpl>(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton(
+    () => GetStudentAttendanceLogUsecase(
+      studentsRepository: serviceLocator<StudentsRepositoryImpl>(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton(
+    () => AddStudentUsecase(
+      studentsRepository: serviceLocator<StudentsRepositoryImpl>(),
+    ),
+  );
+
+  serviceLocator.registerFactory(
+    () => StudentsBloc(
+      getDirectoryKpisUsecase: serviceLocator<GetDirectoryKpisUsecase>(),
+      getStudentsPageUsecase: serviceLocator<GetStudentsPageUsecase>(),
+      getStudentAttendanceLogUsecase:
+          serviceLocator<GetStudentAttendanceLogUsecase>(),
+      addStudentUsecase: serviceLocator<AddStudentUsecase>(),
     ),
   );
 }
