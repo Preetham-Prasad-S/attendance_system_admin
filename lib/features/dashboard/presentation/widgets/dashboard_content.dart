@@ -46,12 +46,14 @@ class DashboardContent extends StatelessWidget {
             return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AttendanceTrendCard(
-                  points: state.trend,
-                  period: state.period,
-                  onPeriodChanged: (period) => context
-                      .read<DashboardBloc>()
-                      .add(TrendPeriodChanged(period: period)),
+                Expanded(
+                  child: AttendanceTrendCard(
+                    points: state.trend,
+                    period: state.period,
+                    onPeriodChanged: (period) => context
+                        .read<DashboardBloc>()
+                        .add(TrendPeriodChanged(period: period)),
+                  ),
                 ),
                 const SizedBox(width: AppSpacing.xl),
                 SizedBox(width: unit, child: const UrgentAlertsCard()),
