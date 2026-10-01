@@ -58,9 +58,9 @@ Features that are implemented as files/components but **not shown in the UI yet*
 - **Location:** `lib/features/dashboard/presentation/widgets/table/` and `lib/features/dashboard/presentation/widgets/common/`
 - **Description:** Implemented — `RollCallTableCard` (7-column live sessions table with attendance chips, turn-out ratios, Export Daily CSV button, "Showing 4 of 64 Classes" counter) and `AppFooter` (version/certification left, session ID right), replacing the `SectionPlaceholder` in `dashboard_content.dart`. Data hardcoded until Part 6.
 
-### Part 6 — Data wiring (replace hardcoded values) — PARTIAL
-- **Done (live against Supabase):** KPI stats row (`KpiStatsRow` ← `GetKpisUsecase`: student/staff counts, department count, today's present/absent/late/on-leave from `attendance_records`) and attendance trend chart (`AttendanceTrendCard` ← `GetAttendanceTrendUsecase`: daily present % for Weekly/Monthly/Semester, footer stats, today-vs-yesterday badge). Stack: `dashboard_entities.dart`, `DashboardRepository(+Impl)`, `DashboardDatasource(+Impl)`, `DashboardBloc`, DI registrations, header date. Demo data seeded via migration `0004`.
-- **Remaining:** `UrgentAlertsCard`, `DepartmentBreakdownCard`, `PresenceSplitCard`, `RollCallTableCard`, IoT widgets — blocked on deferred tables (alerts, timetable, devices).
+### Part 6 — Data wiring (replace hardcoded values) — MOSTLY DONE
+- **Done (live against Supabase):** KPI stats row (`KpiStatsRow` ← `GetKpisUsecase`), attendance trend chart (`AttendanceTrendCard` ← `GetAttendanceTrendUsecase`, Weekly/Monthly/Semester), presence split donut (`PresenceSplitCard` ← `KpiStats`), department breakdown bars (`DepartmentBreakdownCard` ← `GetDepartmentStatsUsecase`, per-department today's present %), urgent alerts (`UrgentAlertsCard` ← `GetAlertsUsecase`: 7-day compliance breaches + today's absence watch, dynamic badge/empty state). Stack: `dashboard_entities.dart`, `DashboardRepository(+Impl)`, `DashboardDatasource(+Impl)`, `DashboardBloc`, DI registrations, header date. Demo data seeded via migration `0004`.
+- **Remaining (blocked on deferred tables):** `RollCallTableCard` (needs `subjects`/`class_sections`/`timetable_periods` + sessions), IoT widgets (`devices`), sidebar leave badge `12` (`leave_requests`), roster/terminal alert types (needs `timetable`/`devices`).
 - **Planned location:**
   - Entities: `lib/features/dashboard/domain/entities/`
   - Repository interfaces: `lib/features/dashboard/domain/repositories/`

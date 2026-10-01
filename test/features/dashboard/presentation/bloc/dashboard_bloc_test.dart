@@ -1,7 +1,9 @@
 import 'package:attendance_system_admin/core/failure.dart';
 import 'package:attendance_system_admin/core/usecase.dart';
 import 'package:attendance_system_admin/features/dashboard/domain/entities/dashboard_entities.dart';
+import 'package:attendance_system_admin/features/dashboard/domain/usecases/get_alerts_usecase.dart';
 import 'package:attendance_system_admin/features/dashboard/domain/usecases/get_attendance_trend_usecase.dart';
+import 'package:attendance_system_admin/features/dashboard/domain/usecases/get_department_stats_usecase.dart';
 import 'package:attendance_system_admin/features/dashboard/domain/usecases/get_kpis_usecase.dart';
 import 'package:attendance_system_admin/features/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:attendance_system_admin/features/dashboard/presentation/bloc/dashboard_event.dart';
@@ -15,6 +17,11 @@ class MockGetKpisUsecase extends Mock implements GetKpisUsecase {}
 class MockGetAttendanceTrendUsecase extends Mock
     implements GetAttendanceTrendUsecase {}
 
+class MockGetDepartmentStatsUsecase extends Mock
+    implements GetDepartmentStatsUsecase {}
+
+class MockGetAlertsUsecase extends Mock implements GetAlertsUsecase {}
+
 class FakeNoParams extends Fake implements NoParams {}
 
 class FakeTrendParams extends Fake implements GetAttendanceTrendUsecaseParams {}
@@ -23,6 +30,8 @@ void main() {
   late DashboardBloc dashboardBloc;
   late MockGetKpisUsecase mockGetKpisUsecase;
   late MockGetAttendanceTrendUsecase mockGetAttendanceTrendUsecase;
+  late MockGetDepartmentStatsUsecase mockGetDepartmentStatsUsecase;
+  late MockGetAlertsUsecase mockGetAlertsUsecase;
 
   final tKpiStats = KpiStats(
     totalStudents: 50,
@@ -46,6 +55,22 @@ void main() {
     DailyAttendancePoint(date: DateTime(2026, 10, 1), total: 50, present: 43),
   ];
 
+  final tDepartments = [
+    DepartmentStat(name: 'Computer Science', recordsToday: 50, presentToday: 44),
+    DepartmentStat(name: 'Electronics', recordsToday: 50, presentToday: 42),
+  ];
+
+  final tAlerts = [
+    DashboardAlert(
+      type: 'THRESHOLD BREACH',
+      title: '3 Students below 75% in Computer Science',
+      description: 'Attendance below the institutional minimum.',
+      time: 'Last 7 days',
+      actionLabel: 'Review & Notify Parents',
+      actionStyle: AlertActionStyle.filled,
+    ),
+  ];
+
   setUpAll(() {
     registerFallbackValue(FakeNoParams());
     registerFallbackValue(FakeTrendParams());
@@ -54,10 +79,21 @@ void main() {
   setUp(() {
     mockGetKpisUsecase = MockGetKpisUsecase();
     mockGetAttendanceTrendUsecase = MockGetAttendanceTrendUsecase();
+    mockGetDepartmentStatsUsecase = MockGetDepartmentStatsUsecase();
+    mockGetAlertsUsecase = MockGetAlertsUsecase();
+
+    when(
+      () => mockGetDepartmentStatsUsecase.call(any()),
+    ).thenAnswer((_) async => Right(tDepartments));
+    when(
+      () => mockGetAlertsUsecase.call(any()),
+    ).thenAnswer((_) async => Right(tAlerts));
 
     dashboardBloc = DashboardBloc(
       getKpisUsecase: mockGetKpisUsecase,
       getAttendanceTrendUsecase: mockGetAttendanceTrendUsecase,
+      getDepartmentStatsUsecase: mockGetDepartmentStatsUsecase,
+      getAlertsUsecase: mockGetAlertsUsecase,
     );
   });
 
@@ -87,11 +123,13 @@ void main() {
           isA<DashboardLoaded>()
               .having((state) => state.kpis, 'kpis', tKpiStats)
               .having((state) => state.trend, 'trend', tWeeklyTrend)
+              .having((state) => state.period, 'period', TrendPeriod.weekly)
               .having(
-                (state) => state.period,
-                'period',
-                TrendPeriod.weekly,
-              ),
+                (state) => state.departments,
+                'departments',
+                tDepartments,
+              )
+              .having((state) => state.alerts, 'alerts', tAlerts),
         ];
         expectLater(dashboardBloc.stream, emitsInOrder(expected));
 
@@ -153,6 +191,38 @@ void main() {
         dashboardBloc.add(LoadDashboardRequested());
       },
     );
+
+    test(
+      'should emit failure when department stats fail',
+      () async {
+        // arrange
+        when(
+          () => mockGetKpisUsecase.call(any()),
+        ).thenAnswer((_) async => Right(tKpiStats));
+        when(
+          () => mockGetAttendanceTrendUsecase.call(any()),
+        ).thenAnswer((_) async => Right(tWeeklyTrend));
+        when(
+          () => mockGetDepartmentStatsUsecase.call(any()),
+        ).thenAnswer(
+          (_) async => Left(ServerFailure(message: 'departments failed')),
+        );
+
+        // assert later
+        final expected = [
+          isA<DashboardLoading>(),
+          isA<DashboardFailureState>().having(
+            (state) => state.message,
+            'message',
+            'departments failed',
+          ),
+        ];
+        expectLater(dashboardBloc.stream, emitsInOrder(expected));
+
+        // act
+        dashboardBloc.add(LoadDashboardRequested());
+      },
+    );
   });
 
   group('DashboardBloc - TrendPeriodChanged', () {
@@ -180,11 +250,13 @@ void main() {
           isA<DashboardLoaded>()
               .having((state) => state.kpis, 'kpis', tKpiStats)
               .having((state) => state.trend, 'trend', tMonthlyTrend)
+              .having((state) => state.period, 'period', TrendPeriod.monthly)
               .having(
-                (state) => state.period,
-                'period',
-                TrendPeriod.monthly,
-              ),
+                (state) => state.departments,
+                'departments',
+                tDepartments,
+              )
+              .having((state) => state.alerts, 'alerts', tAlerts),
         ];
         expectLater(dashboardBloc.stream, emitsInOrder(expected));
 

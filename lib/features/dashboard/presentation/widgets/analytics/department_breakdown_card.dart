@@ -4,9 +4,26 @@ import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_radius.dart';
 import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/theme/app_typography.dart';
+import '../../../domain/entities/dashboard_entities.dart';
 
 class DepartmentBreakdownCard extends StatelessWidget {
-  const DepartmentBreakdownCard({super.key});
+  const DepartmentBreakdownCard({
+    super.key,
+    required this.departments,
+    required this.totalStaff,
+  });
+
+  final List<DepartmentStat> departments;
+  final int totalStaff;
+
+  static const _rowColors = [
+    AppColors.primary,
+    AppColors.primaryLight,
+    AppColors.chartLine,
+    AppColors.info,
+    AppColors.chartLineLight,
+    AppColors.warning,
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -49,41 +66,20 @@ class DepartmentBreakdownCard extends StatelessWidget {
             style: AppTypography.caption.copyWith(fontSize: 12),
           ),
           const SizedBox(height: AppSpacing.xl),
-          _DepartmentRow(
-            name: 'Electronics & Comm. (ECE)',
-            value: 96.0,
-            color: AppColors.primary,
-          ),
-          _gap(),
-          _DepartmentRow(
-            name: 'Computer Science & Eng.',
-            value: 95.0,
-            color: AppColors.primaryLight,
-          ),
-          _gap(),
-          _DepartmentRow(
-            name: 'Electrical Engineering',
-            value: 93.0,
-            color: AppColors.chartLine,
-          ),
-          _gap(),
-          _DepartmentRow(
-            name: 'Mechanical Engineering',
-            value: 91.0,
-            color: AppColors.info,
-          ),
-          _gap(),
-          _DepartmentRow(
-            name: 'Biotechnology',
-            value: 89.0,
-            color: AppColors.chartLineLight,
-          ),
-          _gap(),
-          _DepartmentRow(
-            name: 'Civil & Environmental',
-            value: 88.0,
-            color: AppColors.warning,
-          ),
+          if (departments.isEmpty)
+            Text(
+              'No department data for today yet.',
+              style: AppTypography.caption.copyWith(fontSize: 12),
+            )
+          else
+            for (var i = 0; i < departments.length; i++) ...[
+              if (i > 0) _gap(),
+              _DepartmentRow(
+                name: departments[i].name,
+                value: departments[i].presentPct,
+                color: _rowColors[i % _rowColors.length],
+              ),
+            ],
           const SizedBox(height: AppSpacing.xl),
           Container(
             padding: const EdgeInsets.only(top: AppSpacing.lg),
@@ -94,7 +90,7 @@ class DepartmentBreakdownCard extends StatelessWidget {
               children: [
                 Flexible(
                   child: Text(
-                    'Total 8 Active Faculties',
+                    'Total $totalStaff Active Faculties',
                     overflow: TextOverflow.ellipsis,
                     style: AppTypography.caption,
                   ),

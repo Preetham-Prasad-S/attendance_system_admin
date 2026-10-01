@@ -4,12 +4,16 @@ import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_radius.dart';
 import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/theme/app_typography.dart';
+import '../../../domain/entities/dashboard_entities.dart';
 
 class UrgentAlertsCard extends StatelessWidget {
-  const UrgentAlertsCard({super.key});
+  const UrgentAlertsCard({super.key, required this.alerts});
+
+  final List<DashboardAlert> alerts;
 
   @override
   Widget build(BuildContext context) {
+    final hasAlerts = alerts.isNotEmpty;
     return ClipRRect(
       borderRadius: BorderRadius.circular(AppRadius.lg),
       child: Stack(
@@ -27,10 +31,14 @@ class UrgentAlertsCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Icon(
-                      Icons.error_outline,
+                    Icon(
+                      hasAlerts
+                          ? Icons.error_outline
+                          : Icons.check_circle_outline,
                       size: 20,
-                      color: AppColors.danger,
+                      color: hasAlerts
+                          ? AppColors.danger
+                          : AppColors.success,
                     ),
                     const SizedBox(width: AppSpacing.sm),
                     Expanded(
@@ -46,50 +54,38 @@ class UrgentAlertsCard extends StatelessWidget {
                         vertical: 3,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.dangerSurface,
+                        color: hasAlerts
+                            ? AppColors.dangerSurface
+                            : AppColors.successSurface,
                         borderRadius: BorderRadius.circular(AppRadius.full),
                       ),
                       child: Text(
-                        '3 Actionable',
+                        hasAlerts
+                            ? '${alerts.length} Actionable'
+                            : 'All Clear',
                         style: AppTypography.caption.copyWith(
                           fontSize: 11,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.dangerDark,
+                          color: hasAlerts
+                              ? AppColors.dangerDark
+                              : AppColors.successDark,
                         ),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: AppSpacing.xl),
-                _AlertItem(
-                  type: 'THRESHOLD BREACH',
-                  title: '18 Students below 75% in CS Dept',
-                  description:
-                      'Automated SMS warnings queued for parent dispatch.',
-                  time: '10 mins ago',
-                  actionLabel: 'Review & Notify Parents',
-                  actionStyle: _ActionStyle.filled,
-                ),
-                _divider(),
-                _AlertItem(
-                  type: 'MISSING ROSTER',
-                  title: 'Class 9-B (Period 3) - Physics',
-                  description:
-                      'Lecturer Prof. K. Mehta has not submitted session roster.',
-                  time: '18 mins ago',
-                  actionLabel: 'Ping Teacher',
-                  actionStyle: _ActionStyle.outlined,
-                ),
-                _divider(),
-                _AlertItem(
-                  type: 'HARDWARE SIGNAL LOST',
-                  title: 'Terminal 04 (North Gate - Face Rec)',
-                  description:
-                      'Offline for 12m. Optical scanner failing ping heartbeat.',
-                  time: 'Heartbeat lost',
-                  actionLabel: 'Run Diagnostics',
-                  actionStyle: _ActionStyle.danger,
-                ),
+                if (!hasAlerts)
+                  Text(
+                    'No urgent alerts right now. All monitored attendance '
+                    'signals are within limits.',
+                    style: AppTypography.caption.copyWith(fontSize: 12),
+                  )
+                else
+                  for (var i = 0; i < alerts.length; i++) ...[
+                    if (i > 0) _divider(),
+                    _AlertItem.fromAlert(alerts[i]),
+                  ],
               ],
             ),
           ),
@@ -97,7 +93,10 @@ class UrgentAlertsCard extends StatelessWidget {
             top: 0,
             left: 0,
             right: 0,
-            child: Container(height: 4, color: AppColors.danger),
+            child: Container(
+              height: 4,
+              color: hasAlerts ? AppColors.danger : AppColors.success,
+            ),
           ),
         ],
       ),
@@ -112,8 +111,6 @@ class UrgentAlertsCard extends StatelessWidget {
   }
 }
 
-enum _ActionStyle { filled, outlined, danger }
-
 class _AlertItem extends StatelessWidget {
   const _AlertItem({
     required this.type,
@@ -123,6 +120,19 @@ class _AlertItem extends StatelessWidget {
     required this.actionLabel,
     required this.actionStyle,
   });
+
+  factory _AlertItem.fromAlert(DashboardAlert alert) => _AlertItem(
+    type: alert.type,
+    title: alert.title,
+    description: alert.description,
+    time: alert.time,
+    actionLabel: alert.actionLabel,
+    actionStyle: switch (alert.actionStyle) {
+      AlertActionStyle.filled => _ActionStyle.filled,
+      AlertActionStyle.outlined => _ActionStyle.outlined,
+      AlertActionStyle.danger => _ActionStyle.danger,
+    },
+  );
 
   final String type;
   final String title;
@@ -214,3 +224,5 @@ class _AlertItem extends StatelessWidget {
     }
   }
 }
+
+enum _ActionStyle { filled, outlined, danger }

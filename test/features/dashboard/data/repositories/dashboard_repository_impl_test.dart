@@ -121,4 +121,100 @@ void main() {
       },
     );
   });
+
+  group('getDepartmentStats', () {
+    test(
+      'should return Right(departments) when call to datasource is successful',
+      () async {
+        // arrange
+        final tDepartments = [
+          DepartmentStat(
+            name: 'Computer Science',
+            recordsToday: 50,
+            presentToday: 44,
+          ),
+        ];
+        when(
+          () => mockDashboardDatasource.fetchDepartmentStats(),
+        ).thenAnswer((_) async => tDepartments);
+
+        // act
+        final result = await dashboardRepositoryImpl.getDepartmentStats();
+
+        // assert
+        verify(() => mockDashboardDatasource.fetchDepartmentStats()).called(1);
+        expect(result.isRight(), true);
+
+        result.fold((failure) => fail('Should not fail'), (departments) {
+          expect(departments, tDepartments);
+        });
+      },
+    );
+
+    test('should return ServerFailure when call to datasource throws', () async {
+      // arrange
+      when(
+        () => mockDashboardDatasource.fetchDepartmentStats(),
+      ).thenThrow(Exception('boom'));
+
+      // act
+      final result = await dashboardRepositoryImpl.getDepartmentStats();
+
+      // assert
+      verify(() => mockDashboardDatasource.fetchDepartmentStats()).called(1);
+      expect(result.isLeft(), true);
+
+      result.fold((failure) {
+        expect(failure, isA<ServerFailure>());
+      }, (_) => fail('Should fail'));
+    });
+  });
+
+  group('getAlerts', () {
+    test('should return Right(alerts) when call to datasource is successful', () async {
+      // arrange
+      final tAlerts = [
+        DashboardAlert(
+          type: 'THRESHOLD BREACH',
+          title: '3 Students below 75%',
+          description: 'Attendance below the institutional minimum.',
+          time: 'Last 7 days',
+          actionLabel: 'Review & Notify Parents',
+          actionStyle: AlertActionStyle.filled,
+        ),
+      ];
+      when(
+        () => mockDashboardDatasource.fetchAlerts(),
+      ).thenAnswer((_) async => tAlerts);
+
+      // act
+      final result = await dashboardRepositoryImpl.getAlerts();
+
+      // assert
+      verify(() => mockDashboardDatasource.fetchAlerts()).called(1);
+      expect(result.isRight(), true);
+
+      result.fold((failure) => fail('Should not fail'), (alerts) {
+        expect(alerts, tAlerts);
+      });
+    });
+
+    test('should return ServerFailure when call to datasource throws', () async {
+      // arrange
+      when(
+        () => mockDashboardDatasource.fetchAlerts(),
+      ).thenThrow(Exception('boom'));
+
+      // act
+      final result = await dashboardRepositoryImpl.getAlerts();
+
+      // assert
+      verify(() => mockDashboardDatasource.fetchAlerts()).called(1);
+      expect(result.isLeft(), true);
+
+      result.fold((failure) {
+        expect(failure, isA<ServerFailure>());
+      }, (_) => fail('Should fail'));
+    });
+  });
 }

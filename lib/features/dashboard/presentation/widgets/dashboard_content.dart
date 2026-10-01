@@ -56,18 +56,26 @@ class DashboardContent extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: AppSpacing.xl),
-                SizedBox(width: unit, child: const UrgentAlertsCard()),
+                SizedBox(
+                  width: unit,
+                  child: UrgentAlertsCard(alerts: state.alerts),
+                ),
               ],
             );
           },
         ),
         const SizedBox(height: AppSpacing.xl),
-        const Row(
+        Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(child: DepartmentBreakdownCard()),
-            SizedBox(width: AppSpacing.xl),
-            Expanded(child: PresenceSplitCard()),
+            Expanded(
+              child: DepartmentBreakdownCard(
+                departments: state.departments,
+                totalStaff: state.kpis.totalStaff,
+              ),
+            ),
+            const SizedBox(width: AppSpacing.xl),
+            Expanded(child: PresenceSplitCard(kpis: state.kpis)),
           ],
         ),
         const SizedBox(height: AppSpacing.xl),

@@ -100,6 +100,145 @@ class DashboardDatasourceImpl implements DashboardDatasource {
     ];
   }
 
+  @override
+  Future<List<DepartmentStat>> fetchDepartmentStats() async {
+    final studentRows = await _supabaseClient
+        .from('students')
+        .select('id, department');
+    final todayRows = await _supabaseClient
+        .from('attendance_records')
+        .select('student_id, status')
+        .eq('date', _isoDate(DateTime.now()));
+
+    final departmentByStudent = <String, String?>{
+      for (final row in studentRows)
+        row['id'] as String: row['department'] as String?,
+    };
+
+    final recordsByDepartment = <String, int>{};
+    final presentByDepartment = <String, int>{};
+    for (final row in todayRows) {
+      final department = departmentByStudent[row['student_id']];
+      if (department == null || department.isEmpty) continue;
+      recordsByDepartment[department] =
+          (recordsByDepartment[department] ?? 0) + 1;
+      if (row['status'] == 'present') {
+        presentByDepartment[department] =
+            (presentByDepartment[department] ?? 0) + 1;
+      }
+    }
+
+    final departments = <String>{
+      for (final row in studentRows)
+        if ((row['department'] as String?)?.isNotEmpty ?? false)
+          row['department'] as String,
+    };
+
+    final stats = [
+      for (final name in departments)
+        DepartmentStat(
+          name: name,
+          recordsToday: recordsByDepartment[name] ?? 0,
+          presentToday: presentByDepartment[name] ?? 0,
+        ),
+    ];
+    stats.sort((a, b) {
+      final byPct = b.presentPct.compareTo(a.presentPct);
+      return byPct != 0 ? byPct : a.name.compareTo(b.name);
+    });
+    return stats;
+  }
+
+  @override
+  Future<List<DashboardAlert>> fetchAlerts() async {
+    final today = DateTime.now();
+    final windowStart = today.subtract(const Duration(days: 6));
+
+    final studentRows = await _supabaseClient
+        .from('students')
+        .select('id, department');
+    final windowRows = await _supabaseClient
+        .from('attendance_records')
+        .select('student_id, status, date')
+        .gte('date', _isoDate(windowStart))
+        .lte('date', _isoDate(today));
+
+    final departmentByStudent = <String, String?>{
+      for (final row in studentRows)
+        row['id'] as String: row['department'] as String?,
+    };
+
+    // Per-student totals over the 7-day compliance window.
+    final totalsByStudent = <String, List<int>>{}; // [records, present]
+    var absentToday = 0;
+    var recordsToday = 0;
+    final todayIso = _isoDate(today);
+    for (final row in windowRows) {
+      final studentId = row['student_id'] as String;
+      final entry = totalsByStudent[studentId] ?? [0, 0];
+      entry[0] += 1;
+      if (row['status'] == 'present') entry[1] += 1;
+      totalsByStudent[studentId] = entry;
+
+      if (row['date'] == todayIso) {
+        recordsToday += 1;
+        if (row['status'] == 'absent') absentToday += 1;
+      }
+    }
+
+    var belowThreshold = 0;
+    final offendersByDepartment = <String, int>{};
+    for (final entry in totalsByStudent.entries) {
+      final total = entry.value[0];
+      final present = entry.value[1];
+      if (total == 0 || present / total >= 0.75) continue;
+      belowThreshold += 1;
+      final department = departmentByStudent[entry.key];
+      if (department != null && department.isNotEmpty) {
+        offendersByDepartment[department] =
+            (offendersByDepartment[department] ?? 0) + 1;
+      }
+    }
+
+    String? topOffendingDepartment;
+    var topOffenderCount = 0;
+    for (final entry in offendersByDepartment.entries) {
+      if (entry.value > topOffenderCount) {
+        topOffendingDepartment = entry.key;
+        topOffenderCount = entry.value;
+      }
+    }
+
+    final alerts = <DashboardAlert>[
+      if (belowThreshold > 0)
+        DashboardAlert(
+          type: 'THRESHOLD BREACH',
+          title: topOffendingDepartment == null
+              ? '$belowThreshold Students below 75%'
+              : '$belowThreshold Students below 75% in $topOffendingDepartment',
+          description:
+              'Attendance below the institutional minimum over the last '
+              '7 days. Automated SMS warnings queued for parent dispatch.',
+          time: 'Last 7 days',
+          actionLabel: 'Review & Notify Parents',
+          actionStyle: AlertActionStyle.filled,
+        ),
+      if (absentToday > 0)
+        DashboardAlert(
+          type: 'ABSENCE WATCH',
+          title: '$absentToday Students Absent Today',
+          description:
+              'Absentee rate '
+              '${(absentToday / recordsToday * 100).toStringAsFixed(1)}% '
+              'across $recordsToday recorded sessions.',
+          time: 'Today',
+          actionLabel: 'Open Daily Attendance',
+          actionStyle: AlertActionStyle.outlined,
+        ),
+    ];
+    return alerts;
+  }
+
   static DateTime _parseIsoDate(String iso) {
     final parts = iso.split('-');
     return DateTime(

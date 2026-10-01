@@ -20,7 +20,7 @@ The admin app is currently a **UI-only dashboard shell** — every value on scre
 
 - ✅ Supabase schema (profiles, students, staff, attendance) via CLI migrations
 - ✅ Login / logout with a seeded super-admin account
-- 🟡 Dashboard data wiring — KPI stats row + attendance trend chart are live; alerts, analytics cards, and roll-call table stay hardcoded until devices/alerts/timetable tables exist
+- 🟡 Dashboard data wiring — KPI row, trend chart, presence split, department breakdown, and alerts are live; roll-call table and IoT widgets stay hardcoded until devices/alerts/timetable tables exist
 - ❌ Data layers for the 9 unbuilt sidebar screens (Students, Timetable, Leave, Device Hub, …)
 
 Those deferred items are tracked in the repo root's `FUTURE_FEATURES.md` (see "Part 6 — Data wiring").

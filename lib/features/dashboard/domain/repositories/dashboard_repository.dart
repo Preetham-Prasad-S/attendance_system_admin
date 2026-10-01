@@ -11,4 +11,10 @@ abstract interface class DashboardRepository {
   Future<Either<Failure, List<DailyAttendancePoint>>> getAttendanceTrend(
     int days,
   );
+
+  /// Fetches today's attendance aggregated per department.
+  Future<Either<Failure, List<DepartmentStat>>> getDepartmentStats();
+
+  /// Derives operational alerts from attendance data.
+  Future<Either<Failure, List<DashboardAlert>>> getAlerts();
 }

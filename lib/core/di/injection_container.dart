@@ -6,7 +6,9 @@ import 'package:attendance_system_admin/features/auth/domain/usecases/signup_use
 import 'package:attendance_system_admin/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:attendance_system_admin/features/dashboard/data/datasources/dashboard_datasource_impl.dart';
 import 'package:attendance_system_admin/features/dashboard/data/repositories/dashboard_repository_impl.dart';
+import 'package:attendance_system_admin/features/dashboard/domain/usecases/get_alerts_usecase.dart';
 import 'package:attendance_system_admin/features/dashboard/domain/usecases/get_attendance_trend_usecase.dart';
+import 'package:attendance_system_admin/features/dashboard/domain/usecases/get_department_stats_usecase.dart';
 import 'package:attendance_system_admin/features/dashboard/domain/usecases/get_kpis_usecase.dart';
 import 'package:attendance_system_admin/features/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -71,10 +73,24 @@ Future<void> initDependencies() async {
     ),
   );
 
+  serviceLocator.registerLazySingleton(
+    () => GetDepartmentStatsUsecase(
+      dashboardRepository: serviceLocator<DashboardRepositoryImpl>(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton(
+    () => GetAlertsUsecase(
+      dashboardRepository: serviceLocator<DashboardRepositoryImpl>(),
+    ),
+  );
+
   serviceLocator.registerFactory(
     () => DashboardBloc(
       getKpisUsecase: serviceLocator<GetKpisUsecase>(),
       getAttendanceTrendUsecase: serviceLocator<GetAttendanceTrendUsecase>(),
+      getDepartmentStatsUsecase: serviceLocator<GetDepartmentStatsUsecase>(),
+      getAlertsUsecase: serviceLocator<GetAlertsUsecase>(),
     ),
   );
 }

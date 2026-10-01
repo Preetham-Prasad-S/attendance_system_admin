@@ -5,9 +5,15 @@ import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_radius.dart';
 import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/theme/app_typography.dart';
+import '../../../domain/entities/dashboard_entities.dart';
 
 class PresenceSplitCard extends StatelessWidget {
-  const PresenceSplitCard({super.key});
+  const PresenceSplitCard({super.key, required this.kpis});
+
+  final KpiStats kpis;
+
+  double _percentOf(int count) =>
+      kpis.recordsToday == 0 ? 0 : count / kpis.recordsToday * 100;
 
   @override
   Widget build(BuildContext context) {
@@ -43,24 +49,24 @@ class PresenceSplitCard extends StatelessWidget {
             style: AppTypography.caption.copyWith(fontSize: 12),
           ),
           const SizedBox(height: AppSpacing.xl),
-          Center(child: _DonutChart()),
+          Center(child: _DonutChart(kpis: kpis)),
           const SizedBox(height: AppSpacing.xl),
           Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: _LegendItem(
                   label: 'Present',
-                  count: '4,481',
-                  percent: '(92.4%)',
+                  count: kpis.presentToday.toString(),
+                  percent: '(${_percentOf(kpis.presentToday).toStringAsFixed(1)}%)',
                   color: AppColors.success,
                 ),
               ),
               const SizedBox(width: AppSpacing.lg),
-              const Expanded(
+              Expanded(
                 child: _LegendItem(
                   label: 'Absent',
-                  count: '246',
-                  percent: '(5.1%)',
+                  count: kpis.absentToday.toString(),
+                  percent: '(${_percentOf(kpis.absentToday).toStringAsFixed(1)}%)',
                   color: AppColors.danger,
                 ),
               ),
@@ -69,20 +75,20 @@ class PresenceSplitCard extends StatelessWidget {
           const SizedBox(height: AppSpacing.md),
           Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: _LegendItem(
                   label: 'Late',
-                  count: '89',
-                  percent: '(1.8%)',
+                  count: kpis.lateToday.toString(),
+                  percent: '(${_percentOf(kpis.lateToday).toStringAsFixed(1)}%)',
                   color: AppColors.warning,
                 ),
               ),
               const SizedBox(width: AppSpacing.lg),
-              const Expanded(
+              Expanded(
                 child: _LegendItem(
                   label: 'Leave',
-                  count: '34',
-                  percent: '(0.7%)',
+                  count: kpis.onLeaveToday.toString(),
+                  percent: '(${_percentOf(kpis.onLeaveToday).toStringAsFixed(1)}%)',
                   color: AppColors.info,
                 ),
               ),
@@ -108,10 +114,43 @@ class PresenceSplitCard extends StatelessWidget {
 }
 
 class _DonutChart extends StatelessWidget {
-  const _DonutChart();
+  const _DonutChart({required this.kpis});
+
+  final KpiStats kpis;
 
   @override
   Widget build(BuildContext context) {
+    final sections = [
+      if (kpis.presentToday > 0)
+        PieChartSectionData(
+          value: kpis.presentToday.toDouble(),
+          color: AppColors.success,
+          radius: 20,
+          showTitle: false,
+        ),
+      if (kpis.absentToday > 0)
+        PieChartSectionData(
+          value: kpis.absentToday.toDouble(),
+          color: AppColors.danger,
+          radius: 20,
+          showTitle: false,
+        ),
+      if (kpis.lateToday > 0)
+        PieChartSectionData(
+          value: kpis.lateToday.toDouble(),
+          color: AppColors.warning,
+          radius: 20,
+          showTitle: false,
+        ),
+      if (kpis.onLeaveToday > 0)
+        PieChartSectionData(
+          value: kpis.onLeaveToday.toDouble(),
+          color: AppColors.info,
+          radius: 20,
+          showTitle: false,
+        ),
+    ];
+
     return SizedBox(
       width: 200,
       height: 200,
@@ -122,39 +161,23 @@ class _DonutChart extends StatelessWidget {
             PieChartData(
               sectionsSpace: 4,
               centerSpaceRadius: 75,
-              sections: [
-                PieChartSectionData(
-                  value: 4481,
-                  color: AppColors.success,
-                  radius: 20,
-                  showTitle: false,
-                ),
-                PieChartSectionData(
-                  value: 246,
-                  color: AppColors.danger,
-                  radius: 20,
-                  showTitle: false,
-                ),
-                PieChartSectionData(
-                  value: 89,
-                  color: AppColors.warning,
-                  radius: 20,
-                  showTitle: false,
-                ),
-                PieChartSectionData(
-                  value: 34,
-                  color: AppColors.info,
-                  radius: 20,
-                  showTitle: false,
-                ),
-              ],
+              sections: sections.isEmpty
+                  ? [
+                      PieChartSectionData(
+                        value: 1,
+                        color: AppColors.surfaceMuted,
+                        radius: 20,
+                        showTitle: false,
+                      ),
+                    ]
+                  : sections,
             ),
           ),
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                '4,850',
+                kpis.totalStudents.toString(),
                 style: AppTypography.sectionTitle.copyWith(
                   fontSize: 28,
                   fontWeight: FontWeight.w700,

@@ -29,4 +29,22 @@ class DashboardRepositoryImpl implements DashboardRepository {
       return Left(ServerFailure(message: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, List<DepartmentStat>>> getDepartmentStats() async {
+    try {
+      return Right(await _dashboardDatasource.fetchDepartmentStats());
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<DashboardAlert>>> getAlerts() async {
+    try {
+      return Right(await _dashboardDatasource.fetchAlerts());
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
 }

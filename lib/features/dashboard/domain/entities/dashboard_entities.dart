@@ -91,3 +91,72 @@ enum TrendPeriod {
   /// Number of calendar days covered by the period.
   final int days;
 }
+
+/// One department's attendance aggregate for today.
+class DepartmentStat {
+  final String name;
+  final int recordsToday;
+  final int presentToday;
+
+  const DepartmentStat({
+    required this.name,
+    required this.recordsToday,
+    required this.presentToday,
+  });
+
+  /// Share of today's records marked present, in percent.
+  double get presentPct =>
+      recordsToday == 0 ? 0 : (presentToday / recordsToday) * 100;
+
+  @override
+  bool operator ==(Object other) =>
+      other is DepartmentStat &&
+      other.name == name &&
+      other.recordsToday == recordsToday &&
+      other.presentToday == presentToday;
+
+  @override
+  int get hashCode => Object.hash(name, recordsToday, presentToday);
+}
+
+/// Button style for an alert's action button.
+enum AlertActionStyle { filled, outlined, danger }
+
+/// An operational alert derived from attendance data.
+class DashboardAlert {
+  final String type;
+  final String title;
+  final String description;
+  final String time;
+  final String actionLabel;
+  final AlertActionStyle actionStyle;
+
+  const DashboardAlert({
+    required this.type,
+    required this.title,
+    required this.description,
+    required this.time,
+    required this.actionLabel,
+    required this.actionStyle,
+  });
+
+  @override
+  bool operator ==(Object other) =>
+      other is DashboardAlert &&
+      other.type == type &&
+      other.title == title &&
+      other.description == description &&
+      other.time == time &&
+      other.actionLabel == actionLabel &&
+      other.actionStyle == actionStyle;
+
+  @override
+  int get hashCode => Object.hash(
+        type,
+        title,
+        description,
+        time,
+        actionLabel,
+        actionStyle,
+      );
+}

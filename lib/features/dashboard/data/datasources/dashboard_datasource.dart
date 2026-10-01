@@ -7,4 +7,10 @@ abstract interface class DashboardDatasource {
 
   /// Aggregates daily attendance for the last [days] days.
   Future<List<DailyAttendancePoint>> fetchAttendanceTrend(int days);
+
+  /// Aggregates today's attendance per department.
+  Future<List<DepartmentStat>> fetchDepartmentStats();
+
+  /// Derives operational alerts from attendance data.
+  Future<List<DashboardAlert>> fetchAlerts();
 }

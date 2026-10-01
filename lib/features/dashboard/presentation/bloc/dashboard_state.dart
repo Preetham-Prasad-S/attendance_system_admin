@@ -15,11 +15,15 @@ class DashboardLoaded extends DashboardState {
   final KpiStats kpis;
   final List<DailyAttendancePoint> trend;
   final TrendPeriod period;
+  final List<DepartmentStat> departments;
+  final List<DashboardAlert> alerts;
 
   DashboardLoaded({
     required this.kpis,
     required this.trend,
     required this.period,
+    required this.departments,
+    required this.alerts,
   });
 }
 
