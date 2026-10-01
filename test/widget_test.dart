@@ -5,6 +5,7 @@ import 'package:attendance_system_admin/app/shell/widgets/sidebar/sidebar_nav_it
 import 'package:attendance_system_admin/app/shell/widgets/top_bar/app_top_bar.dart';
 import 'package:attendance_system_admin/core/di/injection_container.dart';
 import 'package:attendance_system_admin/features/auth/presentation/screens/login/login_screen.dart';
+import 'package:attendance_system_admin/features/dashboard/presentation/pages/dashboard_page.dart';
 import 'package:attendance_system_admin/features/students/presentation/pages/students_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -62,6 +63,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(StudentsPage), findsOneWidget);
-    expect(find.text('Students — coming soon'), findsOneWidget);
+    expect(find.byType(DashboardPage), findsNothing);
+    expect(find.text('Executive Attendance Overview'), findsNothing);
   });
 }
