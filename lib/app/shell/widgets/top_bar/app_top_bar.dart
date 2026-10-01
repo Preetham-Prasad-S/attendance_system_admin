@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_colors.dart';
-import '../../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_spacing.dart';
 import 'top_bar_actions.dart';
 import 'top_bar_profile.dart';
 import 'top_bar_search_field.dart';
 import 'top_bar_term_selector.dart';
 
-class DashboardTopBar extends StatelessWidget {
-  const DashboardTopBar({super.key});
+class AppTopBar extends StatelessWidget {
+  const AppTopBar({super.key});
 
   @override
   Widget build(BuildContext context) {

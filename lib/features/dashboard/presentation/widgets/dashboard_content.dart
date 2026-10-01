@@ -11,7 +11,7 @@ import 'alerts/urgent_alerts_card.dart';
 import 'analytics/department_breakdown_card.dart';
 import 'analytics/presence_split_card.dart';
 import 'charts/attendance_trend_card.dart';
-import 'common/app_footer.dart';
+import '../../../../app/shell/widgets/common/app_footer.dart';
 import 'header/dashboard_header.dart';
 import 'stats/kpi_stats_row.dart';
 import 'table/roll_call_table_card.dart';

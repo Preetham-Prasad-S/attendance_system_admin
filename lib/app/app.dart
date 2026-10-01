@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../core/theme/app_theme.dart';
-import '../features/dashboard/presentation/pages/dashboard_screen.dart';
+import 'shell/app_shell.dart';
 
 class CampusPulseApp extends StatelessWidget {
   const CampusPulseApp({super.key});
@@ -42,7 +42,7 @@ class _SessionGate extends StatelessWidget {
             ? snapshot.data!.session
             : auth.currentSession;
 
-        return session != null ? const DashboardScreen() : const LoginScreen();
+        return session != null ? const AppShell() : const LoginScreen();
       },
     );
   }

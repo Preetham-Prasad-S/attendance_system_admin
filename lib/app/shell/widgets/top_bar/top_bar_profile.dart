@@ -3,9 +3,9 @@ import 'package:attendance_system_admin/features/auth/presentation/bloc/auth_eve
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../../core/theme/app_colors.dart';
-import '../../../../../core/theme/app_spacing.dart';
-import '../../../../../core/theme/app_typography.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 
 class TopBarProfile extends StatelessWidget {
   const TopBarProfile({super.key});

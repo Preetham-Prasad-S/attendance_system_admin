@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/app_colors.dart';
-import '../../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_spacing.dart';
 import 'sidebar_header.dart';
 import 'sidebar_nav_list.dart';
 import 'sidebar_university_selector.dart';
 
-class DashboardSidebar extends StatelessWidget {
-  const DashboardSidebar({super.key});
+class AppSidebar extends StatelessWidget {
+  const AppSidebar({
+    super.key,
+    required this.selectedIndex,
+    required this.onSelect,
+  });
+
+  final int selectedIndex;
+  final ValueChanged<int> onSelect;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +32,14 @@ class DashboardSidebar extends StatelessWidget {
           const SizedBox(height: AppSpacing.lg + 2),
           const SidebarUniversitySelector(),
           const SizedBox(height: AppSpacing.xl - 4),
-          const Expanded(child: SingleChildScrollView(child: SidebarNavList())),
+          Expanded(
+            child: SingleChildScrollView(
+              child: SidebarNavList(
+                selectedIndex: selectedIndex,
+                onSelect: onSelect,
+              ),
+            ),
+          ),
         ],
       ),
     );
