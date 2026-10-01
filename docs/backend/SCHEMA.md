@@ -109,6 +109,24 @@ All three tables share: `id uuid primary key default gen_random_uuid()`, `organi
 
 ---
 
+## Migration 0003 — Seed super admin
+
+Promotes the manually created admin profile to `role = 'super_admin'`, sets `organization = 'CampusPulse'`, and replaces the email-style name with the local part. A guard raises if the profile row is missing. No passwords in the repo — the migration only touches the already-created row.
+
+---
+
+## Migration 0004 — Demo data
+
+Deterministic seed for the disposable database (`organization = 'CampusPulse'`):
+
+- **50 students** across 5 departments — `md5()`-based names/emails, a few flagged `inactive`
+- **8 staff/lecturers**
+- **7 days of `attendance_records`** (including today), ~85% `present`, 5% `late`, 6% `absent`, 4% `on_leave`, `method = 'biometric'`
+
+All values are md5-derived, so re-deriving the data during development is stable. Feeds the dashboard KPI row and attendance trend chart.
+
+---
+
 ## Deferred tables (later phases)
 
 Not part of this phase — listed so the schema direction is clear:

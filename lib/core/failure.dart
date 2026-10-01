@@ -14,3 +14,8 @@ class AppAuthException implements Exception {
 class AuthFailure extends Failure {
   AuthFailure({required super.message});
 }
+
+/// Failure type for generic server / data errors.
+class ServerFailure extends Failure {
+  ServerFailure({required super.message});
+}

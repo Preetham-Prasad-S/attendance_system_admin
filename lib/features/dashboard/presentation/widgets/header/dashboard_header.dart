@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_radius.dart';
@@ -34,7 +35,9 @@ class DashboardHeader extends StatelessWidget {
                       ),
                       const SizedBox(width: AppSpacing.sm),
                       Text(
-                        'Thursday, October 24, 2024',
+                        DateFormat(
+                          'EEEE, MMMM d, yyyy',
+                        ).format(DateTime.now()),
                         style: AppTypography.label.copyWith(
                           fontSize: 13,
                           color: AppColors.textSecondary,

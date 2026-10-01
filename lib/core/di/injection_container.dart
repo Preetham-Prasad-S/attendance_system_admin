@@ -4,6 +4,11 @@ import 'package:attendance_system_admin/features/auth/domain/usecases/login_usec
 import 'package:attendance_system_admin/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:attendance_system_admin/features/auth/domain/usecases/signup_usecase.dart';
 import 'package:attendance_system_admin/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:attendance_system_admin/features/dashboard/data/datasources/dashboard_datasource_impl.dart';
+import 'package:attendance_system_admin/features/dashboard/data/repositories/dashboard_repository_impl.dart';
+import 'package:attendance_system_admin/features/dashboard/domain/usecases/get_attendance_trend_usecase.dart';
+import 'package:attendance_system_admin/features/dashboard/domain/usecases/get_kpis_usecase.dart';
+import 'package:attendance_system_admin/features/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -39,6 +44,37 @@ Future<void> initDependencies() async {
       signupUsecase: serviceLocator<SignupUsecase>(),
       loginUsecase: serviceLocator<LoginUsecase>(),
       logoutUsecase: serviceLocator<LogoutUsecase>(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton(
+    () => DashboardDatasourceImpl(
+      supabaseClient: serviceLocator<SupabaseClient>(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton(
+    () => DashboardRepositoryImpl(
+      dashboardDatasource: serviceLocator<DashboardDatasourceImpl>(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton(
+    () => GetKpisUsecase(
+      dashboardRepository: serviceLocator<DashboardRepositoryImpl>(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton(
+    () => GetAttendanceTrendUsecase(
+      dashboardRepository: serviceLocator<DashboardRepositoryImpl>(),
+    ),
+  );
+
+  serviceLocator.registerFactory(
+    () => DashboardBloc(
+      getKpisUsecase: serviceLocator<GetKpisUsecase>(),
+      getAttendanceTrendUsecase: serviceLocator<GetAttendanceTrendUsecase>(),
     ),
   );
 }

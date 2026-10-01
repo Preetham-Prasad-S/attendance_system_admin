@@ -20,7 +20,7 @@ The admin app is currently a **UI-only dashboard shell** — every value on scre
 
 - ✅ Supabase schema (profiles, students, staff, attendance) via CLI migrations
 - ✅ Login / logout with a seeded super-admin account
-- ❌ Dashboard data wiring (hardcoded KPIs, charts, alerts stay as-is for now)
+- 🟡 Dashboard data wiring — KPI stats row + attendance trend chart are live; alerts, analytics cards, and roll-call table stay hardcoded until devices/alerts/timetable tables exist
 - ❌ Data layers for the 9 unbuilt sidebar screens (Students, Timetable, Leave, Device Hub, …)
 
 Those deferred items are tracked in the repo root's `FUTURE_FEATURES.md` (see "Part 6 — Data wiring").
@@ -34,7 +34,7 @@ Those deferred items are tracked in the repo root's `FUTURE_FEATURES.md` (see "P
 | 3 | Migration: core domain tables | ✅ Done |
 | 4 | Seed super admin | ✅ Done |
 | 5 | Flutter config fixes (dotenv) | ✅ Done |
-| 6 | Recover auth code from git history | ⬜ Not started |
+| 6 | Recover auth code from git history | ✅ Done |
 | 7 | Adapt recovered auth code | ✅ Done |
 | 8 | Logout wiring | ✅ Done |
 | 9 | Dependency injection (`core/di`) | ✅ Done |

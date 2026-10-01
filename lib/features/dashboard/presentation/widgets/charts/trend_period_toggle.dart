@@ -4,18 +4,17 @@ import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_radius.dart';
 import '../../../../../core/theme/app_spacing.dart';
 import '../../../../../core/theme/app_typography.dart';
+import '../../../domain/entities/dashboard_entities.dart';
 
-class TrendPeriodToggle extends StatefulWidget {
-  const TrendPeriodToggle({super.key});
+class TrendPeriodToggle extends StatelessWidget {
+  const TrendPeriodToggle({
+    super.key,
+    required this.selected,
+    required this.onChanged,
+  });
 
-  @override
-  State<TrendPeriodToggle> createState() => _TrendPeriodToggleState();
-}
-
-class _TrendPeriodToggleState extends State<TrendPeriodToggle> {
-  static const _options = ['Weekly', 'Monthly', 'Semester'];
-
-  int _selected = 0;
+  final TrendPeriod selected;
+  final ValueChanged<TrendPeriod> onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +27,9 @@ class _TrendPeriodToggleState extends State<TrendPeriodToggle> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          for (var i = 0; i < _options.length; i++)
+          for (final period in TrendPeriod.values)
             GestureDetector(
-              onTap: () => setState(() => _selected = i),
+              onTap: () => onChanged(period),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 150),
                 padding: const EdgeInsets.symmetric(
@@ -38,20 +37,20 @@ class _TrendPeriodToggleState extends State<TrendPeriodToggle> {
                   vertical: AppSpacing.xs + 1,
                 ),
                 decoration: BoxDecoration(
-                  color: _selected == i
+                  color: selected == period
                       ? AppColors.surface
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(AppRadius.sm - 2),
-                  border: _selected == i
+                  border: selected == period
                       ? Border.all(color: AppColors.border)
                       : null,
                 ),
                 child: Text(
-                  _options[i],
+                  period.label,
                   style: AppTypography.caption.copyWith(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: _selected == i
+                    color: selected == period
                         ? AppColors.textPrimary
                         : AppColors.textSecondary,
                   ),
