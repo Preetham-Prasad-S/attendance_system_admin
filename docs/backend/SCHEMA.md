@@ -140,3 +140,63 @@ Not part of this phase — listed so the schema direction is clear:
 ## Legacy note
 
 The pre-rewrite app used a quoted capital-U `"User"` table populated by an ad-hoc dashboard trigger. Since the database is disposable, that table is dropped and replaced by `profiles` + `handle_new_user()`. The Flutter datasource is updated accordingly (`.from("profiles")`).
+
+---
+
+## Migration 0006 — Institutes registry
+
+`public.institutes` is the registry of institutes. It exists because the tenant key was free text: there was nothing to *list*, so no UI could offer a choice.
+
+| Column | Type | Constraints / Notes |
+|---|---|---|
+| `id` | `uuid` | `primary key default gen_random_uuid()` |
+| `slug` | `text` | `not null unique` — the tenant key, matches `students.organization` etc. |
+| `name` | `text` | `not null` — display name |
+| `code` | `text` | optional short label; **not** fabricated by the backfill |
+| `is_active` | `boolean` | `not null default true` — deactivation is a soft delete |
+| `created_at` / `updated_at` | `timestamptz` | `set_updated_at` trigger |
+
+`slug` and `students.organization` are linked **by convention, not by foreign key** — deliberate, to avoid rewriting the three domain tables and every policy.
+
+**Backfill:** distinct `organization` values from `students`/`staff`/`attendance_records`/`profiles`, skipping the `'unassigned'` trigger fallback. Already-cased slugs (`CampusPulse`) are preserved as-is; others are humanised (`north_gate` ? `North Gate`).
+
+### RLS helpers (new)
+
+`can_access_organization(target text)` and `can_write_organization(target text)` — both `security definer`, `stable`, `search_path = public`, execute revoked from `PUBLIC`/`anon`. They replace the inline `organization = current_organization()` predicates:
+
+- **read** — `current_app_role() = 'super_admin' or target = current_organization()`
+- **write** — super admin for any institute; an `admin` only within their own
+
+A regular admin's effective access is unchanged by migration 0006; only `super_admin` widens.
+
+## Migration 0007 — Secondary institutes
+
+Registers `apex-institute-of-tech` and `northgate-college`, **with no students/staff/attendance**. Their data is created through the app, which exercises the real write paths instead of seeding around them.
+
+## Migration 0008 — Account status
+
+| Column | Type | Notes |
+|---|---|---|
+| `profiles.status` | `public.account_status` | `not null default 'invited'` — **fail-closed** |
+| `profiles.invited_by` | `uuid` | `references public.profiles(id) on delete set null` |
+
+`account_status` is `('invited', 'active')`. An account invited by a super admin cannot enter the app until it sets a password on `PasswordSetupScreen`, which flips it to `active`.
+
+Because the column defaults to `'invited'`, existing rows were promoted in the same migration — otherwise the seeded super admin would have been locked out of their own app.
+
+`protect_profile_privileges()` is unchanged: it guards `role`/`organization`/`id`, and self-updating `status` is already allowed by `profiles_update_own`.
+
+## Edge function — `create-institute-admin`
+
+Holds `service_role`, which is why it exists: creating an `auth.users` row cannot be done from a client, and the anon key must never gain that power.
+
+| Check | Result |
+|---|---|
+| Caller identity | `auth.getUser(token)` — gateway also enforces `verify_jwt` |
+| Caller role | `profiles.role = 'super_admin'`, **read from the database**, never from the request |
+| Institute | must exist and be active in the registry |
+| Email | shape-checked; an existing account returns `409` |
+
+It creates the user unconfirmed with `user_metadata.organization` set **server-side**, so the client-supplied tenant in `handle_new_user()` is never used, and returns a one-time setup link rather than emailing it (Supabase's default mailer is rate-limited).
+
+The Dart side needs no new dependency: `supabase_flutter 2.12.4` resolves to `supabase 2.10.6`, which exposes `FunctionsClient`.

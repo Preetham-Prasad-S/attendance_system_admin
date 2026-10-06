@@ -1,5 +1,9 @@
+import 'dart:async';
+
+import '../../../../helpers/institutes_fixture.dart';
 import 'package:attendance_system_admin/core/failure.dart';
 import 'package:attendance_system_admin/core/usecase.dart';
+import 'package:attendance_system_admin/features/institutes/domain/services/institute_context.dart';
 import 'package:attendance_system_admin/features/students/domain/entities/students_entities.dart';
 import 'package:attendance_system_admin/features/students/domain/usecases/add_student_usecase.dart';
 import 'package:attendance_system_admin/features/students/domain/usecases/get_directory_kpis_usecase.dart';
@@ -33,6 +37,7 @@ class FakeAddStudentParams extends Fake implements AddStudentParams {}
 
 void main() {
   late StudentsBloc studentsBloc;
+  late InstituteContext instituteContext;
   late MockGetDirectoryKpisUsecase mockGetDirectoryKpisUsecase;
   late MockGetStudentsPageUsecase mockGetStudentsPageUsecase;
   late MockGetStudentAttendanceLogUsecase mockGetStudentAttendanceLogUsecase;
@@ -113,15 +118,17 @@ void main() {
       () => mockAddStudentUsecase.call(any()),
     ).thenAnswer((_) async => Right(tStudent));
 
+    instituteContext = buildInstituteContext();
     studentsBloc = StudentsBloc(
       getDirectoryKpisUsecase: mockGetDirectoryKpisUsecase,
       getStudentsPageUsecase: mockGetStudentsPageUsecase,
       getStudentAttendanceLogUsecase: mockGetStudentAttendanceLogUsecase,
       addStudentUsecase: mockAddStudentUsecase,
+      instituteContext: instituteContext,
     );
   });
 
-  tearDown(() {
+tearDown(() {
     studentsBloc.close();
   });
 
@@ -130,6 +137,70 @@ void main() {
     await pumpEventQueue();
     expect(studentsBloc.state, isA<StudentsLoaded>());
   }
+
+  group('StudentsBloc - institute switching', () {
+    test('resets institute-specific filters when the institute changes', () async {
+      await loadDirectory();
+
+      studentsBloc.add(DepartmentChanged(department: 'Civil'));
+      await pumpEventQueue();
+      expect((studentsBloc.state as StudentsLoaded).filters.department, 'Civil');
+
+      // Switch institute and reload.
+      instituteContext.selectInstitute(tOtherInstitute);
+      studentsBloc.add(LoadStudentsRequested());
+      await pumpEventQueue();
+
+      final filters = (studentsBloc.state as StudentsLoaded).filters;
+      expect(filters.department, isNull);
+      expect(filters.page, 0);
+    });
+
+    test('keeps filters when the same institute reloads', () async {
+      await loadDirectory();
+
+      studentsBloc.add(DepartmentChanged(department: 'Civil'));
+      await pumpEventQueue();
+
+      studentsBloc.add(LoadStudentsRequested());
+      await pumpEventQueue();
+
+      expect((studentsBloc.state as StudentsLoaded).filters.department, 'Civil');
+    });
+
+    test('drops a response that arrives after the institute switched', () async {
+      final firstPage = Completer<Either<Failure, DirectoryPage>>();
+      final secondPage = Completer<Either<Failure, DirectoryPage>>();
+      var call = 0;
+
+      when(() => mockGetStudentsPageUsecase.call(any())).thenAnswer((_) {
+        call += 1;
+        return call == 1 ? firstPage.future : secondPage.future;
+      });
+
+      // Load for the first institute.
+      studentsBloc.add(LoadStudentsRequested());
+      await pumpEventQueue();
+
+      // Switch institute and start a second load.
+      instituteContext.selectInstitute(tOtherInstitute);
+      studentsBloc.add(LoadStudentsRequested());
+      await pumpEventQueue();
+
+      // The fresh load lands first...
+      secondPage.complete(Right(tPage2));
+      await pumpEventQueue();
+      expect(studentsBloc.state, isA<StudentsLoaded>());
+
+      // ...and the stale one must not overwrite it.
+      firstPage.complete(Right(tPage));
+      await pumpEventQueue();
+
+final loaded = studentsBloc.state as StudentsLoaded;
+      expect(loaded.page.totalCount, tPage2.totalCount);
+      expect(loaded.filters.department, isNull);
+    });
+  });
 
   group('StudentsBloc - Load', () {
     test('initial state should be StudentsInitial', () {

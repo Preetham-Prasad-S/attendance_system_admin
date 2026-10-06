@@ -1,3 +1,4 @@
+import '../../../../helpers/institutes_fixture.dart';
 import 'package:attendance_system_admin/core/failure.dart';
 import 'package:attendance_system_admin/core/usecase.dart';
 import 'package:attendance_system_admin/features/dashboard/domain/entities/dashboard_entities.dart';
@@ -94,6 +95,7 @@ void main() {
       getAttendanceTrendUsecase: mockGetAttendanceTrendUsecase,
       getDepartmentStatsUsecase: mockGetDepartmentStatsUsecase,
       getAlertsUsecase: mockGetAlertsUsecase,
+      instituteContext: buildInstituteContext(),
     );
   });
 

@@ -1,3 +1,5 @@
+import '../../../../helpers/institutes_fixture.dart';
+import 'package:attendance_system_admin/core/theme/app_spacing.dart';
 import 'package:attendance_system_admin/core/usecase.dart';
 import 'package:attendance_system_admin/features/students/domain/entities/students_entities.dart';
 import 'package:attendance_system_admin/features/students/domain/usecases/add_student_usecase.dart';
@@ -122,6 +124,35 @@ void main() {
     createdAt: DateTime(2026, 10, 1),
   );
 
+  /// Taller page so the directory overflows a short viewport, which the sticky
+  /// panel test needs in order to scroll past the table's top edge.
+  final tTallPage = DirectoryPage(
+    entries: [
+      for (var i = 0; i < 20; i++)
+        StudentDirectoryEntry(
+          student: Student(
+            id: 't$i',
+            studentNo: 'CS2021-${(100 + i).toString().padLeft(3, '0')}',
+            name: 'Student $i',
+            email: 's$i@apex.edu',
+            department: i.isEven ? 'Computer Science' : 'Mechanical',
+            status: 'active',
+            createdAt: DateTime(2026, 1, 1),
+          ),
+          summary: const AttendanceSummary(
+            recordsTotal: 30,
+            presentDays: 24,
+            lateDays: 2,
+            absentDays: 4,
+            leaveDays: 0,
+          ),
+          lastMethod: 'rfid',
+          lastRecordedAt: DateTime(2026, 10, 1, 8, 30),
+        ),
+    ],
+    totalCount: 20,
+  );
+
   setUpAll(() {
     registerFallbackValue(FakeNoParams());
     registerFallbackValue(FakeDirectoryFilters());
@@ -158,6 +189,7 @@ void main() {
             getStudentsPageUsecase: mockGetStudentsPageUsecase,
             getStudentAttendanceLogUsecase: mockGetStudentAttendanceLogUsecase,
             addStudentUsecase: mockAddStudentUsecase,
+      instituteContext: buildInstituteContext(),
           )..add(LoadStudentsRequested()),
           child: const StudentsDirectoryView(),
         ),
@@ -165,8 +197,11 @@ void main() {
     );
   }
 
-  Future<void> pumpDirectory(WidgetTester tester) async {
-    tester.view.physicalSize = const Size(1600, 1000);
+  Future<void> pumpDirectory(
+    WidgetTester tester, {
+    Size size = const Size(1600, 1000),
+  }) async {
+    tester.view.physicalSize = size;
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
 
@@ -221,6 +256,75 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(find.byType(StudentDetailPanel), findsNothing);
+  });
+
+  testWidgets('detail panel sizes to its content, not the table height', (
+    tester,
+  ) async {
+    await pumpDirectory(tester);
+
+    await tester.tap(find.text('Rohan Sharma'));
+    await tester.pumpAndSettle();
+
+    final panelHeight = tester.getSize(find.byType(StudentDetailPanel)).height;
+    final tableHeight = tester.getSize(find.byType(StudentsTableCard)).height;
+
+    // Shrink-wrapped: shorter than the table card it overlays.
+    expect(panelHeight, lessThan(tableHeight));
+    // And never taller than the space available below its anchored top.
+    expect(panelHeight, lessThanOrEqualTo(1000 - AppSpacing.xl));
+    expect(tester.takeException(), isNull);
+  });
+
+  /// Jumps the directory page to [offset] so the sticky panel's anchor can be
+  /// asserted without depending on hit-testable drag positions.
+  Future<void> scrollDirectoryTo(WidgetTester tester, double offset) async {
+    tester
+        .state<ScrollableState>(find.byType(Scrollable).first)
+        .position
+        .jumpTo(offset);
+    await tester.pumpAndSettle();
+  }
+
+  testWidgets('detail panel stays pinned to the top while the page scrolls', (
+    tester,
+  ) async {
+    // 20 rows on a short viewport so the page scrolls past the table's top.
+    when(
+      () => mockGetStudentsPageUsecase.call(any()),
+    ).thenAnswer((_) async => Right(tTallPage));
+    await pumpDirectory(tester, size: const Size(1600, 620));
+
+    await scrollDirectoryTo(tester, 400);
+    expect(find.byType(StudentsTableCard), findsOneWidget);
+
+    await tester.tap(find.text('Student 0'));
+    await tester.pumpAndSettle();
+
+    // Level with the table card's top edge while the page is scrolled.
+    expect(
+      tester.getTopLeft(find.byType(StudentDetailPanel)).dy,
+      moreOrLessEquals(
+        tester.getTopLeft(find.byType(StudentsTableCard)).dy,
+        epsilon: 0.5,
+      ),
+    );
+
+    // Scrolling further pins it to the top of the page body.
+    await scrollDirectoryTo(tester, 1200);
+
+    expect(find.byType(StudentDetailPanel), findsOneWidget);
+    expect(
+      tester.getTopLeft(find.byType(StudentDetailPanel)).dy,
+      moreOrLessEquals(AppSpacing.xl, epsilon: 0.5),
+    );
+    expect(tester.takeException(), isNull);
+
+    // Scrolling back reveals the header actions again — never covered.
+    await scrollDirectoryTo(tester, 0);
+    await tester.tap(find.text('+ Add New Student'));
+    await tester.pumpAndSettle();
+    expect(find.byType(StudentsAddDialog), findsOneWidget);
   });
 
   testWidgets('add dialog validates inputs and closes on success', (

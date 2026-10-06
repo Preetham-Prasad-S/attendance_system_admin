@@ -1,3 +1,4 @@
+import 'package:attendance_system_admin/core/failure.dart';
 import 'package:flutter/material.dart';
 import 'auth_textfield_widget.dart';
 
@@ -28,6 +29,7 @@ class _AuthDesktopLoginCredentialWidget
           textEditingController: widget._emailController,
           hintText: "name@company.com",
           labelText: "Email Address",
+          errorField: AuthErrorField.email,
         ),
         SizedBox(height: 10),
         SizedBox(height: 10),
@@ -36,6 +38,7 @@ class _AuthDesktopLoginCredentialWidget
           hintText: "•••••••••••",
           isPassword: true,
           labelText: "Password",
+          errorField: AuthErrorField.password,
         ),
       ],
     );

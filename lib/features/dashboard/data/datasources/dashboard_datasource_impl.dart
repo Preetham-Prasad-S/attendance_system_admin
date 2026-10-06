@@ -1,32 +1,56 @@
 import 'package:attendance_system_admin/features/dashboard/data/datasources/dashboard_datasource.dart';
 import 'package:attendance_system_admin/features/dashboard/domain/entities/dashboard_entities.dart';
+import 'package:attendance_system_admin/features/institutes/domain/services/institute_context.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DashboardDatasourceImpl implements DashboardDatasource {
   final SupabaseClient _supabaseClient;
+  final InstituteContext _instituteContext;
 
-  DashboardDatasourceImpl({required SupabaseClient supabaseClient})
-    : _supabaseClient = supabaseClient;
+  DashboardDatasourceImpl({
+    required SupabaseClient supabaseClient,
+    required InstituteContext instituteContext,
+  }) : _supabaseClient = supabaseClient,
+       _instituteContext = instituteContext;
+
+  /// The institute to scope to. Throws rather than running an unscoped query:
+  /// a super_admin's RLS permits every institute, so a query without this
+  /// filter would merge all of them into one dashboard.
+  String get _instituteSlug {
+    final slug = _instituteContext.selectedSlug;
+    if (slug == null || slug.isEmpty) {
+      throw Exception(
+        'No institute is selected. Choose an institute and try again.',
+      );
+    }
+    return slug;
+  }
 
   static String _isoDate(DateTime date) =>
       date.toIso8601String().substring(0, 10);
 
   @override
   Future<KpiStats> fetchKpis() async {
+    final slug = _instituteSlug;
+
     final studentsCount = await _supabaseClient
         .from('students')
         .select('id')
+        .eq('organization', slug)
         .count(CountOption.exact);
     final staffCount = await _supabaseClient
         .from('staff')
         .select('id')
+        .eq('organization', slug)
         .count(CountOption.exact);
     final departmentRows = await _supabaseClient
         .from('students')
-        .select('department');
+        .select('department')
+        .eq('organization', slug);
     final todayRows = await _supabaseClient
         .from('attendance_records')
         .select('status')
+        .eq('organization', slug)
         .eq('date', _isoDate(DateTime.now()));
 
     var present = 0;
@@ -68,12 +92,14 @@ class DashboardDatasourceImpl implements DashboardDatasource {
 
   @override
   Future<List<DailyAttendancePoint>> fetchAttendanceTrend(int days) async {
+    final slug = _instituteSlug;
     final today = DateTime.now();
     final start = today.subtract(Duration(days: days - 1));
 
     final rows = await _supabaseClient
         .from('attendance_records')
         .select('date, status')
+        .eq('organization', slug)
         .gte('date', _isoDate(start))
         .lte('date', _isoDate(today))
         .order('date');
@@ -102,12 +128,16 @@ class DashboardDatasourceImpl implements DashboardDatasource {
 
   @override
   Future<List<DepartmentStat>> fetchDepartmentStats() async {
+    final slug = _instituteSlug;
+
     final studentRows = await _supabaseClient
         .from('students')
-        .select('id, department');
+        .select('id, department')
+        .eq('organization', slug);
     final todayRows = await _supabaseClient
         .from('attendance_records')
         .select('student_id, status')
+        .eq('organization', slug)
         .eq('date', _isoDate(DateTime.now()));
 
     final departmentByStudent = <String, String?>{
@@ -151,15 +181,18 @@ class DashboardDatasourceImpl implements DashboardDatasource {
 
   @override
   Future<List<DashboardAlert>> fetchAlerts() async {
+    final slug = _instituteSlug;
     final today = DateTime.now();
     final windowStart = today.subtract(const Duration(days: 6));
 
     final studentRows = await _supabaseClient
         .from('students')
-        .select('id, department');
+        .select('id, department')
+        .eq('organization', slug);
     final windowRows = await _supabaseClient
         .from('attendance_records')
         .select('student_id, status, date')
+        .eq('organization', slug)
         .gte('date', _isoDate(windowStart))
         .lte('date', _isoDate(today));
 

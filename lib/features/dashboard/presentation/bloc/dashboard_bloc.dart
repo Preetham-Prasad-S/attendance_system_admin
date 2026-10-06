@@ -4,26 +4,37 @@ import 'package:attendance_system_admin/features/dashboard/domain/usecases/get_a
 import 'package:attendance_system_admin/features/dashboard/domain/usecases/get_attendance_trend_usecase.dart';
 import 'package:attendance_system_admin/features/dashboard/domain/usecases/get_department_stats_usecase.dart';
 import 'package:attendance_system_admin/features/dashboard/domain/usecases/get_kpis_usecase.dart';
+import 'package:attendance_system_admin/features/institutes/domain/services/institute_context.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dashboard_event.dart';
 import 'dashboard_state.dart';
 
 /// Bloc driving the dashboard's KPI row, trend chart, analytics, and alerts.
+///
+/// Handlers run concurrently (bloc default), so each load captures the
+/// institute it was issued for and drops its result if the selection moved on
+/// — otherwise a slow response for one institute would overwrite another.
 class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   final GetKpisUsecase _getKpisUsecase;
   final GetAttendanceTrendUsecase _getAttendanceTrendUsecase;
   final GetDepartmentStatsUsecase _getDepartmentStatsUsecase;
   final GetAlertsUsecase _getAlertsUsecase;
+  final InstituteContext _instituteContext;
+
+  /// The institute the currently held figures belong to.
+  String? _activeSlug;
 
   DashboardBloc({
     required GetKpisUsecase getKpisUsecase,
     required GetAttendanceTrendUsecase getAttendanceTrendUsecase,
     required GetDepartmentStatsUsecase getDepartmentStatsUsecase,
     required GetAlertsUsecase getAlertsUsecase,
+    required InstituteContext instituteContext,
   }) : _getKpisUsecase = getKpisUsecase,
        _getAttendanceTrendUsecase = getAttendanceTrendUsecase,
        _getDepartmentStatsUsecase = getDepartmentStatsUsecase,
        _getAlertsUsecase = getAlertsUsecase,
+       _instituteContext = instituteContext,
        super(DashboardInitial()) {
     on<LoadDashboardRequested>(_onLoadDashboardRequested);
     on<TrendPeriodChanged>(_onTrendPeriodChanged);
@@ -33,6 +44,9 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     LoadDashboardRequested event,
     Emitter<DashboardState> emit,
   ) async {
+    final slug = _instituteContext.selectedSlug;
+    _activeSlug = slug;
+
     emit(DashboardLoading());
 
     final kpisResult = await _getKpisUsecase.call(NoParams());
@@ -43,6 +57,9 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       NoParams(),
     );
     final alertsResult = await _getAlertsUsecase.call(NoParams());
+
+    // The institute switched while these were in flight.
+    if (_activeSlug != slug) return;
 
     final failure =
         kpisResult.fold((f) => f, (_) => null) ??
@@ -98,15 +115,18 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     trendResult.fold(
       // Keep the previous chart visible if the refresh fails.
       (failure) {},
-      (trend) => emit(
-        DashboardLoaded(
-          kpis: current.kpis,
-          trend: trend,
-          period: event.period,
-          departments: current.departments,
-          alerts: current.alerts,
-        ),
-      ),
+      (trend) {
+        if (_activeSlug != _instituteContext.selectedSlug) return;
+        emit(
+          DashboardLoaded(
+            kpis: current.kpis,
+            trend: trend,
+            period: event.period,
+            departments: current.departments,
+            alerts: current.alerts,
+          ),
+        );
+      },
     );
   }
 }

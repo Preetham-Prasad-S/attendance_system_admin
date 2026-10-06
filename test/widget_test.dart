@@ -4,11 +4,14 @@ import 'package:attendance_system_admin/app/shell/widgets/sidebar/app_sidebar.da
 import 'package:attendance_system_admin/app/shell/widgets/sidebar/sidebar_nav_item.dart';
 import 'package:attendance_system_admin/app/shell/widgets/top_bar/app_top_bar.dart';
 import 'package:attendance_system_admin/core/di/injection_container.dart';
+import 'package:attendance_system_admin/features/auth/presentation/bloc/session_cubit.dart';
 import 'package:attendance_system_admin/features/auth/presentation/screens/login/login_screen.dart';
 import 'package:attendance_system_admin/features/dashboard/presentation/pages/dashboard_page.dart';
+import 'package:attendance_system_admin/features/institutes/presentation/bloc/institutes_bloc.dart';
+import 'package:attendance_system_admin/features/institutes/presentation/bloc/institutes_event.dart';
 import 'package:attendance_system_admin/features/students/presentation/pages/students_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -21,6 +24,25 @@ void main() {
     );
     await initDependencies();
   });
+
+  /// The shell reads identity (for role-gated nav) and the institute
+  /// registry. Both are provided by the app root, so a shell-only test has to
+  /// supply them.
+  Widget wrapShell() {
+    final sessionCubit = serviceLocator<SessionCubit>();
+    final institutesBloc = serviceLocator<InstitutesBloc>();
+    institutesBloc.add(const InstitutesLoadRequested());
+    addTearDown(sessionCubit.close);
+    addTearDown(institutesBloc.close);
+
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<SessionCubit>.value(value: sessionCubit),
+        BlocProvider<InstitutesBloc>.value(value: institutesBloc),
+      ],
+      child: const AppShell(),
+    );
+  }
 
   testWidgets('renders the login screen when signed out', (tester) async {
     tester.view.physicalSize = const Size(1600, 1000);
@@ -37,7 +59,7 @@ void main() {
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(const MaterialApp(home: AppShell()));
+    await tester.pumpWidget(MaterialApp(home: wrapShell()));
 
     expect(find.byType(AppShell), findsOneWidget);
     expect(find.byType(AppSidebar), findsOneWidget);
@@ -51,7 +73,7 @@ void main() {
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(const MaterialApp(home: AppShell()));
+    await tester.pumpWidget(MaterialApp(home: wrapShell()));
     await tester.pumpAndSettle();
 
     expect(find.byType(StudentsPage), findsNothing);
@@ -65,5 +87,24 @@ void main() {
     expect(find.byType(StudentsPage), findsOneWidget);
     expect(find.byType(DashboardPage), findsNothing);
     expect(find.text('Executive Attendance Overview'), findsNothing);
+  });
+
+  testWidgets('placeholder nav entries stay inert', (tester) async {
+    tester.view.physicalSize = const Size(1600, 1000);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(MaterialApp(home: wrapShell()));
+    await tester.pumpAndSettle();
+
+    await tester.tap(
+      find.widgetWithText(SidebarNavItem, 'Timetable'),
+      warnIfMissed: false,
+    );
+    await tester.pumpAndSettle();
+
+    // Still on the dashboard — no page is registered for that index yet.
+    expect(find.byType(DashboardPage), findsOneWidget);
+    expect(find.byType(StudentsPage), findsNothing);
   });
 }

@@ -1,6 +1,11 @@
+import 'package:attendance_system_admin/core/failure.dart';
 import 'package:attendance_system_admin/core/theme/app_colors.dart';
+import 'package:attendance_system_admin/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:attendance_system_admin/features/auth/presentation/bloc/auth_event.dart';
+import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_form_error_widget.dart';
 import 'package:colorful_iconify_flutter/icons/logos.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 
@@ -13,6 +18,23 @@ class LoginShortLayout extends StatefulWidget {
 }
 
 class _ShortLayout extends State<LoginShortLayout> {
+  late final TextEditingController _emailController;
+  late final TextEditingController _passwordController;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -35,7 +57,10 @@ class _ShortLayout extends State<LoginShortLayout> {
 
                 SizedBox(height: 15),
 
-                ShortLoginPasswordWidget(),
+                ShortLoginPasswordWidget(
+                  emailController: _emailController,
+                  passwordController: _passwordController,
+                ),
 
                 SizedBox(height: 10),
 
@@ -43,7 +68,18 @@ class _ShortLayout extends State<LoginShortLayout> {
 
                 SizedBox(height: 20),
 
-                ShortLoginLoginButtonWidget(),
+                AuthFormErrorWidget(),
+
+                ShortLoginLoginButtonWidget(
+                  onPressed: () {
+                    context.read<AuthBloc>().add(
+                      LoginRequested(
+                        email: _emailController.text.trim(),
+                        password: _passwordController.text.trim(),
+                      ),
+                    );
+                  },
+                ),
 
                 SizedBox(height: 20),
 
@@ -65,13 +101,16 @@ class _ShortLayout extends State<LoginShortLayout> {
   }
 }
 
-class ShortLoginPasswordWidget extends StatefulWidget {
-  const ShortLoginPasswordWidget({super.key});
-  @override
-  State<ShortLoginPasswordWidget> createState() => _ShortLoginPasswordWidget();
-}
+class ShortLoginPasswordWidget extends StatelessWidget {
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
 
-class _ShortLoginPasswordWidget extends State<ShortLoginPasswordWidget> {
+  const ShortLoginPasswordWidget({
+    super.key,
+    required this.emailController,
+    required this.passwordController,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -87,9 +126,10 @@ class _ShortLoginPasswordWidget extends State<ShortLoginPasswordWidget> {
 
         SizedBox(height: 10),
         AuthTextFieldWidget(
-          textEditingController: TextEditingController(),
+          textEditingController: emailController,
           hintText: "name@company.com",
           labelText: "Email Address",
+          errorField: AuthErrorField.email,
         ),
 
         SizedBox(height: 10),
@@ -124,10 +164,11 @@ class _ShortLoginPasswordWidget extends State<ShortLoginPasswordWidget> {
         SizedBox(height: 10),
 
         AuthTextFieldWidget(
-          textEditingController: TextEditingController(),
+          textEditingController: passwordController,
           hintText: "•••••••••••",
           isPassword: true,
           labelText: 'Password',
+          errorField: AuthErrorField.password,
         ),
       ],
     );
@@ -281,16 +322,18 @@ class ShortLoginDividerWidget extends StatelessWidget {
 }
 
 class ShortLoginLoginButtonWidget extends StatelessWidget {
-  const ShortLoginLoginButtonWidget({super.key});
+  final VoidCallback onPressed;
+
+  const ShortLoginLoginButtonWidget({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () {},
+      onPressed: onPressed,
       style: TextButton.styleFrom(
         minimumSize: Size(double.infinity, 50),
         foregroundColor: Color.fromRGBO(255, 255, 255, 1),
-        backgroundColor: Color.fromRGBO(48, 102, 208, 1),
+        backgroundColor: AppColors.primary,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadiusGeometry.circular(10),
         ),

@@ -1,12 +1,17 @@
+import 'package:attendance_system_admin/features/institutes/domain/services/institute_context.dart';
 import 'package:attendance_system_admin/features/students/data/datasources/students_datasource.dart';
 import 'package:attendance_system_admin/features/students/domain/entities/students_entities.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class StudentsDatasourceImpl implements StudentsDatasource {
   final SupabaseClient _supabaseClient;
+  final InstituteContext _instituteContext;
 
-  StudentsDatasourceImpl({required SupabaseClient supabaseClient})
-    : _supabaseClient = supabaseClient;
+  StudentsDatasourceImpl({
+    required SupabaseClient supabaseClient,
+    required InstituteContext instituteContext,
+  }) : _supabaseClient = supabaseClient,
+       _instituteContext = instituteContext;
 
   /// Window shared by the KPI cards, table summaries, and the 30-day log.
   static const int complianceWindowDays = 30;
@@ -22,6 +27,19 @@ class StudentsDatasourceImpl implements StudentsDatasource {
     leaveDays: 0,
   );
 
+  /// The institute to scope to. Throws rather than running an unscoped query:
+  /// a super_admin's RLS permits every institute, so a query without this
+  /// filter would merge all of them into one table.
+  String get _instituteSlug {
+    final slug = _instituteContext.selectedSlug;
+    if (slug == null || slug.isEmpty) {
+      throw Exception(
+        'No institute is selected. Choose an institute and try again.',
+      );
+    }
+    return slug;
+  }
+
   static String _isoDate(DateTime date) =>
       date.toIso8601String().substring(0, 10);
 
@@ -36,6 +54,7 @@ class StudentsDatasourceImpl implements StudentsDatasource {
 
   @override
   Future<DirectoryKpis> fetchDirectoryKpis() async {
+    final slug = _instituteSlug;
     final today = DateTime.now();
     final windowStart = today.subtract(
       const Duration(days: complianceWindowDays - 1),
@@ -44,10 +63,12 @@ class StudentsDatasourceImpl implements StudentsDatasource {
 
     final studentRows = await _supabaseClient
         .from('students')
-        .select('id, status, created_at, department');
+        .select('id, status, created_at, department')
+        .eq('organization', slug);
     final windowRows = await _supabaseClient
         .from('attendance_records')
         .select('student_id, status')
+        .eq('organization', slug)
         .gte('date', _isoDate(windowStart))
         .lte('date', _isoDate(today));
 
@@ -98,9 +119,11 @@ class StudentsDatasourceImpl implements StudentsDatasource {
 
   @override
   Future<DirectoryPage> fetchStudentsPage(DirectoryFilters filters) async {
+    final slug = _instituteSlug;
+
     Set<String>? criticalIds;
     if (filters.criticalOnly) {
-      criticalIds = await _fetchCriticalStudentIds();
+      criticalIds = await _fetchCriticalStudentIds(slug);
       if (criticalIds.isEmpty) {
         return const DirectoryPage(entries: [], totalCount: 0);
       }
@@ -108,7 +131,8 @@ class StudentsDatasourceImpl implements StudentsDatasource {
 
     PostgrestFilterBuilder<List<Map<String, dynamic>>> query = _supabaseClient
         .from('students')
-        .select('id, student_no, name, email, department, status, created_at');
+        .select('id, student_no, name, email, department, status, created_at')
+        .eq('organization', slug);
 
     final search = _sanitizeSearch(filters.searchQuery);
     if (search.isNotEmpty) {
@@ -132,7 +156,7 @@ class StudentsDatasourceImpl implements StudentsDatasource {
         .range(from, from + filters.pageSize - 1)
         .count(CountOption.exact);
 
-    final entries = await _buildEntries(response.data);
+    final entries = await _buildEntries(response.data, slug);
     return DirectoryPage(entries: entries, totalCount: response.count);
   }
 
@@ -141,12 +165,14 @@ class StudentsDatasourceImpl implements StudentsDatasource {
     String studentId,
     int days,
   ) async {
+    final slug = _instituteSlug;
     final today = DateTime.now();
     final start = today.subtract(Duration(days: days - 1));
 
     final rows = await _supabaseClient
         .from('attendance_records')
         .select('date, status')
+        .eq('organization', slug)
         .eq('student_id', studentId)
         .gte('date', _isoDate(start))
         .lte('date', _isoDate(today))
@@ -169,7 +195,9 @@ class StudentsDatasourceImpl implements StudentsDatasource {
 
   @override
   Future<Student> addStudent(AddStudentParams params) async {
-    final organization = await _resolveOrganization();
+    // The student joins the institute currently being viewed, not the
+    // creator's home institute.
+    final organization = _instituteSlug;
 
     try {
       final row = await _supabaseClient
@@ -196,7 +224,7 @@ class StudentsDatasourceImpl implements StudentsDatasource {
   }
 
   /// Active-student ids below the 65% critical threshold in the window.
-  Future<Set<String>> _fetchCriticalStudentIds() async {
+  Future<Set<String>> _fetchCriticalStudentIds(String slug) async {
     final today = DateTime.now();
     final windowStart = today.subtract(
       const Duration(days: complianceWindowDays - 1),
@@ -204,10 +232,12 @@ class StudentsDatasourceImpl implements StudentsDatasource {
 
     final studentRows = await _supabaseClient
         .from('students')
-        .select('id, status');
+        .select('id, status')
+        .eq('organization', slug);
     final windowRows = await _supabaseClient
         .from('attendance_records')
         .select('student_id, status')
+        .eq('organization', slug)
         .gte('date', _isoDate(windowStart))
         .lte('date', _isoDate(today));
 
@@ -227,6 +257,7 @@ class StudentsDatasourceImpl implements StudentsDatasource {
   /// most recent attendance record (method + timestamp) per student.
   Future<List<StudentDirectoryEntry>> _buildEntries(
     List<Map<String, dynamic>> studentRows,
+    String slug,
   ) async {
     if (studentRows.isEmpty) return const [];
 
@@ -239,6 +270,7 @@ class StudentsDatasourceImpl implements StudentsDatasource {
     final records = await _supabaseClient
         .from('attendance_records')
         .select('student_id, status, date, method, created_at')
+        .eq('organization', slug)
         .inFilter('student_id', ids)
         .gte('date', _isoDate(windowStart))
         .lte('date', _isoDate(today))
@@ -324,31 +356,4 @@ class StudentsDatasourceImpl implements StudentsDatasource {
     createdAt: DateTime.tryParse(row['created_at'] as String? ?? '') ??
         DateTime.now(),
   );
-
-  /// Resolves the caller's organization from their profile, falling back to
-  /// an existing student row (both RLS-scoped to the caller's org).
-  Future<String> _resolveOrganization() async {
-    final user = _supabaseClient.auth.currentUser;
-    if (user == null) throw Exception('Not authenticated');
-
-    final profile = await _supabaseClient
-        .from('profiles')
-        .select('organization')
-        .eq('id', user.id)
-        .maybeSingle();
-    final organization = profile?['organization'] as String?;
-    if (organization != null && organization.isNotEmpty) {
-      return organization;
-    }
-
-    final existing = await _supabaseClient
-        .from('students')
-        .select('organization')
-        .limit(1)
-        .maybeSingle();
-    final fallback = existing?['organization'] as String?;
-    if (fallback != null && fallback.isNotEmpty) return fallback;
-
-    throw Exception('Could not resolve organization');
-  }
 }

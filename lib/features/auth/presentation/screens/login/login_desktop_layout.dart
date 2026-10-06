@@ -4,6 +4,7 @@ import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_check_box_widget.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_divider_widget.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_form_title_description_widget.dart';
+import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_form_error_widget.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_image_description_widget.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_image_widget.dart';
 import 'package:attendance_system_admin/features/auth/presentation/widgets/auth_desktop_login_credentials_widget.dart';
@@ -28,6 +29,13 @@ class _LoginDesktopLayout extends State<LoginDesktopLayout> {
     super.initState();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -113,6 +121,8 @@ class _LoginDesktopLayout extends State<LoginDesktopLayout> {
                         ),
 
                         SizedBox(height: 20),
+
+                        AuthFormErrorWidget(),
 
                         AuthDesktopButtonWidget(
                           onPressed: () {

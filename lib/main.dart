@@ -16,7 +16,7 @@ Future<void> main() async {
   await Supabase.initialize(
     // The .env URL ends with "/", which would produce double-slash paths
     // (e.g. "...co//auth/v1") in the client URLs — strip trailing slashes.
-    url: dotenv.env["SUPABASE_API_URL"]!.replaceAll(RegExp(r'/+$'), ''),
+    url: dotenv.env["SUPABASE_API_URL"]!,
     anonKey: dotenv.env["SUPABASE_API_ANON_KEY"]!,
   );
 

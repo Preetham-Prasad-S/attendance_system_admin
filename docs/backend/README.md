@@ -40,6 +40,7 @@ Those deferred items are tracked in the repo root's `FUTURE_FEATURES.md` (see "P
 | 8 | Logout wiring | ✅ Done |
 | 9 | Dependency injection (`core/di`) | ✅ Done |
 | 10 | Verification (analyze, tests, manual E2E) | ✅ Done |
+| 11 | Multi-institute tenancy: registry, super-admin switching, admin invitations | ✅ Done |
 
 Update the status column in [PLAN.md](PLAN.md) as steps complete.
 

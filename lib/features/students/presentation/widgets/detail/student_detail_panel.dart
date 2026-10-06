@@ -9,18 +9,25 @@ import '../common/compliance_chip.dart';
 
 /// Overlay panel showing the selected student's summary, 30-day attendance
 /// log, and placeholder sections (course deficit, parent contact).
+///
+/// The card shrink-wraps its content; [maxHeight] only caps it. When the
+/// content is taller than the cap, the body scrolls internally.
 class StudentDetailPanel extends StatelessWidget {
   const StudentDetailPanel({
     super.key,
     required this.entry,
     required this.log,
     required this.isLoadingLog,
+    required this.maxHeight,
     required this.onClose,
   });
 
   final StudentDirectoryEntry entry;
   final List<AttendanceLogDay>? log;
   final bool isLoadingLog;
+
+  /// Upper bound for the card's height; the card never exceeds it.
+  final double maxHeight;
   final VoidCallback onClose;
 
   @override
@@ -30,62 +37,67 @@ class StudentDetailPanel extends StatelessWidget {
     final tier = summary.tier;
     final hasData = tier != ComplianceTier.noData;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(AppRadius.lg),
-        border: Border.all(color: AppColors.border),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x1A0F172A),
-            blurRadius: 12,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _buildHeader(student, summary, tier, hasData),
-          const Divider(height: 1, thickness: 1),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.all(AppSpacing.lg),
-              children: [
-                _SummaryStats(summary: summary, tier: tier),
-                const SizedBox(height: AppSpacing.lg),
-                _AttendanceLogCard(
-                  log: log,
-                  isLoading: isLoadingLog,
-                ),
-                const SizedBox(height: AppSpacing.lg),
-                const _PlaceholderSection(
-                  title: 'Course Attendance Deficit',
-                  message:
-                      'Per-course tracking requires the Subjects & Timetable '
-                      'module, which is not available yet.',
-                ),
-                const SizedBox(height: AppSpacing.lg),
-                const _PlaceholderSection(
-                  title: 'Parent & Emergency Contact',
-                  message:
-                      'Parent contact details are not stored on the student '
-                      'record yet.',
-                ),
-                const SizedBox(height: AppSpacing.lg),
-                OutlinedButton.icon(
-                  onPressed: null,
-                  icon: const Icon(Icons.send_outlined, size: 16),
-                  label: const Text('Dispatch Parent Warning SMS/Email'),
-                  style: OutlinedButton.styleFrom(
-                    disabledForegroundColor: AppColors.textMuted,
-                    alignment: Alignment.center,
-                  ),
-                ),
-              ],
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: maxHeight),
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          border: Border.all(color: AppColors.border),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x1A0F172A),
+              blurRadius: 12,
+              offset: Offset(0, 4),
             ),
-          ),
-        ],
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _buildHeader(student, summary, tier, hasData),
+            const Divider(height: 1, thickness: 1),
+            Flexible(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(AppSpacing.lg),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _SummaryStats(summary: summary, tier: tier),
+                    const SizedBox(height: AppSpacing.lg),
+                    _AttendanceLogCard(log: log, isLoading: isLoadingLog),
+                    const SizedBox(height: AppSpacing.lg),
+                    const _PlaceholderSection(
+                      title: 'Course Attendance Deficit',
+                      message:
+                          'Per-course tracking requires the Subjects & '
+                          'Timetable module, which is not available yet.',
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
+                    const _PlaceholderSection(
+                      title: 'Parent & Emergency Contact',
+                      message:
+                          'Parent contact details are not stored on the '
+                          'student record yet.',
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
+                    OutlinedButton.icon(
+                      onPressed: null,
+                      icon: const Icon(Icons.send_outlined, size: 16),
+                      label: const Text('Dispatch Parent Warning SMS/Email'),
+                      style: OutlinedButton.styleFrom(
+                        disabledForegroundColor: AppColors.textMuted,
+                        alignment: Alignment.center,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -145,9 +157,7 @@ class StudentDetailPanel extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: TierPalette.chipBackground(tier),
                         borderRadius: BorderRadius.circular(AppRadius.sm),
-                        border: Border.all(
-                          color: TierPalette.progress(tier),
-                        ),
+                        border: Border.all(color: TierPalette.progress(tier)),
                       ),
                       child: Text(
                         hasData
@@ -203,9 +213,7 @@ class _SummaryStats extends StatelessWidget {
         Expanded(
           child: _StatTile(
             label: 'ATTENDANCE',
-            value: hasData
-                ? '${summary.presentPct.toStringAsFixed(1)}%'
-                : '—',
+            value: hasData ? '${summary.presentPct.toStringAsFixed(1)}%' : '—',
             color: hasData ? TierPalette.foreground(tier) : null,
           ),
         ),
@@ -248,10 +256,7 @@ class _StatTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            label,
-            style: AppTypography.statLabel.copyWith(fontSize: 10),
-          ),
+          Text(label, style: AppTypography.statLabel.copyWith(fontSize: 10)),
           const SizedBox(height: 2),
           Text(
             value,
@@ -326,9 +331,7 @@ class _AttendanceLogCard extends StatelessWidget {
                         const SizedBox(width: 3),
                         Text(
                           label,
-                          style: AppTypography.caption.copyWith(
-                            fontSize: 10,
-                          ),
+                          style: AppTypography.caption.copyWith(fontSize: 10),
                         ),
                       ],
                     ),

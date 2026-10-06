@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:attendance_system_admin/core/entities/account_status.dart';
+
 class UserModel {
   final String id;
   final String email;
@@ -9,6 +11,12 @@ class UserModel {
   final String? phoneNo;
   final String? role;
 
+  /// Invited / active lifecycle (migration 0008).
+  final AccountStatus status;
+
+  /// Profile id of the super admin who invited this account, if any.
+  final String? invitedBy;
+
   UserModel({
     required this.id,
     required this.email,
@@ -17,6 +25,8 @@ class UserModel {
     required this.phoneNo,
     required this.role,
     required this.organization,
+    this.status = AccountStatus.active,
+    this.invitedBy,
   });
 
   UserModel copyWith({
@@ -27,6 +37,8 @@ class UserModel {
     String? organization,
     String? phoneNo,
     String? role,
+    AccountStatus? status,
+    String? invitedBy,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -36,6 +48,8 @@ class UserModel {
       organization: organization ?? this.organization,
       phoneNo: phoneNo ?? this.phoneNo,
       role: role ?? this.role,
+      status: status ?? this.status,
+      invitedBy: invitedBy ?? this.invitedBy,
     );
   }
 
@@ -48,6 +62,8 @@ class UserModel {
       'organization': organization,
       'phone_no': phoneNo,
       'role': role,
+      'status': status.name,
+      'invited_by': invitedBy,
     };
   }
 
@@ -60,6 +76,8 @@ class UserModel {
       organization: map['organization'] as String,
       phoneNo: map['phone_no'] as String?,
       role: map['role'] as String?,
+      status: AccountStatus.fromString(map['status'] as String?),
+      invitedBy: map['invited_by'] as String?,
     );
   }
 

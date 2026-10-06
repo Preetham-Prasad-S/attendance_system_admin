@@ -12,6 +12,7 @@ class SidebarNavItem extends StatelessWidget {
     required this.label,
     this.isActive = false,
     this.trailing,
+    this.activeTrailing,
     this.onTap,
   });
 
@@ -19,6 +20,11 @@ class SidebarNavItem extends StatelessWidget {
   final String label;
   final bool isActive;
   final Widget? trailing;
+
+  /// Rendered instead of [trailing] while [isActive] is true. Lets a screen
+  /// badge (e.g. Staff's "Live" pill) show only in its selected state.
+  final Widget? activeTrailing;
+
   final VoidCallback? onTap;
 
   @override
@@ -61,7 +67,10 @@ class SidebarNavItem extends StatelessWidget {
                     ),
                   ),
                 ),
-                ?trailing,
+                if (isActive && activeTrailing != null)
+                  activeTrailing!
+                else
+                  ?trailing,
               ],
             ),
           ),

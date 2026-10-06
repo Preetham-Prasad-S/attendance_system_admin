@@ -1,4 +1,5 @@
 import 'package:attendance_system_admin/core/usecase.dart';
+import 'package:attendance_system_admin/features/institutes/domain/services/institute_context.dart';
 import 'package:attendance_system_admin/features/students/domain/entities/students_entities.dart';
 import 'package:attendance_system_admin/features/students/domain/usecases/add_student_usecase.dart';
 import 'package:attendance_system_admin/features/students/domain/usecases/get_directory_kpis_usecase.dart';
@@ -12,22 +13,31 @@ import 'students_state.dart';
 /// the detail panel's 30-day log, and adding students.
 ///
 /// Event handlers run concurrently (bloc default), so async continuations
-/// re-read `state` and apply stale-guards before emitting.
+/// re-read `state` and apply stale-guards before emitting. Every async
+/// continuation also compares [_activeSlug] against the slug it started with,
+/// so a response for one institute can never land under another institute's
+/// selection.
 class StudentsBloc extends Bloc<StudentsEvent, StudentsState> {
   final GetDirectoryKpisUsecase _getDirectoryKpisUsecase;
   final GetStudentsPageUsecase _getStudentsPageUsecase;
   final GetStudentAttendanceLogUsecase _getStudentAttendanceLogUsecase;
   final AddStudentUsecase _addStudentUsecase;
+  final InstituteContext _instituteContext;
+
+  /// The institute the currently held rows belong to.
+  String? _activeSlug;
 
   StudentsBloc({
     required GetDirectoryKpisUsecase getDirectoryKpisUsecase,
     required GetStudentsPageUsecase getStudentsPageUsecase,
     required GetStudentAttendanceLogUsecase getStudentAttendanceLogUsecase,
     required AddStudentUsecase addStudentUsecase,
+    required InstituteContext instituteContext,
   }) : _getDirectoryKpisUsecase = getDirectoryKpisUsecase,
        _getStudentsPageUsecase = getStudentsPageUsecase,
        _getStudentAttendanceLogUsecase = getStudentAttendanceLogUsecase,
        _addStudentUsecase = addStudentUsecase,
+       _instituteContext = instituteContext,
        super(StudentsInitial()) {
     on<LoadStudentsRequested>(_onLoadStudentsRequested);
     on<SearchChanged>(_onSearchChanged);
@@ -55,11 +65,22 @@ class StudentsBloc extends Bloc<StudentsEvent, StudentsState> {
     LoadStudentsRequested event,
     Emitter<StudentsState> emit,
   ) async {
-    final filters = _currentFilters();
+    // Department rosters, roll numbers and paging are all per-institute, so a
+    // switch resets the filters rather than carrying them across.
+    final slug = _instituteContext.selectedSlug;
+    final instituteChanged = _activeSlug != null && _activeSlug != slug;
+    _activeSlug = slug;
+
+    final filters = instituteChanged
+        ? DirectoryFilters.initial
+        : _currentFilters();
     emit(StudentsLoading(filters: filters));
 
     final kpisResult = await _getDirectoryKpisUsecase.call(NoParams());
     final pageResult = await _getStudentsPageUsecase.call(filters);
+
+    // A switch dispatched a newer load while these were in flight.
+    if (_activeSlug != slug) return;
 
     final failure =
         kpisResult.fold((f) => f, (_) => null) ??
@@ -101,12 +122,15 @@ class StudentsBloc extends Bloc<StudentsEvent, StudentsState> {
     );
 
     final result = await _getStudentsPageUsecase.call(newFilters);
+    final slug = _activeSlug;
     result.fold(
       // Keep the previous page visible if the refresh fails.
       (failure) {},
       (page) {
         final latest = state;
-        // Stale-guard: a newer filter change may have been applied already.
+        // Stale-guard: a newer filter change may have been applied already,
+        // or the institute may have switched.
+        if (_activeSlug != slug) return;
         if (latest is StudentsLoaded && latest.filters == newFilters) {
           emit(latest.copyWith(page: page));
         }
@@ -177,6 +201,7 @@ class StudentsBloc extends Bloc<StudentsEvent, StudentsState> {
   ) async {
     final current = state;
     if (current is! StudentsLoaded) return;
+    final slug = _activeSlug;
 
     emit(
       current.copyWith(
@@ -192,7 +217,9 @@ class StudentsBloc extends Bloc<StudentsEvent, StudentsState> {
 
     final latest = state;
     if (latest is! StudentsLoaded) return;
-    // Stale-guard: another row may have been selected meanwhile.
+    // Stale-guard: another row may have been selected meanwhile, or the
+    // institute may have switched.
+    if (_activeSlug != slug) return;
     if (latest.selectedStudentId != event.studentId) return;
 
     result.fold(
@@ -223,6 +250,7 @@ class StudentsBloc extends Bloc<StudentsEvent, StudentsState> {
   ) async {
     final current = state;
     if (current is! StudentsLoaded) return;
+    final slug = _activeSlug;
 
     emit(current.copyWith(isAdding: true, addError: null, addSuccess: null));
 
@@ -242,6 +270,8 @@ class StudentsBloc extends Bloc<StudentsEvent, StudentsState> {
 
     final latest = state;
     if (latest is! StudentsLoaded) return;
+    // The institute switched while refreshing — drop the stale refresh.
+    if (_activeSlug != slug) return;
     emit(
       latest.copyWith(
         isAdding: false,

@@ -120,11 +120,17 @@ students/presentation/
     ├── stats/directory_kpi_row.dart        # 4× existing KpiStatCard
     ├── filters/directory_filter_bar.dart   # search, dropdowns, quick-filter chips
     ├── table/students_table_card.dart      # header/rows + pagination footer
-    ├── detail/student_detail_panel.dart    # overlay panel, w = min(440, 80vw)
+    ├── detail/student_detail_panel.dart    # overlay panel, w = min(440, 80vw),
+    │                                       #   height = content, capped by viewport
     └── students_add_dialog.dart            # Add New Student form
 ```
 - Detail panel overlays the table's right edge (Stack), matching the
-  reference where status chips are clipped beneath the panel.
+  reference where status chips are clipped beneath the panel. The `Stack`
+  sits outside the page `ListView`, so the panel is scroll-persistent: it
+  starts level with the table card, then pins to the top of the page body
+  (`AppSpacing.xl`) once the page scrolls past it — the header's
+  Export/Add actions are therefore never covered. The panel shrink-wraps
+  its content and only scrolls internally when it hits its height cap.
 - 30-day grid: 6×5 day-of-month chips — present green / late amber /
   absent red / on-leave blue / no-record gray "OFF"; legend + summary line.
 - Table footer: "Showing X–Y of N students | Rows per page: 25 | ‹ 1 2 3 … ›"

@@ -172,3 +172,32 @@ SupabaseClient (lazy singleton)
 - Wiring dashboard widgets to real data (`FUTURE_FEATURES.md` → Part 6)
 - Data layers for sidebar screens: Students, Staff/Faculty, Timetable, Daily Attendance, Leave Approvals, Analytics, Device Hub, Notifications, Settings
 - Deferred tables: timetable, subjects, leave, devices, alerts
+
+---
+
+## Step 11 — Multi-institute tenancy (registry, switching, admin invitations)
+
+**Status:** ✅ Done (2026-10-05) — see [ui/institutes/PLAN.md](../ui/institutes/PLAN.md)
+
+1. ✅ Migration `0006_institutes_registry.sql`
+   - `institutes(slug, name, code, is_active)` + `set_updated_at` trigger
+   - backfilled from the `organization` values already in use; `'unassigned'` skipped
+   - new RLS helpers `can_access_organization()` / `can_write_organization()`
+   - the six domain policies and `profiles_select` now delegate to them, widening read+write to `super_admin`
+   - `protect_profile_privileges()` untouched
+2. ✅ Migration `0007_secondary_institutes.sql` — two institutes registered with **no** rows, so their data is created through the app
+3. ✅ Migration `0008_account_status.sql`
+   - `account_status` enum; `profiles.status` **defaults to `'invited'`** (fail-closed) and `profiles.invited_by`
+   - existing rows promoted to `'active'` in the same migration
+4. ✅ Edge Function `create-institute-admin` (deployed)
+   - authorizes by reading `profiles.role` from the database; sets `organization` server-side
+   - returns a one-time setup link instead of emailing (default mailer is rate-limited)
+   - `verify_jwt = true` pinned in `config.toml`
+5. ✅ Dart: `InstituteContext`, institutes data layer, `InstitutesBloc`, `SessionCubit`, DI
+6. ✅ Dart: 17 institute-scoped query sites across the students and dashboard datasources; `_resolveOrganization()` deleted
+7. ✅ UI: sidebar switcher (locked for regular admins), Institutes page at nav index 9, `PasswordSetupScreen` + third gate branch, real top-bar identity
+8. ✅ Tests: institutes datasource + bloc, `SessionCubit`, switcher gating, institute-switch filter reset and stale-response drop, password setup screen
+9. **Verification:** `flutter analyze` clean for these files; the institutes/auth/students/dashboard test suites all pass.
+   > **Note:** a concurrent Staff feature was in development in the same working tree during this step;
+   > `flutter analyze` and `flutter test` were clean for the institutes work but the tree as a whole was not
+   > (see the handover note).

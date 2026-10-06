@@ -167,6 +167,105 @@ void main() {
     );
   });
 
+  group('login', () {
+    const tEmail = 'test@example.com';
+    const tPassword = 'password123';
+
+    When<Future<AuthResponse>> whenSignIn({
+      required String email,
+      required String password,
+    }) {
+      return when(
+        () => mockGoTrueClient.signInWithPassword(
+          email: email,
+          phone: any(named: 'phone'),
+          password: password,
+          captchaToken: any(named: 'captchaToken'),
+        ),
+      );
+    }
+
+    test(
+      'should rethrow AuthException when signInWithPassword fails',
+      () async {
+        // arrange
+        whenSignIn(email: tEmail, password: tPassword).thenThrow(
+          AuthApiException(
+            'Invalid login credentials',
+            statusCode: '400',
+            code: 'invalid_credentials',
+          ),
+        );
+
+        // act
+        final call = authDatasourceImpl.login(tEmail, tPassword);
+
+        // assert
+        expect(
+          () => call,
+          throwsA(
+            isA<AuthApiException>().having(
+              (e) => e.code,
+              'code',
+              'invalid_credentials',
+            ),
+          ),
+        );
+      },
+    );
+
+    test('should wrap non-auth errors into an AuthException', () async {
+      // arrange
+      whenSignIn(
+        email: tEmail,
+        password: tPassword,
+      ).thenThrow(Exception('boom'));
+
+      // act
+      final call = authDatasourceImpl.login(tEmail, tPassword);
+
+      // assert
+      expect(
+        () => call,
+        throwsA(
+          isA<AuthException>().having(
+            (e) => e.message,
+            'message',
+            contains('boom'),
+          ),
+        ),
+      );
+    });
+
+    test(
+      'should throw AuthException when signInWithPassword returns null user',
+      () async {
+        // arrange
+        final mockAuthResponse = MockAuthResponse();
+        when(() => mockAuthResponse.user).thenReturn(null);
+        whenSignIn(
+          email: tEmail,
+          password: tPassword,
+        ).thenAnswer((_) async => mockAuthResponse);
+
+        // act
+        final call = authDatasourceImpl.login(tEmail, tPassword);
+
+        // assert
+        expect(
+          () => call,
+          throwsA(
+            isA<AuthException>().having(
+              (e) => e.message,
+              'message',
+              contains('Login Failed'),
+            ),
+          ),
+        );
+      },
+    );
+  });
+
   group('logout', () {
     test('should call signOut on the Supabase auth client', () async {
       // arrange

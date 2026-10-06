@@ -74,4 +74,66 @@ class AuthDatasourceImpl implements AuthDatasource {
   Future<void> logout() async {
     await _supabaseClient.auth.signOut();
   }
+
+  @override
+  Future<UserModel> fetchCurrentProfile() async {
+    final user = _supabaseClient.auth.currentUser;
+    if (user == null) {
+      throw AuthException(
+        'Not signed in --> AuthDatasource.fetchCurrentProfile()',
+      );
+    }
+
+    try {
+      final data = await _supabaseClient
+          .from('profiles')
+          .select()
+          .eq('id', user.id)
+          .single();
+      return UserModel.fromMap(data);
+    } on AuthException {
+      rethrow;
+    } catch (e) {
+      throw AuthException(
+        "AuthException : ${e.toString()} --> AuthDatasource.fetchCurrentProfile()",
+      );
+    }
+  }
+
+  @override
+  Future<void> completePasswordSetup(String password) async {
+    final user = _supabaseClient.auth.currentUser;
+    if (user == null) {
+      throw AuthException(
+        'Not signed in --> AuthDatasource.completePasswordSetup()',
+      );
+    }
+
+    try {
+      await _supabaseClient.auth.updateUser(
+        UserAttributes(password: password),
+      );
+    } on AuthException {
+      rethrow;
+    } catch (e) {
+      throw AuthException(
+        "AuthException : ${e.toString()} --> AuthDatasource.completePasswordSetup()",
+      );
+    }
+
+    // Only once the password exists does the account become usable.
+    // profiles_update_own permits this, and protect_profile_privileges only
+    // guards role/organization/id.
+    final updated = await _supabaseClient
+        .from('profiles')
+        .update(<String, dynamic>{'status': 'active'})
+        .eq('id', user.id)
+        .select('id');
+
+    if (updated.isEmpty) {
+      throw AuthException(
+        'Could not activate the account --> AuthDatasource.completePasswordSetup()',
+      );
+    }
+  }
 }

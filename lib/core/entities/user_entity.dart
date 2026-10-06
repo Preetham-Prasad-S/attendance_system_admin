@@ -1,4 +1,7 @@
 import 'dart:convert';
+
+import 'package:attendance_system_admin/core/entities/account_status.dart';
+
 import '../models/user_model.dart';
 
 class UserEntity {
@@ -9,6 +12,8 @@ class UserEntity {
   final String organization;
   final String? phoneNo;
   final String? role;
+  final AccountStatus status;
+  final String? invitedBy;
 
   UserEntity({
     required this.id,
@@ -18,7 +23,15 @@ class UserEntity {
     required this.phoneNo,
     required this.role,
     required this.organization,
+    this.status = AccountStatus.active,
+    this.invitedBy,
   });
+
+  /// Whether this account may switch between institutes and manage them.
+  bool get isSuperAdmin => role == 'super_admin';
+
+  /// Whether this account has completed password setup.
+  bool get isActivated => status.isActive;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -29,6 +42,8 @@ class UserEntity {
       'organization': organization,
       'phone_no': phoneNo,
       'role': role,
+      'status': status.name,
+      'invited_by': invitedBy,
     };
   }
 
@@ -41,6 +56,8 @@ class UserEntity {
       organization: map['organization'] as String,
       phoneNo: map['phone_no'] as String?,
       role: map['role'] as String?,
+      status: AccountStatus.fromString(map['status'] as String?),
+      invitedBy: map['invited_by'] as String?,
     );
   }
 
@@ -58,6 +75,8 @@ class UserEntity {
       phoneNo: phoneNo,
       role: role,
       organization: organization,
+      status: status,
+      invitedBy: invitedBy,
     );
   }
 
@@ -70,6 +89,8 @@ class UserEntity {
       phoneNo: model.phoneNo,
       role: model.role,
       organization: model.organization,
+      status: model.status,
+      invitedBy: model.invitedBy,
     );
   }
 }
