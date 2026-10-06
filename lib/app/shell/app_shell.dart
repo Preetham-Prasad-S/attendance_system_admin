@@ -7,7 +7,6 @@ import 'package:attendance_system_admin/features/institutes/presentation/bloc/in
 import 'package:attendance_system_admin/features/institutes/presentation/bloc/institutes_state.dart';
 import 'package:attendance_system_admin/features/institutes/presentation/pages/institutes_page.dart';
 import 'package:attendance_system_admin/features/staff/presentation/pages/staff_page.dart';
-import 'package:attendance_system_admin/features/students/presentation/pages/students_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -31,7 +30,7 @@ class _AppShellState extends State<AppShell> {
   /// items are not tappable.
   static List<Widget> _pages() => [
     const DashboardPage(),
-    const StudentsPage(),
+    const SizedBox.shrink(), // Students (hidden in the sidebar for now)
     const StaffPage(), // Staff/Faculty
     const SizedBox.shrink(), // Timetable
     const SizedBox.shrink(), // Daily Attendance

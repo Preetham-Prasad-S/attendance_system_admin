@@ -14,6 +14,7 @@ import 'package:attendance_system_admin/features/staff/presentation/widgets/cove
 import 'package:attendance_system_admin/features/students/presentation/pages/students_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -68,9 +69,7 @@ void main() {
     expect(find.byType(AppTopBar), findsOneWidget);
   });
 
-  testWidgets('navigates to the Students page from the sidebar', (
-    tester,
-  ) async {
+  testWidgets('hides the Students entry from the sidebar', (tester) async {
     tester.view.physicalSize = const Size(1600, 1000);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
@@ -78,17 +77,9 @@ void main() {
     await tester.pumpWidget(MaterialApp(home: wrapShell()));
     await tester.pumpAndSettle();
 
+    expect(find.widgetWithText(SidebarNavItem, 'Students'), findsNothing);
     expect(find.byType(StudentsPage), findsNothing);
-
-    await tester.tap(
-      find.widgetWithText(SidebarNavItem, 'Students'),
-      warnIfMissed: false,
-    );
-    await tester.pumpAndSettle();
-
-    expect(find.byType(StudentsPage), findsOneWidget);
-    expect(find.byType(DashboardPage), findsNothing);
-    expect(find.text('Executive Attendance Overview'), findsNothing);
+    expect(find.byType(DashboardPage), findsOneWidget);
   });
 
   testWidgets('navigates to the Staff page from the sidebar', (tester) async {

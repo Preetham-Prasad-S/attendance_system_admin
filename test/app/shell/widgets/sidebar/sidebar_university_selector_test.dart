@@ -15,13 +15,6 @@ const _northgate = Institute(
   name: 'Northgate College',
   code: 'NGC',
 );
-const _retired = Institute(
-  id: 'i3',
-  slug: 'old-college',
-  name: 'Old College',
-  isActive: false,
-);
-
 void main() {
   Widget wrap(
     Widget child, {

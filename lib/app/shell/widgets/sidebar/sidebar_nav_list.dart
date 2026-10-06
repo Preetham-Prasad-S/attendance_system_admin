@@ -35,11 +35,15 @@ class SidebarNavList extends StatelessWidget {
       label: 'Dashboard',
       isEnabled: true,
     ),
+    // Temporarily hidden from navigation; the entry keeps its index so the
+    // page slots in `AppShell` stay stable. Set `isHidden` to false to
+    // restore it.
     _NavEntry(
       index: 1,
       icon: Icons.people_outline,
       label: 'Students',
       isEnabled: true,
+      isHidden: true,
     ),
     _NavEntry(
       index: 2,
@@ -91,10 +95,12 @@ class SidebarNavList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final entries = _entries().where((entry) => !entry.isHidden).toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        for (final entry in _entries()) ...[
+        for (final entry in entries) ...[
           if (entry.superAdminOnly && !isSuperAdmin)
             const SizedBox.shrink()
           else
@@ -126,6 +132,7 @@ class _NavEntry {
     this.trailingCount,
     this.showStatusDot = false,
     this.showLivePill = false,
+    this.isHidden = false,
   });
 
   final int index;
@@ -134,6 +141,10 @@ class _NavEntry {
 
   /// Wired to a real page in [AppShell].
   final bool isEnabled;
+
+  /// Withheld from the sidebar for now; the index is preserved so page
+  /// slots do not shift.
+  final bool isHidden;
 
   /// Only rendered for a super admin.
   final bool superAdminOnly;
