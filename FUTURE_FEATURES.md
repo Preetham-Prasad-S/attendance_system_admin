@@ -38,6 +38,37 @@ Features that are implemented as files/components but **not shown in the UI yet*
 - **To re-enable:** Same as #3 (both cards re-enter together as the rail Column).
 - **Depends on:** Device telemetry feed (Part 6 data wiring).
 
+### 5. Urgent Alerts Card
+- **File:** `lib/features/dashboard/presentation/widgets/alerts/urgent_alerts_card.dart`
+- **Widget:** `UrgentAlertsCard`
+- **Description:** Fully wired to Supabase via `GetAlertsUsecase` (7-day compliance breaches + today's absence watch, dynamic badge/empty state), with per-alert action buttons. Shows the alert count badge in the header when actionable.
+- **Status:** Hidden — removed from the trend/alerts Row in `dashboard_content.dart`; `AttendanceTrendCard` now spans the full width. The bloc still loads `state.alerts`, so the data layer stays intact.
+- **To re-enable:** In `lib/features/dashboard/presentation/widgets/dashboard_content.dart`, restore `import 'alerts/urgent_alerts_card.dart';` and re-wrap the trend card in the two-column layout:
+  ```dart
+  LayoutBuilder(
+    builder: (context, constraints) {
+      final unit = (constraints.maxWidth - AppSpacing.xl * 3) / 3;
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: AttendanceTrendCard(
+              points: state.trend,
+              period: state.period,
+              onPeriodChanged: (period) => context
+                  .read<DashboardBloc>()
+                  .add(TrendPeriodChanged(period: period)),
+            ),
+          ),
+          const SizedBox(width: AppSpacing.xl),
+          SizedBox(width: unit, child: UrgentAlertsCard(alerts: state.alerts)),
+        ],
+      );
+    },
+  ),
+  ```
+- **Depends on:** Nothing — already live against Supabase. Consider making the alert actions functional (e.g. notify parents / open the defaulter roster) before re-enabling.
+
 ---
 
 ## Planned dashboard parts (from UI reference `ui_references/screens/image.png`)
@@ -48,7 +79,7 @@ Features that are implemented as files/components but **not shown in the UI yet*
 
 ### Part 3 — Attendance trend chart + Urgent alerts ✅ DONE
 - **Location:** `lib/features/dashboard/presentation/widgets/charts/` and `lib/features/dashboard/presentation/widgets/alerts/`
-- **Description:** Implemented — `AttendanceTrendCard` (fl_chart line chart, dashed 75% threshold, legend, period toggle, static tooltip, footer stats), `TrendPeriodToggle`, `UrgentAlertsCard` (3 actionable alerts with action buttons). Data hardcoded until Part 6.
+- **Description:** Implemented — `AttendanceTrendCard` (fl_chart line chart, dashed 75% threshold, legend, period toggle, static tooltip, footer stats), `TrendPeriodToggle`, `UrgentAlertsCard` (3 actionable alerts with action buttons; now hidden — see hidden feature #5). Data hardcoded until Part 6.
 
 ### Part 4 — Analytics row (Department, Presence split, IoT stream, Telemetry) ✅ DONE
 - **Location:** `lib/features/dashboard/presentation/widgets/analytics/`
@@ -59,7 +90,7 @@ Features that are implemented as files/components but **not shown in the UI yet*
 - **Description:** Implemented — `RollCallTableCard` (7-column live sessions table with attendance chips, turn-out ratios, Export Daily CSV button, "Showing 4 of 64 Classes" counter) and `AppFooter` (version/certification left, session ID right), replacing the `SectionPlaceholder` in `dashboard_content.dart`. Data hardcoded until Part 6.
 
 ### Part 6 — Data wiring (replace hardcoded values) — MOSTLY DONE
-- **Done (live against Supabase):** KPI stats row (`KpiStatsRow` ← `GetKpisUsecase`), attendance trend chart (`AttendanceTrendCard` ← `GetAttendanceTrendUsecase`, Weekly/Monthly/Semester), presence split donut (`PresenceSplitCard` ← `KpiStats`), department breakdown bars (`DepartmentBreakdownCard` ← `GetDepartmentStatsUsecase`, per-department today's present %), urgent alerts (`UrgentAlertsCard` ← `GetAlertsUsecase`: 7-day compliance breaches + today's absence watch, dynamic badge/empty state). Stack: `dashboard_entities.dart`, `DashboardRepository(+Impl)`, `DashboardDatasource(+Impl)`, `DashboardBloc`, DI registrations, header date. Demo data seeded via migration `0004`.
+- **Done (live against Supabase):** KPI stats row (`KpiStatsRow` ← `GetKpisUsecase`), attendance trend chart (`AttendanceTrendCard` ← `GetAttendanceTrendUsecase`, Weekly/Monthly/Semester), presence split donut (`PresenceSplitCard` ← `KpiStats`), department breakdown bars (`DepartmentBreakdownCard` ← `GetDepartmentStatsUsecase`, per-department today's present %), urgent alerts (`UrgentAlertsCard` ← `GetAlertsUsecase`: 7-day compliance breaches + today's absence watch, dynamic badge/empty state — widget hidden, see #5). Stack: `dashboard_entities.dart`, `DashboardRepository(+Impl)`, `DashboardDatasource(+Impl)`, `DashboardBloc`, DI registrations, header date. Demo data seeded via migration `0004`.
 - **Remaining (blocked on deferred tables):** `RollCallTableCard` (needs `subjects`/`class_sections`/`timetable_periods` + sessions), IoT widgets (`devices`), sidebar leave badge `12` (`leave_requests`), roster/terminal alert types (needs `timetable`/`devices`).
 - **Planned location:**
   - Entities: `lib/features/dashboard/domain/entities/`

@@ -7,7 +7,6 @@ import '../../../../core/theme/app_typography.dart';
 import '../bloc/dashboard_bloc.dart';
 import '../bloc/dashboard_event.dart';
 import '../bloc/dashboard_state.dart';
-import 'alerts/urgent_alerts_card.dart';
 import 'analytics/department_breakdown_card.dart';
 import 'analytics/presence_split_card.dart';
 import 'charts/attendance_trend_card.dart';
@@ -40,29 +39,12 @@ class DashboardContent extends StatelessWidget {
         const SizedBox(height: AppSpacing.xl),
         KpiStatsRow(kpis: state.kpis, trend: state.trend),
         const SizedBox(height: AppSpacing.xl),
-        LayoutBuilder(
-          builder: (context, constraints) {
-            final unit = (constraints.maxWidth - AppSpacing.xl * 3) / 3;
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: AttendanceTrendCard(
-                    points: state.trend,
-                    period: state.period,
-                    onPeriodChanged: (period) => context
-                        .read<DashboardBloc>()
-                        .add(TrendPeriodChanged(period: period)),
-                  ),
-                ),
-                const SizedBox(width: AppSpacing.xl),
-                SizedBox(
-                  width: unit,
-                  child: UrgentAlertsCard(alerts: state.alerts),
-                ),
-              ],
-            );
-          },
+        AttendanceTrendCard(
+          points: state.trend,
+          period: state.period,
+          onPeriodChanged: (period) => context.read<DashboardBloc>().add(
+            TrendPeriodChanged(period: period),
+          ),
         ),
         const SizedBox(height: AppSpacing.xl),
         Row(
@@ -116,9 +98,8 @@ class _DashboardError extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.lg),
           ElevatedButton(
-            onPressed: () => context
-                .read<DashboardBloc>()
-                .add(LoadDashboardRequested()),
+            onPressed: () =>
+                context.read<DashboardBloc>().add(LoadDashboardRequested()),
             child: const Text('Retry'),
           ),
         ],

@@ -1,3 +1,4 @@
+import '../../../../helpers/institutes_fixture.dart';
 import 'package:attendance_system_admin/core/usecase.dart';
 import 'package:attendance_system_admin/features/dashboard/domain/entities/dashboard_entities.dart';
 import 'package:attendance_system_admin/features/dashboard/domain/usecases/get_alerts_usecase.dart';
@@ -55,7 +56,11 @@ void main() {
   ];
 
   final tDepartments = [
-    DepartmentStat(name: 'Computer Science', recordsToday: 50, presentToday: 44),
+    DepartmentStat(
+      name: 'Computer Science',
+      recordsToday: 50,
+      presentToday: 44,
+    ),
     DepartmentStat(name: 'Electronics', recordsToday: 50, presentToday: 42),
   ];
 
@@ -110,6 +115,7 @@ void main() {
             getAttendanceTrendUsecase: mockGetAttendanceTrendUsecase,
             getDepartmentStatsUsecase: mockGetDepartmentStatsUsecase,
             getAlertsUsecase: mockGetAlertsUsecase,
+      instituteContext: buildInstituteContext(),
           )..add(LoadDashboardRequested()),
           child: const DashboardContent(),
         ),
@@ -121,10 +127,10 @@ void main() {
     expect(find.byType(AttendanceTrendCard), findsOneWidget);
     expect(find.byType(DepartmentBreakdownCard), findsOneWidget);
     expect(find.byType(PresenceSplitCard), findsOneWidget);
-    expect(find.byType(UrgentAlertsCard), findsOneWidget);
+    expect(find.byType(UrgentAlertsCard), findsNothing);
     expect(find.text('50'), findsWidgets);
     expect(find.text('Computer Science'), findsOneWidget);
-    expect(find.text('1 Actionable'), findsOneWidget);
+    expect(find.text('1 Actionable'), findsNothing);
     expect(tester.takeException(), isNull);
   });
 }
