@@ -22,6 +22,10 @@ class KpiStatCard extends StatelessWidget {
     this.footerColor = AppColors.textMuted,
     this.footerIcon,
     this.accentColor,
+    this.borderColor,
+    this.surfaceColor,
+    this.progressColor,
+    this.progressTrackColor,
   });
 
   final String label;
@@ -39,6 +43,16 @@ class KpiStatCard extends StatelessWidget {
   final IconData? footerIcon;
   final Color? accentColor;
 
+  /// Overrides the default [AppColors.border] frame — used to flag a card
+  /// that needs attention (e.g. pending substitutes).
+  final Color? borderColor;
+
+  /// Overrides the default [AppColors.surface] card background.
+  final Color? surfaceColor;
+
+  final Color? progressColor;
+  final Color? progressTrackColor;
+
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -48,9 +62,9 @@ class KpiStatCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(AppSpacing.lg),
             decoration: BoxDecoration(
-              color: AppColors.surface,
+              color: surfaceColor ?? AppColors.surface,
               borderRadius: BorderRadius.circular(AppRadius.md),
-              border: Border.all(color: AppColors.border),
+              border: Border.all(color: borderColor ?? AppColors.border),
             ),
             child: _buildCardContent(),
           ),
@@ -115,8 +129,8 @@ class KpiStatCard extends StatelessWidget {
             child: LinearProgressIndicator(
               value: progressValue,
               minHeight: 6,
-              color: AppColors.success,
-              backgroundColor: AppColors.successSurface,
+              color: progressColor ?? AppColors.success,
+              backgroundColor: progressTrackColor ?? AppColors.successSurface,
             ),
           ),
         ],

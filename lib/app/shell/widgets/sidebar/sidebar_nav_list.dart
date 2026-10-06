@@ -41,10 +41,12 @@ class SidebarNavList extends StatelessWidget {
       label: 'Students',
       isEnabled: true,
     ),
-    const _NavEntry(
+    _NavEntry(
       index: 2,
       icon: Icons.badge_outlined,
       label: 'Staff/Faculty',
+      isEnabled: true,
+      showLivePill: true,
     ),
     const _NavEntry(
       index: 3,
@@ -103,6 +105,7 @@ class SidebarNavList extends StatelessWidget {
               trailing: entry.trailingCount != null
                   ? _NavBadge(count: entry.trailingCount!)
                   : (entry.showStatusDot ? const _NavDot() : null),
+              activeTrailing: entry.showLivePill ? const _LivePill() : null,
               // Placeholder screens are not selectable yet.
               onTap: entry.isEnabled ? () => onSelect(entry.index) : null,
             ),
@@ -122,6 +125,7 @@ class _NavEntry {
     this.superAdminOnly = false,
     this.trailingCount,
     this.showStatusDot = false,
+    this.showLivePill = false,
   });
 
   final int index;
@@ -135,6 +139,9 @@ class _NavEntry {
   final bool superAdminOnly;
   final String? trailingCount;
   final bool showStatusDot;
+
+  /// Shows a green "Live" pill in the item's selected state only.
+  final bool showLivePill;
 }
 
 class _NavBadge extends StatelessWidget {
@@ -176,6 +183,33 @@ class _NavDot extends StatelessWidget {
       decoration: const BoxDecoration(
         color: AppColors.success,
         shape: BoxShape.circle,
+      ),
+    );
+  }
+}
+
+/// Green "Live" pill shown on the active nav item (Staff/Faculty).
+class _LivePill extends StatelessWidget {
+  const _LivePill();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm + 1,
+        vertical: 2,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.success,
+        borderRadius: BorderRadius.circular(AppRadius.full),
+      ),
+      child: Text(
+        'Live',
+        style: AppTypography.caption.copyWith(
+          fontSize: 11,
+          fontWeight: FontWeight.w700,
+          color: AppColors.surface,
+        ),
       ),
     );
   }

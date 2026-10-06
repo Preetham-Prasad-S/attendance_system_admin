@@ -9,6 +9,8 @@ import 'package:attendance_system_admin/features/auth/presentation/screens/login
 import 'package:attendance_system_admin/features/dashboard/presentation/pages/dashboard_page.dart';
 import 'package:attendance_system_admin/features/institutes/presentation/bloc/institutes_bloc.dart';
 import 'package:attendance_system_admin/features/institutes/presentation/bloc/institutes_event.dart';
+import 'package:attendance_system_admin/features/staff/presentation/pages/staff_page.dart';
+import 'package:attendance_system_admin/features/staff/presentation/widgets/coverage/coverage_board.dart';
 import 'package:attendance_system_admin/features/students/presentation/pages/students_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -89,6 +91,30 @@ void main() {
     expect(find.text('Executive Attendance Overview'), findsNothing);
   });
 
+  testWidgets('navigates to the Staff page from the sidebar', (tester) async {
+    tester.view.physicalSize = const Size(1600, 1000);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(MaterialApp(home: wrapShell()));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(StaffPage), findsNothing);
+
+    final staffItem = find.widgetWithText(SidebarNavItem, 'Staff/Faculty');
+    await tester.tap(staffItem, warnIfMissed: false);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(StaffPage), findsOneWidget);
+    // The "Live" pill is active-state-only, so it rides along with selection.
+    expect(
+      find.descendant(of: staffItem, matching: find.text('Live')),
+      findsOneWidget,
+    );
+    expect(find.text('Faculty Workload & Lecture Coverage'), findsOneWidget);
+    expect(find.byType(CoverageBoard), findsOneWidget);
+  });
+
   testWidgets('placeholder nav entries stay inert', (tester) async {
     tester.view.physicalSize = const Size(1600, 1000);
     tester.view.devicePixelRatio = 1.0;
@@ -105,6 +131,6 @@ void main() {
 
     // Still on the dashboard — no page is registered for that index yet.
     expect(find.byType(DashboardPage), findsOneWidget);
-    expect(find.byType(StudentsPage), findsNothing);
+    expect(find.byType(StaffPage), findsNothing);
   });
 }

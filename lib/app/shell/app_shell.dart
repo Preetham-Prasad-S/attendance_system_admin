@@ -6,6 +6,7 @@ import 'package:attendance_system_admin/features/institutes/presentation/bloc/in
 import 'package:attendance_system_admin/features/institutes/presentation/bloc/institutes_event.dart';
 import 'package:attendance_system_admin/features/institutes/presentation/bloc/institutes_state.dart';
 import 'package:attendance_system_admin/features/institutes/presentation/pages/institutes_page.dart';
+import 'package:attendance_system_admin/features/staff/presentation/pages/staff_page.dart';
 import 'package:attendance_system_admin/features/students/presentation/pages/students_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,7 +32,7 @@ class _AppShellState extends State<AppShell> {
   static List<Widget> _pages() => [
     const DashboardPage(),
     const StudentsPage(),
-    const SizedBox.shrink(), // Staff/Faculty
+    const StaffPage(), // Staff/Faculty
     const SizedBox.shrink(), // Timetable
     const SizedBox.shrink(), // Daily Attendance
     const SizedBox.shrink(), // Leave Approvals
@@ -43,7 +44,7 @@ class _AppShellState extends State<AppShell> {
 
   /// Switching institutes dispatches through [InstitutesBloc]; the pages
   /// listen to it and re-load their own data (see [DashboardPage] and
-  /// [StudentsPage]), because their blocs are created inside the pages.
+  /// [StaffPage]), because their blocs are created inside the pages.
   void _onInstituteChanged(Institute institute) {
     context.read<InstitutesBloc>().add(InstituteSelected(institute));
   }
